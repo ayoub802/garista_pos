@@ -308,12 +308,42 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
   }
 
   void clearBag(BuildContext context) {
+    // Get the list of bags from local storage
+    List<BagData> bags = List.from(LocalStorage.getBags());
+    BagData? selectedBag = bags[state.selectedBagIndex];
+
+    // Ensure the selected bag exists before attempting to clear it
+    if (selectedBag == null) {
+      AppHelpers.showSnackBar(
+        context,
+        "No selected bag to clear!", // Inform the user if there's no bag to clear
+      );
+      return;
+    }
+
+    // Clear the bag products
+    bags[state.selectedBagIndex] = selectedBag.copyWith(bagProducts: []);
+    LocalStorage.setBags(bags);
+
+    // Optionally, you can clear the pagination response if needed
     var newPagination = state.paginateResponse?.copyWith(stocks: []);
     state = state.copyWith(paginateResponse: newPagination);
-    List<BagData> bags = List.from(LocalStorage.getBags());
-    bags[state.selectedBagIndex] =
-        bags[state.selectedBagIndex].copyWith(bagProducts: []);
-    LocalStorage.setBags(bags);
+
+    // Inform the user that the bag has been cleared
+    AppHelpers.showSnackBar(
+      context,
+      "Bag cleared successfully!",
+    );
+
+    // Fetch cart data if necessary
+    fetchCarts(
+      checkYourNetwork: () {
+        AppHelpers.showSnackBar(
+          context,
+          AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+        );
+      },
+    );
   }
 
   void deleteProductFromBag(BuildContext context, BagProductData bagProduct) {
@@ -342,23 +372,179 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
   }
 
   void deleteProductCount({
-    required BagProductData? bagProductData,
+    required BuildContext context,
     required int productIndex,
   }) {
-    List<ProductData>? listOfProduct = state.paginateResponse?.stocks;
-    listOfProduct?.removeAt(productIndex);
-    PriceDate? data = state.paginateResponse;
-    PriceDate? newData = data?.copyWith(stocks: listOfProduct);
-    state = state.copyWith(paginateResponse: newData);
-    final List<BagProductData> bagProducts =
-        LocalStorage.getBags()[state.selectedBagIndex].bagProducts ?? [];
-    bagProducts.removeAt(productIndex);
-
+    // Get the list of bags from local storage
     List<BagData> bags = List.from(LocalStorage.getBags());
-    bags[state.selectedBagIndex] =
-        bags[state.selectedBagIndex].copyWith(bagProducts: bagProducts);
+    BagData? selectedBag = bags[state.selectedBagIndex];
+
+    // Ensure the selected bag is not null and has products
+    if (selectedBag?.bagProducts == null || selectedBag.bagProducts!.isEmpty) return;
+
+    // Retrieve all cart items from the selected bag products
+    final List<CartProductData> allCarts = [];
+    for (var bagProduct in selectedBag!.bagProducts!) {
+      allCarts.addAll(bagProduct.carts);
+    }
+
+    // Ensure the productIndex is within bounds
+    if (productIndex < 0 || productIndex >= allCarts.length) {
+      AppHelpers.showSnackBar(
+        context,
+        "Invalid product index!", // Optional: Inform the user
+      );
+      return; // Exit if the index is invalid
+    }
+
+    // Remove the product at the specified index
+    CartProductData cartItem = allCarts[productIndex];
+    for (var bagProduct in selectedBag.bagProducts!) {
+      int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
+      if (cartIndex != -1) {
+        // Remove the cart item from the product's carts
+        List<CartProductData> updatedCarts = List.from(bagProduct.carts);
+        updatedCarts.removeAt(cartIndex);
+
+        // Create an updated BagProductData and replace it in the bag
+        BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
+        int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
+        selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
+        break; // Exit once the product is found and removed
+      }
+    }
+
+    // Save the updated bags back to local storage
+    bags[state.selectedBagIndex] = selectedBag;
     LocalStorage.setBags(bags);
 
-    fetchCarts(isNotLoading: true);
+    // Trigger any necessary actions after deletion, like fetching cart data
+    fetchCarts(
+      checkYourNetwork: () {
+        AppHelpers.showSnackBar(
+          context,
+          AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+        );
+      },
+    );
   }
+
+   void decreaseProductCount({
+      required  BuildContext context,
+      required int productIndex,
+    }) {
+      List<BagData> bags = List.from(LocalStorage.getBags());
+      BagData? selectedBag = bags[state.selectedBagIndex];
+       
+      if (selectedBag?.bagProducts == null) return;
+
+      final List<CartProductData> allCarts = [];
+      for (var bagProduct in selectedBag!.bagProducts!) {
+        allCarts.addAll(bagProduct.carts);
+      }
+
+      if (productIndex >= allCarts.length) return; 
+
+      CartProductData cartItem = allCarts[productIndex];
+
+      if (cartItem.quantity > 1) {
+
+        CartProductData updatedCartItem = cartItem.copyWith(quantity: cartItem.quantity - 1);
+       print('The ProductIndex $productIndex and selectedBags ${updatedCartItem}');
+
+        for (var bagProduct in selectedBag.bagProducts!) {
+          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
+          if (cartIndex != -1) {
+            List<CartProductData> updatedCarts = List.from(bagProduct.carts);
+            updatedCarts[cartIndex] = updatedCartItem;
+
+            BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
+            int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
+            selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
+            break;
+          }
+        }
+
+      } 
+      else {
+        for (var bagProduct in selectedBag.bagProducts!) {
+          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
+          if (cartIndex != -1) {
+            bagProduct.carts.removeAt(cartIndex);
+            break;
+          }
+        }
+      }
+
+      // Save the updated bags back to local storage
+      bags[state.selectedBagIndex] = selectedBag;
+      LocalStorage.setBags(bags);
+
+      // Optional: You can trigger a delayed action, e.g., fetching cart data
+      // timer = Timer(
+      //   const Duration(milliseconds: 500),
+      //   () => fetchCarts(isNotLoading: true),
+      // );
+      fetchCarts(
+      checkYourNetwork: () {
+        AppHelpers.showSnackBar(
+          context,
+          AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+        );
+      },
+    );
+    }
+   
+   void increaseProductCount({
+      required  BuildContext context,
+      required int productIndex,
+    }) {
+      List<BagData> bags = List.from(LocalStorage.getBags());
+      BagData? selectedBag = bags[state.selectedBagIndex];
+       
+      if (selectedBag?.bagProducts == null) return;
+
+      final List<CartProductData> allCarts = [];
+      for (var bagProduct in selectedBag!.bagProducts!) {
+        allCarts.addAll(bagProduct.carts);
+      }
+
+      if (productIndex >= allCarts.length) return; 
+
+      CartProductData cartItem = allCarts[productIndex];
+
+
+        CartProductData updatedCartItem = cartItem.copyWith(quantity: cartItem.quantity + 1);
+        for (var bagProduct in selectedBag.bagProducts!) {
+          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
+          if (cartIndex != -1) {
+            List<CartProductData> updatedCarts = List.from(bagProduct.carts);
+            updatedCarts[cartIndex] = updatedCartItem;
+
+            BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
+            int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
+            selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
+            break;
+          }
+        }
+
+      // Save the updated bags back to local storage
+      bags[state.selectedBagIndex] = selectedBag;
+      LocalStorage.setBags(bags);
+
+      // Optional: You can trigger a delayed action, e.g., fetching cart data
+      // timer = Timer(
+      //   const Duration(milliseconds: 500),
+      //   () => fetchCarts(isNotLoading: true),
+      // );
+      fetchCarts(
+      checkYourNetwork: () {
+        AppHelpers.showSnackBar(
+          context,
+          AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+        );
+      },
+    );
+    }
+
 }

@@ -72,13 +72,13 @@ class LoginNotifier extends StateNotifier<LoginState> {
             goToMain: goToMain,
           );
 
-          final res = await _usersRepository.getProfileDetails(context);
+          // final res = await _usersRepository.getProfileDetails(context);
 
-          res.when(
-              success: (s) {
-                LocalStorage.setUser(s.data);
-              },
-              failure: (failure) {});
+          // res.when(
+          //     success: (s) {
+          //       LocalStorage.setUser(s.data);
+          //     },
+          //     failure: (failure) {});
         },
         failure: (failure) {
           state = state.copyWith(isLoading: false, isLoginError: true);

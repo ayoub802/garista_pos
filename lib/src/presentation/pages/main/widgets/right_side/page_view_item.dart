@@ -56,9 +56,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
 
     // print("The Bags State => ${state.bags[0]!.bagProducts![0]!.carts}");
     return AbsorbPointer(
-      absorbing: state.isBagsLoading ||
-          state.isCurrenciesLoading ||
-          state.isProductCalculateLoading,
+      absorbing: false,
       child: Stack(
         children: [
           SingleChildScrollView(
@@ -138,9 +136,14 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                                   symbol: currency?.currency,
                                   add: () {
                                     // Your logic to increase product count
+                                     notifier.increaseProductCount( 
+                                         context: context,
+                                        productIndex: index);
                                   },
                                   remove: () {
-                                    // Your logic to decrease product count
+                                    notifier.decreaseProductCount( 
+                                         context: context,
+                                        productIndex: index);
                                   },
                                   cart: [
                                     cartItem
@@ -148,9 +151,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                                   delete: () {
                                     // Logic to delete the product from the cart
                                     notifier.deleteProductCount(
-                                      bagProductData: state
-                                          .bags[state.selectedBagIndex]
-                                          .bagProducts?[index],
+                                      context: context,
                                       productIndex: index,
                                     );
                                   },
@@ -237,8 +238,8 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
               ],
             ),
           ),
-          BlurLoadingWidget(
-              isLoading: state.isBagsLoading || state.isCurrenciesLoading),
+          // BlurLoadingWidget(
+          //     isLoading: state.isBagsLoading || state.isCurrenciesLoading),
         ],
       ),
     );

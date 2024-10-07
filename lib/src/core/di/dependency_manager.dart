@@ -24,3 +24,4 @@ final currenciesRepository = getIt.get<CurrenciesRepository>();
 final brandsRepository = getIt.get<BrandsRepository>();
 final categoriesRepository = getIt.get<CategoriesRepository>();
 final productsRepository = getIt.get<ProductsRepository>();
+

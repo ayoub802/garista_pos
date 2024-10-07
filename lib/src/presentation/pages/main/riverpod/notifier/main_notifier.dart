@@ -33,14 +33,14 @@ class MainNotifier extends StateNotifier<MainState> {
 
   Future<void> fetchUserDetail(BuildContext context) async {
     final response = await _usersRepository.getProfileDetails(context);
-    response.when(
-      success: (data) async {
-        LocalStorage.setUser(data.data);
-      },
-      failure: (failure) {
-        debugPrint('==> get user detail failure: $failure');
-      },
-    );
+    // response.when(
+    //   success: (data) async {
+    //     LocalStorage.setUser(data.data);
+    //   },
+    //   failure: (failure) {
+    //     debugPrint('==> get user detail failure: $failure');
+    //   },
+    // );
   }
 
   Future<void> fetchProducts({

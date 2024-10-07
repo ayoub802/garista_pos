@@ -7,6 +7,7 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:garista_pos/src/presentation/pages/auth/login/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../generated/assets.dart';
 import '../../../core/constants/constants.dart';
@@ -22,6 +23,7 @@ import 'package:garista_pos/src/presentation/pages/main/riverpod/notifier/main_n
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'widgets/right_side/riverpod/provider/right_side_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/post_page.dart';
+import 'widgets/profile/edit_profile/edit_profile_page.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -36,12 +38,12 @@ class _MainPageState extends ConsumerState<MainPage>
   Timer? timer;
   late List<IndexedStackChild> list = [
     IndexedStackChild(child: const PostPage(), preload: true),
+    IndexedStackChild(child: const ProfilePage()),
+    IndexedStackChild(child: const TablesPage()),
     // IndexedStackChild(child: const OrdersTablesPage()),
     // IndexedStackChild(child: const CustomersPage()),
-    // IndexedStackChild(child: const TablesPage()),
     // IndexedStackChild(child: const SaleHistory()),
     // IndexedStackChild(child: const InComePage()),
-    // IndexedStackChild(child: const ProfilePage()),
   ];
   @override
   void dispose() {
@@ -133,7 +135,7 @@ class _MainPageState extends ConsumerState<MainPage>
           child: KeyboardDismisser(
               child: Row(
             children: [
-              bottomLeftNavigationBar(),
+              bottomLeftNavigationBar(state),
               Expanded(
                 child: ProsteIndexedStack(
                   index: state.selectIndex,
@@ -355,7 +357,9 @@ class _MainPageState extends ConsumerState<MainPage>
     );
   }
 
-  Container bottomLeftNavigationBar() {
+  Container bottomLeftNavigationBar(MainState state) {
+
+    print('The User ${LocalStorage.getUser()}');
     return Container(
       height: double.infinity,
       width: 90.w,
@@ -367,19 +371,22 @@ class _MainPageState extends ConsumerState<MainPage>
           24.verticalSpace,
           Container(
             decoration: BoxDecoration(
-                color: AppColors.GaristaColorBg,
+                color:  state.selectIndex == 0 ? AppColors.GaristaColorBg : AppColors.transparent,
                 borderRadius: BorderRadius.circular(10.r)),
             child: IconButton(
                 onPressed: () {
-                  // ref.read(mainProvider.notifier).changeIndex(0);
+                  ref.read(mainProvider.notifier).changeIndex(0);
                 },
                 icon: Icon(
-                  FlutterRemix.home_smile_fill,
-                  // ? FlutterRemix.home_smile_fill
-                  // : FlutterRemix.home_smile_line,
-                  color: AppColors.white,
-                  // ? AppColors.white
-                  // : AppColors.iconColor,
+                  state.selectIndex == 0
+                  ?
+                  FlutterRemix.home_smile_fill
+                  :
+                  FlutterRemix.home_smile_line,
+
+                  color: state.selectIndex == 0
+                  ? AppColors.white
+                  : AppColors.iconColor,
                 )),
           ),
           28.verticalSpace,
@@ -403,43 +410,43 @@ class _MainPageState extends ConsumerState<MainPage>
           //       )),
           // ),
           // 28.verticalSpace,
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: state.selectIndex == 2
-          //           ? AppColors.brandColor
-          //           : AppColors.transparent,
-          //       borderRadius: BorderRadius.circular(10.r)),
-          //   child: IconButton(
-          //       onPressed: () {
-          //         ref.read(mainProvider.notifier).changeIndex(2);
-          //       },
-          //       icon: Icon(
-          //         state.selectIndex == 2
-          //             ? FlutterRemix.user_3_fill
-          //             : FlutterRemix.user_3_line,
-          //         color: state.selectIndex == 2
-          //             ? AppColors.white
-          //             : AppColors.iconColor,
-          //       )),
-          // ),
-          // 28.verticalSpace,
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: state.selectIndex == 3
-          //           ? AppColors.brandColor
-          //           : AppColors.transparent,
-          //       borderRadius: BorderRadius.circular(10.r)),
-          //   child: IconButton(
-          //     onPressed: () {
-          //       ref.read(mainProvider.notifier).changeIndex(3);
-          //     },
-          //     icon: SvgPicture.asset(
-          //       state.selectIndex == 3
-          //           ? Assets.svgSelectTable
-          //           : Assets.svgTable,
-          //     ),
-          //   ),
-          // ),
+          Container(
+            decoration: BoxDecoration(
+                color: state.selectIndex == 1
+                    ? AppColors.GaristaColorBg
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(10.r)),
+            child: IconButton(
+                onPressed: () {
+                  ref.read(mainProvider.notifier).changeIndex(1);
+                },
+                icon: Icon(
+                  state.selectIndex == 2
+                      ? FlutterRemix.user_3_fill
+                      : FlutterRemix.user_3_line,
+                  color: state.selectIndex == 1
+                      ? AppColors.white
+                      : AppColors.iconColor,
+                )),
+          ),
+          28.verticalSpace,
+          Container(
+            decoration: BoxDecoration(
+                color: state.selectIndex == 2
+                    ? AppColors.GaristaColorBg
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(10.r)),
+            child: IconButton(
+              onPressed: () {
+                ref.read(mainProvider.notifier).changeIndex(2);
+              },
+              icon: SvgPicture.asset(
+                state.selectIndex == 2
+                    ? Assets.svgSelectTable
+                    : Assets.svgTable,
+              ),
+            ),
+          ),
           // 28.verticalSpace,
           // Container(
           //   decoration: BoxDecoration(
@@ -478,44 +485,49 @@ class _MainPageState extends ConsumerState<MainPage>
           //             // : AppColors.iconColor,
           //       )),
           // ),
-          // const Spacer(),
-          // InkWell(
-          //   onTap: () {
-          //     ref.read(mainProvider.notifier).changeIndex(6);
-          //   },
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         border: Border.all(
-          //           color: state.selectIndex == 6
-          //               ? AppColors.brandColor
-          //               : AppColors.transparent,
-          //         ),
-          //         borderRadius: BorderRadius.circular(20.r)),
-          //     child: CommonImage(
-          //         width: 40,
-          //         height: 40,
-          //         radius: 20,
-          //         imageUrl: LocalStorage.getUser()?.image ?? ""),
-          //   ),
-          // ),
-          // 24.verticalSpace,
-          // IconButton(
-          //     onPressed: () {
-          //       // context.replaceRoute(const LoginRoute());
-          //       // ref.read(newOrdersProvider.notifier).stopTimer();
-          //       // ref.read(acceptedOrdersProvider.notifier).stopTimer();
-          //       // ref.read(cookingOrdersProvider.notifier).stopTimer();
-          //       // ref.read(readyOrdersProvider.notifier).stopTimer();
-          //       // ref.read(onAWayOrdersProvider.notifier).stopTimer();
-          //       // ref.read(deliveredOrdersProvider.notifier).stopTimer();
-          //       // ref.read(canceledOrdersProvider.notifier).stopTimer();
-          //       // LocalStorage.clearStore();
-          //     },
-          //     icon: const Icon(
-          //       FlutterRemix.logout_circle_line,
-          //       color: AppColors.iconColor,
-          //     )),
-          // 32.verticalSpace
+          const Spacer(),
+          InkWell(
+            onTap: () {
+              ref.read(mainProvider.notifier).changeIndex(1);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: state.selectIndex == 1
+                        ? AppColors.GaristaColorBg
+                        : AppColors.transparent,
+                  ),
+                  borderRadius: BorderRadius.circular(20.r)),
+              child: CommonImage(
+                  width: 40,
+                  height: 40,
+                  radius: 20,
+                  imageUrl: LocalStorage.getUser()?.image ?? ""),
+            ),
+          ),
+          24.verticalSpace,
+          IconButton(
+              onPressed: () {
+                // context.replaceRoute(const LoginRoute());
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginPage()),
+                  );
+                // ref.read(newOrdersProvider.notifier).stopTimer();
+                // ref.read(acceptedOrdersProvider.notifier).stopTimer();
+                // ref.read(cookingOrdersProvider.notifier).stopTimer();
+                // ref.read(readyOrdersProvider.notifier).stopTimer();
+                // ref.read(onAWayOrdersProvider.notifier).stopTimer();
+                // ref.read(deliveredOrdersProvider.notifier).stopTimer();
+                // ref.read(canceledOrdersProvider.notifier).stopTimer();
+                LocalStorage.clearStore();
+              },
+              icon: const Icon(
+                FlutterRemix.logout_circle_line,
+                color: AppColors.iconColor,
+              )),
+          32.verticalSpace
         ],
       ),
     );

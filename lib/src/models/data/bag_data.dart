@@ -70,8 +70,15 @@ class BagProductData {
     );
   }
 
-  BagProductData copyWith({int? quantity}) {
-    return BagProductData(quantity: quantity ?? this.quantity, carts: carts);
+  // Updated copyWith method
+  BagProductData copyWith({
+    int? quantity,
+    List<CartProductData>? carts,
+  }) {
+    return BagProductData(
+      quantity: quantity ?? this.quantity,
+      carts: carts ?? this.carts,
+    );
   }
 
   Map<String, dynamic> toJsonInsert() {
@@ -82,7 +89,6 @@ class BagProductData {
     return map;
   }
 }
-
 class CartProductData {
   late int productId; // Unique identifier for the product
   late int quantity; // Quantity of this product in the cart
@@ -97,6 +103,23 @@ class CartProductData {
     this.desc,
     this.price,
   });
+
+  // Implementing copyWith method
+  CartProductData copyWith({
+    int? productId,
+    int? quantity,
+    String? name,
+    String? desc,
+    String? price,
+  }) {
+    return CartProductData(
+      productId: productId ?? this.productId,
+      quantity: quantity ?? this.quantity,
+      name: name ?? this.name,
+      desc: desc ?? this.desc,
+      price: price ?? this.price,
+    );
+  }
 
   factory CartProductData.fromJson(Map<String, dynamic> data) {
     return CartProductData(

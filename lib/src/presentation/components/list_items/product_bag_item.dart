@@ -181,7 +181,9 @@ class CartOrderItem extends StatelessWidget {
                                   ),
                                   24.horizontalSpace,
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                          remove(); // Ensure the `remove` function is being triggered
+                                        },
                                     child: AnimationButtonEffect(
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -193,7 +195,7 @@ class CartOrderItem extends StatelessWidget {
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
-                                              vertical: 8.h, horizontal: 25.w),
+                                              vertical: 4.h, horizontal: 20.w),
                                           child: const Icon(
                                             Icons.remove,
                                             color: AppColors.black,
@@ -204,7 +206,7 @@ class CartOrderItem extends StatelessWidget {
                                   ),
                                   4.horizontalSpace,
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: add,
                                     child: AnimationButtonEffect(
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -216,7 +218,7 @@ class CartOrderItem extends StatelessWidget {
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
-                                              vertical: 8.h, horizontal: 25.w),
+                                              vertical: 4.h, horizontal: 20.w),
                                           child: const Icon(
                                             Icons.add,
                                             color: AppColors.black,

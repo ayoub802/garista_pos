@@ -35,9 +35,7 @@ class BoardTableInfo extends ConsumerWidget {
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount: state.isSectionLoading
-                          ? 6
-                          : state.shopSectionList.length,
+                      itemCount: 6,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
@@ -57,9 +55,7 @@ class BoardTableInfo extends ConsumerWidget {
                                   bgColor: AppColors.borderColor,
                                   isTab: true,
                                   isActive: state.selectSection == index,
-                                  title: state.shopSectionList[index]
-                                          ?.translation?.title ??
-                                      "",
+                                  title: "",
                                   onTap: () => notifier.changeSection(index)),
                         );
                       }),

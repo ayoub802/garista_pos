@@ -38,7 +38,7 @@ mixin _$TablesState {
   List<TableBookingData?> get tableBookingData =>
       throw _privateConstructorUsedError;
   List<String> get sectionListTitle => throw _privateConstructorUsedError;
-  List<ShopSection?> get shopSectionList => throw _privateConstructorUsedError;
+  // List<ShopSection?> get shopSectionList => throw _privateConstructorUsedError;
   List<DisableDates?> get disableDates => throw _privateConstructorUsedError;
   TableStatisticData? get tableStatistic => throw _privateConstructorUsedError;
   WorkingDayData? get workingDayData => throw _privateConstructorUsedError;
@@ -87,7 +87,7 @@ abstract class $TablesStateCopyWith<$Res> {
       List<TableData?> tableListData,
       List<TableBookingData?> tableBookingData,
       List<String> sectionListTitle,
-      List<ShopSection?> shopSectionList,
+      // List<ShopSection?> shopSectionList,
       List<DisableDates?> disableDates,
       TableStatisticData? tableStatistic,
       WorkingDayData? workingDayData,
@@ -237,10 +237,10 @@ class _$TablesStateCopyWithImpl<$Res, $Val extends TablesState>
           ? _value.sectionListTitle
           : sectionListTitle // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      shopSectionList: null == shopSectionList
-          ? _value.shopSectionList
-          : shopSectionList // ignore: cast_nullable_to_non_nullable
-              as List<ShopSection?>,
+      // shopSectionList: null == shopSectionList
+      //     ? _value.shopSectionList
+      //     : shopSectionList // ignore: cast_nullable_to_non_nullable
+      //         as List<ShopSection?>,
       disableDates: null == disableDates
           ? _value.disableDates
           : disableDates // ignore: cast_nullable_to_non_nullable
@@ -327,7 +327,7 @@ abstract class _$$TablesStateImplCopyWith<$Res>
       List<TableData?> tableListData,
       List<TableBookingData?> tableBookingData,
       List<String> sectionListTitle,
-      List<ShopSection?> shopSectionList,
+      // List<ShopSection?> shopSectionList,
       List<DisableDates?> disableDates,
       TableStatisticData? tableStatistic,
       WorkingDayData? workingDayData,
@@ -475,10 +475,10 @@ class __$$TablesStateImplCopyWithImpl<$Res>
           ? _value._sectionListTitle
           : sectionListTitle // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      shopSectionList: null == shopSectionList
-          ? _value._shopSectionList
-          : shopSectionList // ignore: cast_nullable_to_non_nullable
-              as List<ShopSection?>,
+      // shopSectionList: null == shopSectionList
+      //     ? _value._shopSectionList
+      //     : shopSectionList // ignore: cast_nullable_to_non_nullable
+      //         as List<ShopSection?>,
       disableDates: null == disableDates
           ? _value._disableDates
           : disableDates // ignore: cast_nullable_to_non_nullable
@@ -560,7 +560,7 @@ class _$TablesStateImpl extends _TablesState {
       final List<TableData?> tableListData = const [],
       final List<TableBookingData?> tableBookingData = const [],
       final List<String> sectionListTitle = const [],
-      final List<ShopSection?> shopSectionList = const [],
+      // final List<ShopSection?> shopSectionList = const [],
       final List<DisableDates?> disableDates = const [],
       this.tableStatistic = null,
       this.workingDayData = null,
@@ -577,7 +577,7 @@ class _$TablesStateImpl extends _TablesState {
       : _tableListData = tableListData,
         _tableBookingData = tableBookingData,
         _sectionListTitle = sectionListTitle,
-        _shopSectionList = shopSectionList,
+        // _shopSectionList = shopSectionList,
         _disableDates = disableDates,
         _closeDays = closeDays,
         _times = times,
@@ -666,14 +666,14 @@ class _$TablesStateImpl extends _TablesState {
     return EqualUnmodifiableListView(_sectionListTitle);
   }
 
-  final List<ShopSection?> _shopSectionList;
-  @override
-  @JsonKey()
-  List<ShopSection?> get shopSectionList {
-    if (_shopSectionList is EqualUnmodifiableListView) return _shopSectionList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_shopSectionList);
-  }
+  // final List<ShopSection?> _shopSectionList;
+  // @override
+  // @JsonKey()
+  // List<ShopSection?> get shopSectionList {
+  //   if (_shopSectionList is EqualUnmodifiableListView) return _shopSectionList;
+  //   // ignore: implicit_dynamic_type
+  //   return EqualUnmodifiableListView(_shopSectionList);
+  // }
 
   final List<DisableDates?> _disableDates;
   @override
@@ -735,7 +735,7 @@ class _$TablesStateImpl extends _TablesState {
 
   @override
   String toString() {
-    return 'TablesState(isLoading: $isLoading, isInfoLoading: $isInfoLoading, isBookingLoading: $isBookingLoading, isSectionLoading: $isSectionLoading, isStatisticLoading: $isStatisticLoading, isButtonLoading: $isButtonLoading, isCancelLoading: $isCancelLoading, hasMore: $hasMore, hasMoreSections: $hasMoreSections, hasMoreBookings: $hasMoreBookings, showFilter: $showFilter, isListView: $isListView, selectTabIndex: $selectTabIndex, selectListTabIndex: $selectListTabIndex, selectSection: $selectSection, selectAddSection: $selectAddSection, selectTableId: $selectTableId, selectOrderIndex: $selectOrderIndex, tableListData: $tableListData, tableBookingData: $tableBookingData, sectionListTitle: $sectionListTitle, shopSectionList: $shopSectionList, disableDates: $disableDates, tableStatistic: $tableStatistic, workingDayData: $workingDayData, bookingsData: $bookingsData, selectDateTime: $selectDateTime, selectTimeOfDay: $selectTimeOfDay, selectDuration: $selectDuration, errorSelectDate: $errorSelectDate, errorSelectTime: $errorSelectTime, closeDays: $closeDays, times: $times, start: $start, end: $end)';
+    return 'TablesState(isLoading: $isLoading, isInfoLoading: $isInfoLoading, isBookingLoading: $isBookingLoading, isSectionLoading: $isSectionLoading, isStatisticLoading: $isStatisticLoading, isButtonLoading: $isButtonLoading, isCancelLoading: $isCancelLoading, hasMore: $hasMore, hasMoreSections: $hasMoreSections, hasMoreBookings: $hasMoreBookings, showFilter: $showFilter, isListView: $isListView, selectTabIndex: $selectTabIndex, selectListTabIndex: $selectListTabIndex, selectSection: $selectSection, selectAddSection: $selectAddSection, selectTableId: $selectTableId, selectOrderIndex: $selectOrderIndex, tableListData: $tableListData, tableBookingData: $tableBookingData, sectionListTitle: $sectionListTitle,  disableDates: $disableDates, tableStatistic: $tableStatistic, workingDayData: $workingDayData, bookingsData: $bookingsData, selectDateTime: $selectDateTime, selectTimeOfDay: $selectTimeOfDay, selectDuration: $selectDuration, errorSelectDate: $errorSelectDate, errorSelectTime: $errorSelectTime, closeDays: $closeDays, times: $times, start: $start, end: $end)';
   }
 
   @override
@@ -784,8 +784,8 @@ class _$TablesStateImpl extends _TablesState {
                 .equals(other._tableBookingData, _tableBookingData) &&
             const DeepCollectionEquality()
                 .equals(other._sectionListTitle, _sectionListTitle) &&
-            const DeepCollectionEquality()
-                .equals(other._shopSectionList, _shopSectionList) &&
+            // const DeepCollectionEquality()
+            //     .equals(other._shopSectionList, _shopSectionList) &&
             const DeepCollectionEquality()
                 .equals(other._disableDates, _disableDates) &&
             (identical(other.tableStatistic, tableStatistic) ||
@@ -835,7 +835,7 @@ class _$TablesStateImpl extends _TablesState {
         const DeepCollectionEquality().hash(_tableListData),
         const DeepCollectionEquality().hash(_tableBookingData),
         const DeepCollectionEquality().hash(_sectionListTitle),
-        const DeepCollectionEquality().hash(_shopSectionList),
+        // const DeepCollectionEquality().hash(_shopSectionList),
         const DeepCollectionEquality().hash(_disableDates),
         tableStatistic,
         workingDayData,
@@ -881,7 +881,7 @@ abstract class _TablesState extends TablesState {
       final List<TableData?> tableListData,
       final List<TableBookingData?> tableBookingData,
       final List<String> sectionListTitle,
-      final List<ShopSection?> shopSectionList,
+      // final List<ShopSection?> shopSectionList,
       final List<DisableDates?> disableDates,
       final TableStatisticData? tableStatistic,
       final WorkingDayData? workingDayData,
@@ -939,8 +939,8 @@ abstract class _TablesState extends TablesState {
   List<TableBookingData?> get tableBookingData;
   @override
   List<String> get sectionListTitle;
-  @override
-  List<ShopSection?> get shopSectionList;
+  // @override
+  // List<ShopSection?> get shopSectionList;
   @override
   List<DisableDates?> get disableDates;
   @override

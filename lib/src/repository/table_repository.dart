@@ -12,8 +12,8 @@ import '../models/response/shop_section_response.dart';
 import '../models/response/table_response.dart';
 
 abstract class TableRepository {
-  Future<ApiResult<ShopSection>> createNewSection(
-      {required String name, required num area});
+  // Future<ApiResult<ShopSection>> createNewSection(
+  //     {required String name, required num area});
 
   Future<ApiResult<ShopSectionResponse>> getSection({int? page});
 

@@ -229,43 +229,43 @@ class TablesNotifier extends StateNotifier<TablesState> {
   }
 
   setSection({String? title, int? index}) {
-    if (title != null) {
-      for (int i = 0; i < state.shopSectionList.length; i++) {
-        if (state.shopSectionList[i]?.translation?.title == title) {
-          state = state.copyWith(
-              selectAddSection: state.shopSectionList[i]?.id ?? 1);
-          return;
-        }
-      }
-    } else if (index != null) {
-      state = state.copyWith(
-          selectAddSection: state.shopSectionList[index]?.id ?? 1);
-    }
+    // if (title != null) {
+    //   for (int i = 0; i < state.shopSectionList.length; i++) {
+    //     if (state.shopSectionList[i]?.translation?.title == title) {
+    //       state = state.copyWith(
+    //           selectAddSection: state.shopSectionList[i]?.id ?? 1);
+    //       return;
+    //     }
+    //   }
+    // } else if (index != null) {
+    //   state = state.copyWith(
+    //       selectAddSection: state.shopSectionList[index]?.id ?? 1);
+    // }
   }
 
   addNewSection(
       {required String name,
       required num area,
       required BuildContext context}) async {
-    state = state.copyWith(isSectionLoading: true);
-    final res = await tableRepository.createNewSection(name: name, area: area);
+    // state = state.copyWith(isSectionLoading: true);
+    // final res = await tableRepository.createNewSection(name: name, area: area);
 
-    await fetchSectionList(isRefresh: true);
+    // await fetchSectionList(isRefresh: true);
 
-    res.when(success: (success) async {
-      // List<ShopSection> shopSectionList = List.from(state.shopSectionList);
-      // shopSectionList.insert(0,success);
-      // state=state.copyWith(shopSectionList: shopSectionList,isSectionLoading: false);
-    }, failure: (failure) {
-      if (mounted) {
-        AppHelpers.showSnackBar(
-          context,
-          AppHelpers.getTranslation(failure.toString()),
-        );
-      }
-      state = state.copyWith(isSectionLoading: false);
-    });
-    state = state.copyWith(isSectionLoading: false);
+    // res.when(success: (success) async {
+    //   // List<ShopSection> shopSectionList = List.from(state.shopSectionList);
+    //   // shopSectionList.insert(0,success);
+    //   // state=state.copyWith(shopSectionList: shopSectionList,isSectionLoading: false);
+    // }, failure: (failure) {
+    //   if (mounted) {
+    //     AppHelpers.showSnackBar(
+    //       context,
+    //       AppHelpers.getTranslation(failure.toString()),
+    //     );
+    //   }
+    //   state = state.copyWith(isSectionLoading: false);
+    // });
+    // state = state.copyWith(isSectionLoading: false);
   }
 
   Future<void> fetchSectionList({bool isRefresh = false}) async {
@@ -284,12 +284,12 @@ class TablesNotifier extends StateNotifier<TablesState> {
     response.when(
       success: (data) {
         state = state.copyWith(
-          shopSectionList: data.data ?? [],
+          // shopSectionList: data.data ?? [],
           isSectionLoading: false,
         );
-        if ((data.data?.length ?? 0) < 50) {
-          state = state.copyWith(hasMoreSections: false);
-        }
+        // if ((data.data?.length ?? 0) < 50) {
+        //   state = state.copyWith(hasMoreSections: false);
+        // }
       },
       failure: (failure) {
         _sectionPage--;
@@ -299,9 +299,9 @@ class TablesNotifier extends StateNotifier<TablesState> {
       },
     );
     List<String> list = [];
-    for (var e in state.shopSectionList) {
-      list.add(e?.translation?.title ?? "");
-    }
+    // for (var e in state.shopSectionList) {
+    //   list.add(e?.translation?.title ?? "");
+    // }
     state = state.copyWith(sectionListTitle: list);
   }
 
@@ -328,9 +328,10 @@ class TablesNotifier extends StateNotifier<TablesState> {
                     : null,
         to: end,
         from: start,
-        shopSectionId: state.shopSectionList.isEmpty
-            ? 1
-            : (state.shopSectionList[state.selectSection]?.id));
+        // shopSectionId: state.shopSectionList.isEmpty
+        //     ? 1
+        //     : (state.shopSectionList[state.selectSection]?.id)
+            );
 
     response.when(
       success: (data) async {

@@ -120,8 +120,6 @@ class _AddNewTableState extends ConsumerState<AddNewTable> {
                           tableModel: TableModel(
                             name: name.text,
                             chairCount: int.tryParse(count.text) ?? 4,
-                            tax: int.tryParse(tax.text) ?? 0,
-                            shopSectionId: state.selectAddSection,
                           ),
                           context: context,
                         );

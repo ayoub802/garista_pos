@@ -28,7 +28,7 @@ class ConfirmButton extends StatelessWidget {
     this.height = 50,
     this.isLoading = false,
     this.isActive = true,
-    this.bgColor = AppColors.brandColor,
+    this.bgColor = AppColors.GaristaColorBg,
     this.borderColor = AppColors.transparent,
     this.textColor = AppColors.white,
     this.icon,
@@ -75,7 +75,7 @@ class ConfirmButton extends StatelessWidget {
                     width: 24.r,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.r,
-                      color: isActive ? AppColors.white : AppColors.black,
+                      color: isActive ? AppColors.white : AppColors.white,
                     ),
                   )
                 : icon ??
@@ -91,7 +91,7 @@ class ConfirmButton extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w500,
                             fontSize: textSize?.sp ?? 16.sp,
-                            color: isActive ? textColor : AppColors.black,
+                            color: isActive ? textColor : AppColors.white,
                           ),
                         )
                       ],

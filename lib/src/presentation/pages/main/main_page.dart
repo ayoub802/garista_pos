@@ -24,6 +24,8 @@ import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'widgets/right_side/riverpod/provider/right_side_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/post_page.dart';
 import 'widgets/profile/edit_profile/edit_profile_page.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/tables/tables_page.dart';
+import 'widgets/orders_table/orders_table.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -38,9 +40,9 @@ class _MainPageState extends ConsumerState<MainPage>
   Timer? timer;
   late List<IndexedStackChild> list = [
     IndexedStackChild(child: const PostPage(), preload: true),
-    IndexedStackChild(child: const ProfilePage()),
+    IndexedStackChild(child: const OrdersTablesPage()),
     IndexedStackChild(child: const TablesPage()),
-    // IndexedStackChild(child: const OrdersTablesPage()),
+    IndexedStackChild(child: const ProfilePage()),
     // IndexedStackChild(child: const CustomersPage()),
     // IndexedStackChild(child: const SaleHistory()),
     // IndexedStackChild(child: const InComePage()),
@@ -390,26 +392,6 @@ class _MainPageState extends ConsumerState<MainPage>
                 )),
           ),
           28.verticalSpace,
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: state.selectIndex == 1
-          //           ? AppColors.brandColor
-          //           : AppColors.transparent,
-          //       borderRadius: BorderRadius.circular(10.r)),
-          //   child: IconButton(
-          //       onPressed: () {
-          //         ref.read(mainProvider.notifier).changeIndex(1);
-          //       },
-          //       icon: Icon(
-          //         state.selectIndex == 1
-          //             ? FlutterRemix.shopping_bag_fill
-          //             : FlutterRemix.shopping_bag_line,
-          //         color: state.selectIndex == 1
-          //             ? AppColors.white
-          //             : AppColors.iconColor,
-          //       )),
-          // ),
-          // 28.verticalSpace,
           Container(
             decoration: BoxDecoration(
                 color: state.selectIndex == 1
@@ -421,15 +403,16 @@ class _MainPageState extends ConsumerState<MainPage>
                   ref.read(mainProvider.notifier).changeIndex(1);
                 },
                 icon: Icon(
-                  state.selectIndex == 2
-                      ? FlutterRemix.user_3_fill
-                      : FlutterRemix.user_3_line,
+                  state.selectIndex == 1
+                      ? FlutterRemix.shopping_bag_fill
+                      : FlutterRemix.shopping_bag_line,
                   color: state.selectIndex == 1
                       ? AppColors.white
                       : AppColors.iconColor,
                 )),
           ),
           28.verticalSpace,
+
           Container(
             decoration: BoxDecoration(
                 color: state.selectIndex == 2
@@ -447,6 +430,26 @@ class _MainPageState extends ConsumerState<MainPage>
               ),
             ),
           ),
+                    Container(
+            decoration: BoxDecoration(
+                color: state.selectIndex ==3
+                    ? AppColors.GaristaColorBg
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(10.r)),
+            child: IconButton(
+                onPressed: () {
+                  ref.read(mainProvider.notifier).changeIndex(3);
+                },
+                icon: Icon(
+                  state.selectIndex == 3
+                      ? FlutterRemix.user_3_fill
+                      : FlutterRemix.user_3_line,
+                  color: state.selectIndex ==3
+                      ? AppColors.white
+                      : AppColors.iconColor,
+                )),
+          ),
+          28.verticalSpace,
           // 28.verticalSpace,
           // Container(
           //   decoration: BoxDecoration(
@@ -488,12 +491,12 @@ class _MainPageState extends ConsumerState<MainPage>
           const Spacer(),
           InkWell(
             onTap: () {
-              ref.read(mainProvider.notifier).changeIndex(1);
+              ref.read(mainProvider.notifier).changeIndex(3);
             },
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                    color: state.selectIndex == 1
+                    color: state.selectIndex == 3
                         ? AppColors.GaristaColorBg
                         : AppColors.transparent,
                   ),

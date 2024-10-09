@@ -18,25 +18,25 @@ import '../../models/response/table_response.dart';
 
 class TableRepositoryIml extends TableRepository {
   @override
-  Future<ApiResult<ShopSection>> createNewSection(
-      {required String name, required num area}) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/v1/dashboard/${LocalStorage.getUser()?.id}/shop-sections',
-        queryParameters: {
-          "area": area,
-          "images": [],
-          "title": {LocalStorage.getLanguage()?.locale ?? 'en': name}
-        },
-      );
-      return ApiResult.success(
-          data: ShopSection.fromJson(response.data["data"]));
-    } catch (e) {
-      debugPrint('==> get createNewSection failure: $e');
-      return ApiResult.failure(error: AppHelpers.errorHandler(e));
-    }
-  }
+  // Future<ApiResult<ShopSection>> createNewSection(
+  //     {required String name, required num area}) async {
+  //   try {
+  //     final client = dioHttp.client(requireAuth: true);
+  //     final response = await client.post(
+  //       '/api/v1/dashboard/${LocalStorage.getUser()?.id}/shop-sections',
+  //       queryParameters: {
+  //         "area": area,
+  //         "images": [],
+  //         "title": {LocalStorage.getLanguage()?.locale ?? 'en': name}
+  //       },
+  //     );
+  //     return ApiResult.success(
+  //         data: ShopSection.fromJson(response.data["data"]));
+  //   } catch (e) {
+  //     debugPrint('==> get createNewSection failure: $e');
+  //     return ApiResult.failure(error: AppHelpers.errorHandler(e));
+  //   }
+  // }
 
   @override
   Future<ApiResult<ShopSectionResponse>> getSection({int? page}) async {
@@ -51,10 +51,7 @@ class TableRepositoryIml extends TableRepository {
         '/api/v1/dashboard/${LocalStorage.getUser()?.id}/shop-sections',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: ShopSectionResponse.fromJson(response.data),
-        // data: TableResponse.fromJson(mapData),
-      );
+      return response.data;
     } catch (e) {
       debugPrint('==> get getSection failure: $e');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
@@ -85,24 +82,13 @@ class TableRepositoryIml extends TableRepository {
     DateTime? from,
     DateTime? to,
   }) async {
-    from ??= from ?? DateTime.now();
-    to ??= to ?? DateTime.now();
-    to = to.add(const Duration(days: 1));
-    final data = {
-      if (page != null) 'page': page,
-      'perPage': 10,
-      'lang': LocalStorage.getLanguage()?.locale ?? 'en',
-      if (type != null) 'status': type,
-      if (shopSectionId != null) "shop_section_id": shopSectionId,
-      if (type != null) "date_from": TimeService.dateFormatYMDHm(from),
-      if (type != null) "date_to": TimeService.dateFormatYMDHm(to),
-    };
+
     try {
-      final client = dioHttp.client(requireAuth: true);
+      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-        '/api/v1/dashboard/${LocalStorage.getUser()?.id}/tables',
-        queryParameters: data,
+        '/api/tables/${LocalStorage.getRestaurant()?.id}'
       );
+      
       return ApiResult.success(
         data: TableResponse.fromJson(response.data),
       );

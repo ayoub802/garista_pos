@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import '../../repository/repository.dart';
 import '../handlers/handlers.dart';
+import 'package:garista_pos/src/repository/table_repository.dart';
+import 'package:garista_pos/src/repository/impl/table_repository_iml.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -14,6 +16,9 @@ void setUpDependencies() {
   getIt.registerSingleton<CurrenciesRepository>(CurrenciesRepositoryImpl());
   getIt.registerSingleton<CategoriesRepository>(CategoriesRepositoryImpl());
   getIt.registerSingleton<BrandsRepository>(BrandsRepositoryImpl());
+  getIt.registerSingleton<TableRepository>(TableRepositoryIml());
+  getIt.registerSingleton<OrdersRepository>(OrdersRepositoryImpl());
+
 }
 
 final dioHttp = getIt.get<HttpService>();
@@ -24,4 +29,5 @@ final currenciesRepository = getIt.get<CurrenciesRepository>();
 final brandsRepository = getIt.get<BrandsRepository>();
 final categoriesRepository = getIt.get<CategoriesRepository>();
 final productsRepository = getIt.get<ProductsRepository>();
-
+final tableRepository = getIt.get<TableRepository>();
+final ordersRepository = getIt.get<OrdersRepository>();

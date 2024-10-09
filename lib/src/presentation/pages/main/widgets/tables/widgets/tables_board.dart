@@ -45,10 +45,10 @@ class TablesBoard extends ConsumerWidget {
                             feedback: CustomTable(
                               tableModel: TableModel(
                                 name: tableListData[i]?.name ?? "",
-                                chairCount: tableListData[i]?.chairCount ?? 0,
-                                tax: tableListData[i]?.tax ?? 0,
-                                shopSectionId:
-                                    tableListData[i]?.shopSectionId ?? 0,
+                                chairCount: 4 ?? 0,
+                                // tax: tableListData[i]?.tax ?? 0,
+                                // shopSectionId:
+                                //     tableListData[i]?.shopSectionId ?? 0,
                               ),
                               type: (state.tableStatistic?.occupiedIds
                                           .contains(tableListData[i]?.id ?? 0) ??
@@ -71,10 +71,10 @@ class TablesBoard extends ConsumerWidget {
                               child: CustomTable(
                                 tableModel: TableModel(
                                   name: tableListData[i]?.name ?? "",
-                                  chairCount: tableListData[i]?.chairCount ?? 0,
-                                  tax: tableListData[i]?.tax ?? 0,
-                                  shopSectionId:
-                                      tableListData[i]?.shopSectionId ?? 0,
+                                  chairCount: 4 ?? 0,
+                                  // tax: tableListData[i]?.tax ?? 0,
+                                  // shopSectionId:
+                                  //     tableListData[i]?.shopSectionId ?? 0,
                                 ),
                                 type: (state.tableStatistic?.occupiedIds.contains(
                                             tableListData[i]?.id ?? 0) ??
@@ -118,27 +118,27 @@ class TablesBoard extends ConsumerWidget {
     ];
     return Row(
       children: [
-        for (int i = 0; i < statusList.length; i++)
-          Padding(
-            padding: REdgeInsets.only(left: 8),
-            child: ConfirmButton(
-              paddingSize: 18,
-              textSize: 14,
-              isActive: state.selectTabIndex == i,
-              title: AppHelpers.getTranslation(statusList[i]),
-              textColor: AppColors.black,
-              isTab: true,
-              isShadow: true,
-              onTap: () => notifier.changeIndex(i),
-            ),
-          ),
+        // for (int i = 0; i < statusList.length; i++)
+        //   Padding(
+        //     padding: REdgeInsets.only(left: 8),
+        //     child: ConfirmButton(
+        //       paddingSize: 18,
+        //       textSize: 14,
+        //       isActive: state.selectTabIndex == i,
+        //       title: AppHelpers.getTranslation(statusList[i]),
+        //       textColor: AppColors.black,
+        //       isTab: true,
+        //       isShadow: true,
+        //       onTap: () => notifier.changeIndex(i),
+        //     ),
+        //   ),
         const Spacer(),
         ConfirmButton(
           paddingSize: 20,
-          prefixIcon: Icon(FlutterRemix.add_fill, size: 28.r),
+          prefixIcon: Icon(FlutterRemix.add_fill, size: 28.r, color: Colors.white,),
           textSize: 14,
           title: AppHelpers.getTranslation(TrKeys.addNewTable),
-          textColor: AppColors.black,
+          textColor: AppColors.white,
           onTap: () {
             if (!state.isSectionLoading && !state.isLoading) {
               AppHelpers.showAlertDialog(

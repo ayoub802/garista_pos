@@ -117,10 +117,10 @@ class OrdersRepositoryImpl extends OrdersRepository {
       'lang': LocalStorage.getLanguage()?.locale ?? 'en',
     };
     try {
-      final client = dioHttp.client(requireAuth: true);
+      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-        '/api/v1/dashboard/${LocalStorage.getUser()?.id}/orders/paginate',
-        queryParameters: data,
+        '/api/order_resto/${LocalStorage.getRestaurant()?.id}',
+        // queryParameters: data,
       );
       return ApiResult.success(
         data: OrdersPaginateResponse.fromJson(response.data),

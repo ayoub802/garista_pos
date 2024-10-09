@@ -32,7 +32,7 @@ class TablesState with _$TablesState {
     @Default([]) List<TableData?> tableListData,
     @Default([]) List<TableBookingData?> tableBookingData,
     @Default([]) List<String> sectionListTitle,
-    @Default([]) List<ShopSection?> shopSectionList,
+    // @Default([]) List<ShopSection?> shopSectionList,
     @Default([]) List<DisableDates?> disableDates,
     @Default(null) TableStatisticData? tableStatistic,
     @Default(null) WorkingDayData? workingDayData,

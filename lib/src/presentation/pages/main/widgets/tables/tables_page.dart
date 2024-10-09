@@ -105,63 +105,63 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                                       child: !state.isListView
                                           ? const TablesBoard()
                                           : const TablesList()),
-                                  if (!state.isListView)
-                                    Container(
-                                      width: double.infinity,
-                                      padding: REdgeInsets.symmetric(
-                                          vertical: 7, horizontal: 18),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10.r)),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: REdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Text(
-                                                AppHelpers.getTranslation(
-                                                  TrKeys.tables,
-                                                ),
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
-                                          14.horizontalSpace,
-                                          SizedBox(
-                                            height: 42.r,
-                                            child: const VerticalDivider(
-                                                color: AppColors.hintColor,
-                                                thickness: 1),
-                                          ),
-                                          _tableStatus(
-                                            tableStatus: TrKeys.available,
-                                            tableCount: state.tableStatistic
-                                                    ?.available ??
-                                                0,
-                                            statusColor: AppColors.hintColor,
-                                            isLoading: state.isStatisticLoading,
-                                          ),
-                                          _tableStatus(
-                                            tableStatus: TrKeys.booked,
-                                            tableCount:
-                                                state.tableStatistic?.booked ??
-                                                    0,
-                                            statusColor: AppColors.starColor,
-                                            isLoading: state.isStatisticLoading,
-                                          ),
-                                          _tableStatus(
-                                            tableStatus: TrKeys.occupied,
-                                            tableCount: state
-                                                    .tableStatistic?.occupied ??
-                                                0,
-                                            statusColor: AppColors.red,
-                                            isLoading: state.isStatisticLoading,
-                                          ),
-                                        ],
-                                      ),
-                                    )
+                                  // if (!state.isListView)
+                                  //   Container(
+                                  //     width: double.infinity,
+                                  //     padding: REdgeInsets.symmetric(
+                                  //         vertical: 7, horizontal: 18),
+                                  //     decoration: BoxDecoration(
+                                  //         color: AppColors.white,
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(10.r)),
+                                  //     child: Row(
+                                  //       children: [
+                                  //         Padding(
+                                  //           padding: REdgeInsets.symmetric(
+                                  //               vertical: 10),
+                                  //           child: Text(
+                                  //               AppHelpers.getTranslation(
+                                  //                 TrKeys.tables,
+                                  //               ),
+                                  //               style: GoogleFonts.inter(
+                                  //                 fontSize: 14.sp,
+                                  //                 fontWeight: FontWeight.w600,
+                                  //               )),
+                                  //         ),
+                                  //         14.horizontalSpace,
+                                  //         SizedBox(
+                                  //           height: 42.r,
+                                  //           child: const VerticalDivider(
+                                  //               color: AppColors.hintColor,
+                                  //               thickness: 1),
+                                  //         ),
+                                  //         _tableStatus(
+                                  //           tableStatus: TrKeys.available,
+                                  //           tableCount: state.tableStatistic
+                                  //                   ?.available ??
+                                  //               0,
+                                  //           statusColor: AppColors.hintColor,
+                                  //           isLoading: state.isStatisticLoading,
+                                  //         ),
+                                  //         _tableStatus(
+                                  //           tableStatus: TrKeys.booked,
+                                  //           tableCount:
+                                  //               state.tableStatistic?.booked ??
+                                  //                   0,
+                                  //           statusColor: AppColors.starColor,
+                                  //           isLoading: state.isStatisticLoading,
+                                  //         ),
+                                  //         _tableStatus(
+                                  //           tableStatus: TrKeys.occupied,
+                                  //           tableCount: state
+                                  //                   .tableStatistic?.occupied ??
+                                  //               0,
+                                  //           statusColor: AppColors.red,
+                                  //           isLoading: state.isStatisticLoading,
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   )
                                 ],
                               ),
                             ),
@@ -214,11 +214,11 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                         )),
                       ],
                     ))),
-            Expanded(
-                flex: !state.isListView ? 7 : 7,
-                child: !state.isListView
-                    ? const BoardTableInfo()
-                    : const ListTableInfo()),
+            // Expanded(
+            //     flex: !state.isListView ? 7 : 7,
+            //     child: !state.isListView
+            //         ? const BoardTableInfo()
+            //         : const ListTableInfo()),
           ],
         ),
       ),

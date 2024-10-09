@@ -39,10 +39,11 @@ class ViewMode extends StatelessWidget {
             width: 100.w,
             padding: EdgeInsets.symmetric(vertical: 10.r),
             decoration: BoxDecoration(
-                color: isActive ? AppColors.brandColor : AppColors.transparent,
+                color:
+                    isActive ? AppColors.GaristaColorBg : AppColors.transparent,
                 border: Border.all(
                     color: isActive
-                        ? AppColors.brandColor
+                        ? AppColors.GaristaColorBg
                         : AppColors.borderColor),
                 borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(isLeft ? 12.r : 0),
@@ -54,7 +55,7 @@ class ViewMode extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: isActive ? AppColors.black : AppColors.reviewText,
+                  color: isActive ? AppColors.white : AppColors.reviewText,
                   size: 20.r,
                 ),
                 14.horizontalSpace,
@@ -63,7 +64,7 @@ class ViewMode extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
-                    color: isActive ? AppColors.black : AppColors.reviewText,
+                    color: isActive ? AppColors.white : AppColors.reviewText,
                   ),
                 ),
               ],

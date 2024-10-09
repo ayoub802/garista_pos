@@ -56,11 +56,11 @@ enum UploadType {
 }
 
 enum OrderStatus {
-  newOrder,
+  newO,
   accepted,
   cooking,
   ready,
   onAWay,
-  delivered,
-  canceled,
+  completed,
+  rejected,
 }

@@ -91,7 +91,8 @@ class ListItem extends ConsumerWidget {
                 8.horizontalSpace,
                 SizedBox(
                   width: 96.w,
-                  child: Text(orderData.total,
+                  child: Text(
+                    orderData.total ?? '',
                     style: GoogleFonts.inter(
                       fontSize: 16.sp,
                       color: AppColors.brandTitleDivider,
@@ -103,8 +104,8 @@ class ListItem extends ConsumerWidget {
                 SizedBox(
                   width: 180.w,
                   child: Text(
-                    DateFormat("MMMM dd, HH:mm")
-                        .format(orderData.createdAt?.toLocal() ?? DateTime.now()),
+                    DateFormat("MMMM dd, HH:mm").format(
+                        orderData.createdAt?.toLocal() ?? DateTime.now()),
                     style: GoogleFonts.inter(
                       fontSize: 16.sp,
                       color: AppColors.brandTitleDivider,

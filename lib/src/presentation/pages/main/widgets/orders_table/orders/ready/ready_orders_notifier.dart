@@ -71,7 +71,7 @@ class ReadyOrdersNotifier extends StateNotifier<ReadyOrdersState> {
   }) async {
     if (isRefresh) {
       _page = 0;
-      state = state.copyWith(hasMore: true,orders: []);
+      state = state.copyWith(hasMore: true, orders: []);
       _refreshTime?.cancel();
     }
     if (!state.hasMore) {
@@ -95,21 +95,22 @@ class ReadyOrdersNotifier extends StateNotifier<ReadyOrdersState> {
             orders.add(element);
           }
         }
-        state = state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
+        state =
+            state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
         if (_page == 1 && !isRefresh) {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         } else {
           state = state.copyWith(
             orders: orders,
             isLoading: false,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         }
         if (isRefresh) {
           _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
@@ -125,11 +126,12 @@ class ReadyOrdersNotifier extends StateNotifier<ReadyOrdersState> {
                   // List<OrderData> orders = List.from(state.orders);
                   // for (OrderData element in data?.orders ?? []) {
                   //   if (!orders.map((item) => item.id).contains(element.id)) {
-                  //     orders.insert(0, element);
+                  //     orders.insert(orders.length, element);
                   //   }
                   // }
-                  state = state.copyWith(orders: data?.orders??[],totalCount: 0);
-                  updateTotal?.call(0);
+                  state = state.copyWith(
+                      orders: data?.orders ?? [], totalCount: orders.length);
+                  updateTotal?.call(orders.length);
                 },
                 failure: (f) {});
           });
@@ -204,8 +206,7 @@ class ReadyOrdersNotifier extends StateNotifier<ReadyOrdersState> {
     return 0;
   }
 
-
-  void stopTimer(){
+  void stopTimer() {
     _refreshTime?.cancel();
   }
 }

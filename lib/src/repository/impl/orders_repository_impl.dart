@@ -78,55 +78,39 @@ class OrdersRepositoryImpl extends OrdersRepository {
     String? statusText;
     switch (status) {
       case OrderStatus.accepted:
-        statusText = 'accepted';
+        statusText = 'Accepted';
         break;
       case OrderStatus.ready:
-        statusText = 'ready';
+        statusText = 'Ready';
         break;
-      case OrderStatus.onAWay:
-        statusText = 'on_a_way';
+      case OrderStatus.completed:
+        statusText = 'Completed';
         break;
-      case OrderStatus.delivered:
-        statusText = 'delivered';
+      case OrderStatus.rejected:
+        statusText = 'Rejected';
         break;
-      case OrderStatus.canceled:
-        statusText = 'canceled';
-        break;
-      case OrderStatus.newOrder:
-        statusText = 'new';
-        break;
-      case OrderStatus.cooking:
-        statusText = 'cooking';
+      case OrderStatus.newO:
+        statusText = 'New';
         break;
       default:
         statusText = null;
         break;
     }
     final data = {
-      if (page != null) 'page': page,
       if (statusText != null) 'status': statusText,
-      if (from != null)
-        "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
-      if (to != null)
-        "date_to": to.toString().substring(0, to.toString().indexOf(" ")),
-      if (search != null) 'search': search,
-      'perPage': to == null ? 7 : 15,
-      if (LocalStorage.getUser()?.id == TrKeys.waiter) 'empty-waiter': 1,
-      if (LocalStorage.getUser()?.id == TrKeys.waiter)
-        'delivery_type': 'dine_in',
-      'lang': LocalStorage.getLanguage()?.locale ?? 'en',
     };
     try {
-      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
         '/api/order_resto/${LocalStorage.getRestaurant()?.id}',
-        // queryParameters: data,
+        queryParameters: data,
       );
       return ApiResult.success(
         data: OrdersPaginateResponse.fromJson(response.data),
       );
     } catch (e, s) {
-      debugPrint('==> get order $status failure: $e,$s');
+      debugPrint('==> get order with status $status failure: $e,$s');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
     }
   }
@@ -138,29 +122,25 @@ class OrdersRepositoryImpl extends OrdersRepository {
   }) async {
     String? statusText;
     switch (status) {
-      case OrderStatus.newOrder:
-        statusText = 'new';
-        break;
       case OrderStatus.accepted:
-        statusText = 'accepted';
+        statusText = 'Accepted';
         break;
       case OrderStatus.ready:
-        statusText = 'ready';
+        statusText = 'Ready';
         break;
-      case OrderStatus.onAWay:
-        statusText = 'on_a_way';
+      case OrderStatus.completed:
+        statusText = 'Completed';
         break;
-      case OrderStatus.delivered:
-        statusText = 'delivered';
+      case OrderStatus.rejected:
+        statusText = 'Rejected';
         break;
-      case OrderStatus.canceled:
-        statusText = 'canceled';
+      case OrderStatus.newO:
+        statusText = 'New';
         break;
-      case OrderStatus.cooking:
-        statusText = 'cooking';
+      default:
+        statusText = null;
         break;
     }
-
     final data = {'status': statusText};
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -212,26 +192,23 @@ class OrdersRepositoryImpl extends OrdersRepository {
   }) async {
     String? statusText;
     switch (status) {
-      case OrderStatus.newOrder:
-        statusText = 'new';
-        break;
       case OrderStatus.accepted:
-        statusText = 'accepted';
-        break;
-      case OrderStatus.cooking:
-        statusText = 'cooking';
+        statusText = 'Accepted';
         break;
       case OrderStatus.ready:
-        statusText = 'ready';
+        statusText = 'Ready';
         break;
-      case OrderStatus.onAWay:
-        statusText = 'on_a_way';
+      case OrderStatus.completed:
+        statusText = 'Completed';
         break;
-      case OrderStatus.delivered:
-        statusText = 'delivered';
+      case OrderStatus.rejected:
+        statusText = 'Rejected';
         break;
-      case OrderStatus.canceled:
-        statusText = 'canceled';
+      case OrderStatus.newO:
+        statusText = 'New';
+        break;
+      default:
+        statusText = null;
         break;
     }
 

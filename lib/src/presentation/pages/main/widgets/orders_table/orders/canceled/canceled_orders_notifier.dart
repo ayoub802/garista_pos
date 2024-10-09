@@ -79,7 +79,7 @@ class CanceledOrdersNotifier extends StateNotifier<CanceledOrdersState> {
     }
     state = state.copyWith(isLoading: true);
     final response = await _ordersRepository.getOrders(
-      status: OrderStatus.canceled,
+      status: OrderStatus.rejected,
       page: ++_page,
       to: end,
       from: start,
@@ -97,21 +97,21 @@ class CanceledOrdersNotifier extends StateNotifier<CanceledOrdersState> {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         } else {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         }
         if (isRefresh) {
           _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
             final response = await _ordersRepository.getOrders(
-              status: OrderStatus.canceled,
+              status: OrderStatus.rejected,
               page: 1,
               search: state.query.isEmpty ? null : state.query,
               to: end,
@@ -122,12 +122,12 @@ class CanceledOrdersNotifier extends StateNotifier<CanceledOrdersState> {
                   // List<OrderData> orders = List.from(state.orders);
                   // for (OrderData element in data.data?.orders ?? []) {
                   //   if (!orders.map((item) => item.id).contains(element.id)) {
-                  //     orders.insert(0, element);
+                  //     orders.insert(orders.length, element);
                   //   }
                   // }
-                  state = state.copyWith(orders: data?.orders??[],totalCount: 0);
-                  updateTotal
-                      ?.call(0);
+                  state = state.copyWith(
+                      orders: data?.orders ?? [], totalCount: orders.length);
+                  updateTotal?.call(orders.length);
                 },
                 failure: (f) {});
           });
@@ -147,7 +147,7 @@ class CanceledOrdersNotifier extends StateNotifier<CanceledOrdersState> {
     list.insert(0, orderData);
     state = state.copyWith(orders: list, totalCount: state.totalCount + 1);
     final response = await _ordersRepository.updateOrderStatus(
-      status: OrderStatus.canceled,
+      status: OrderStatus.rejected,
       orderId: orderData.id,
     );
     response.when(

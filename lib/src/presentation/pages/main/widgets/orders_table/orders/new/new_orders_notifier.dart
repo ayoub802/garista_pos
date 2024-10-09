@@ -70,7 +70,7 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
       DateTime? end}) async {
     if (isRefresh) {
       _page = 0;
-      state = state.copyWith(hasMore: true,orders: []);
+      state = state.copyWith(hasMore: true, orders: []);
       _refreshTime?.cancel();
     }
     if (!state.hasMore) {
@@ -78,7 +78,7 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
     }
     state = state.copyWith(isLoading: true);
     final response = await _ordersRepository.getOrders(
-      status: OrderStatus.newOrder,
+      status: OrderStatus.newO,
       page: ++_page,
       to: end,
       from: start,
@@ -94,28 +94,29 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
             orders.add(element);
           }
         }
-        state = state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
+        state =
+            state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
 
         if (_page == 1 && !isRefresh) {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         } else {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         }
 
         if (isRefresh) {
           _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
             final response = await _ordersRepository.getOrders(
-              status: OrderStatus.newOrder,
+              status: OrderStatus.newO,
               page: 1,
               search: state.query.isEmpty ? null : state.query,
               to: end,
@@ -129,8 +130,9 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
                   //     orders.insert(0, element);
                   //   }
                   // }
-                  state = state.copyWith(orders: data?.orders??[],totalCount: 0);
-                  updateTotal?.call(0);
+                  state = state.copyWith(
+                      orders: data?.orders ?? [], totalCount: orders.length);
+                  updateTotal?.call(orders.length);
                 },
                 failure: (f) {});
           });
@@ -150,7 +152,7 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
     list.insert(0, orderData);
     state = state.copyWith(orders: list, totalCount: state.totalCount + 1);
     final response = await _ordersRepository.updateOrderStatus(
-      status: OrderStatus.newOrder,
+      status: OrderStatus.newO,
       orderId: orderData.id,
     );
     response.when(
@@ -205,7 +207,7 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
     return 0;
   }
 
-  void stopTimer(){
+  void stopTimer() {
     _refreshTime?.cancel();
   }
 }

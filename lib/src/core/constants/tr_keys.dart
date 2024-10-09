@@ -225,6 +225,7 @@ class TrKeys {
   static const String profile = 'profile';
   static const String order = 'order';
   static const String newOrder = 'new_order';
+  static const String newO = 'New';
   static const String liked = 'liked';
   static const String products = 'products';
   static const String likedProducts = 'liked_products';
@@ -322,8 +323,8 @@ class TrKeys {
   static const String completed = 'completed';
   static const String canceled = 'canceled';
   static const String leaveFeedback = 'leave_feedback';
-  static const String accepted = 'accepted';
-  static const String ready = 'ready';
+  static const String accepted = 'Accepted';
+  static const String ready = 'Ready';
   static const String onAWay = 'on_a_way';
   static const String delivered = 'delivery';
   static const String addComment = 'add_comment';
@@ -467,9 +468,8 @@ class TrKeys {
   static const String thisFieldIsNotMinusOrZero =
       'this.field.is.not.minus.or.zero';
   static const String thisFieldIsRequired = 'this.field.is.required';
-  static const String rejected = 'rejected';
+  static const String rejected = 'Rejected';
   static const String viewed = "viewed";
   static const String imageCantEmpty = 'image.cant.empty';
   static const String successfullyEdited = 'successfully_edited';
 }
-

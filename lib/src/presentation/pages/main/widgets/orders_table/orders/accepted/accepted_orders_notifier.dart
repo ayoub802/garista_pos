@@ -72,7 +72,7 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
       DateTime? end}) async {
     if (isRefresh) {
       _page = 0;
-      state = state.copyWith(hasMore: true,orders: []);
+      state = state.copyWith(hasMore: true, orders: []);
       _refreshTime?.cancel();
     }
     if (!state.hasMore) {
@@ -96,21 +96,22 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
             orders.add(element);
           }
         }
-        state = state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
+        state =
+            state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
         if (_page == 1 && !isRefresh) {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         } else {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         }
         if (isRefresh) {
           _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
@@ -126,11 +127,12 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
                   // List<OrderData> orders = List.from(state.orders);
                   // for (OrderData element in data.data?.orders ?? []) {
                   //   if (!orders.map((item) => item.id).contains(element.id)) {
-                  //     orders.insert(0, element);
+                  //     orders.insert(orders.length, element);
                   //   }
                   // }
-                  state = state.copyWith(orders: data?.orders??[],totalCount: 0);
-                  updateTotal?.call(0);
+                  state = state.copyWith(
+                      orders: data?.orders ?? [], totalCount: orders.length);
+                  updateTotal?.call(orders.length);
                 },
                 failure: (f) {});
           });
@@ -158,20 +160,20 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
         AppHelpers.showSnackBar(context,
             "#${orderData.id} ${AppHelpers.getTranslation(TrKeys.orderStatusChanged)}",
             isIcon: true);
-        if(AppHelpers.getAutoPrint()) {
+        if (AppHelpers.getAutoPrint()) {
           showDialog(
-            context: context,
-            builder: (context) {
-              return LayoutBuilder(builder: (context, constraints) {
-                return SimpleDialog(
-                  title: SizedBox(
-                    height: constraints.maxHeight * 0.7,
-                    width: 300.r,
-                    // child: GenerateCheckPage(orderData: orderData),
-                  ),
-                );
+              context: context,
+              builder: (context) {
+                return LayoutBuilder(builder: (context, constraints) {
+                  return SimpleDialog(
+                    title: SizedBox(
+                      height: constraints.maxHeight * 0.7,
+                      width: 300.r,
+                      // child: GenerateCheckPage(orderData: orderData),
+                    ),
+                  );
+                });
               });
-            });
         }
       },
       failure: (failure) {
@@ -188,10 +190,10 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
     state = state.copyWith(orders: list, totalCount: state.totalCount - 1);
   }
 
-  deleteOrder(BuildContext context,
-      {required orderId,}) async {
-   
-
+  deleteOrder(
+    BuildContext context, {
+    required orderId,
+  }) async {
     removeList(getIndex(orderId));
     final response = await _ordersRepository.deleteOrder(
       orderId: orderId,
@@ -220,7 +222,7 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
     return 0;
   }
 
-  void stopTimer(){
+  void stopTimer() {
     _refreshTime?.cancel();
   }
 }

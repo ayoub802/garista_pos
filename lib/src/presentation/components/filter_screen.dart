@@ -1,6 +1,5 @@
 import 'package:garista_pos/src/core/utils/app_helpers.dart';
 import 'package:garista_pos/src/core/utils/extension.dart';
-import 'package:garista_pos/src/presentation/pages/main/widgets/income/riverpod/income_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/orders_table/order_table_riverpod/order_table_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/orders_table/orders/canceled/canceled_orders_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/orders_table/orders/cooking/cooking_orders_provider.dart';
@@ -166,13 +165,13 @@ class _FilterScreenState extends State<FilterScreen> {
                           isRefresh: true,
                         );
                   } else {
-                    ref.read(incomeProvider.notifier)
-                      ..fetchIncomeCarts(
-                          start: _newList.first, end: _newList.last)
-                      ..fetchIncomeCharts(
-                          start: _newList.first, end: _newList.last)
-                      ..fetchIncomeStatistic(
-                          start: _newList.first, end: _newList.last);
+                    // ref.read(incomeProvider.notifier)
+                    //   ..fetchIncomeCarts(
+                    //       start: _newList.first, end: _newList.last)
+                    //   ..fetchIncomeCharts(
+                    //       start: _newList.first, end: _newList.last)
+                    //   ..fetchIncomeStatistic(
+                    //       start: _newList.first, end: _newList.last);
                   }
 
                   context.popRoute();

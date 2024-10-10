@@ -40,9 +40,9 @@ class _MainPageState extends ConsumerState<MainPage>
   Timer? timer;
   late List<IndexedStackChild> list = [
     IndexedStackChild(child: const PostPage(), preload: true),
-    IndexedStackChild(child: const OrdersTablesPage()),
-    IndexedStackChild(child: const TablesPage()),
-    IndexedStackChild(child: const ProfilePage()),
+    // IndexedStackChild(child: const OrdersTablesPage()),
+    // IndexedStackChild(child: const TablesPage()),
+    // IndexedStackChild(child: const ProfilePage()),
     // IndexedStackChild(child: const CustomersPage()),
     // IndexedStackChild(child: const SaleHistory()),
     // IndexedStackChild(child: const InComePage()),

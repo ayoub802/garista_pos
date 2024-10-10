@@ -7,7 +7,7 @@ import '../core/handlers/handlers.dart';
 import '../models/models.dart';
 
 abstract class OrdersRepository {
-  Future<ApiResult<CreateOrderResponse>> createOrder(OrderBodyData orderBody);
+  Future<ApiResult<CreateOrderResponse>> createOrder(List<CartItem> cartItems, double totalCost, int extraInfo, int restoId);
 
   Future<ApiResult<OrdersPaginateResponse>> getOrders({
     OrderStatus? status,

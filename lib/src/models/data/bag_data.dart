@@ -95,6 +95,7 @@ class CartProductData {
   String? name; // Product name
   String? desc; // Product description
   String? price; // Product price
+  String? type; // Product price
 
   CartProductData({
     required this.productId,
@@ -102,6 +103,7 @@ class CartProductData {
     this.name,
     this.desc,
     this.price,
+    required this.type,
   });
 
   // Implementing copyWith method
@@ -110,6 +112,7 @@ class CartProductData {
     int? quantity,
     String? name,
     String? desc,
+    String? type,
     String? price,
   }) {
     return CartProductData(
@@ -118,6 +121,7 @@ class CartProductData {
       name: name ?? this.name,
       desc: desc ?? this.desc,
       price: price ?? this.price,
+      type: type ?? this.type,
     );
   }
 
@@ -128,6 +132,7 @@ class CartProductData {
       name: data['name'],
       desc: data['desc'],
       price: data['price'],
+      type: data['type'],
     );
   }
 
@@ -138,11 +143,12 @@ class CartProductData {
       'name': name,
       'desc': desc,
       'price': price,
+      'type': type,
     };
   }
 
   @override
   String toString() {
-    return 'CartProductData(productId: $productId, quantity: $quantity, name: $name, desc: $desc, price: $price)';
+    return 'CartProductData(productId: $productId, quantity: $quantity, name: $name, desc: $desc, price: $price, tpye: $type)';
   }
 }

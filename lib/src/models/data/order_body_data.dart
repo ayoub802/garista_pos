@@ -74,6 +74,32 @@ class OrderBodyData {
   }
 }
 
+class CartItem {
+  final String? type;
+  final int id;
+  final int quantity;
+  final String? comment;
+  // final List<String>? toppings; // Adjust based on your actual data type
+  // final List<String>? ingredients; // Adjust based on your actual data type
+  // final List<String>? extraVariants; // Adjust based on your actual data type
+
+  CartItem({
+    required this.type,
+    required this.id,
+    required this.quantity,
+    this.comment,
+    // this.toppings,
+    // this.ingredients,
+    // this.extraVariants,
+  });
+
+  @override
+  String toString() {
+    return "{\"type\":$type, \"quantity\":$quantity, \"comment\":$comment,}";
+  }
+}
+
+
 class AddressModel {
   final String? address;
   final String? office;

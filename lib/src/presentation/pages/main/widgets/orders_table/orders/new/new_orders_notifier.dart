@@ -113,30 +113,30 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
           updateTotal?.call(orders.length);
         }
 
-        if (isRefresh) {
-          _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
-            final response = await _ordersRepository.getOrders(
-              status: OrderStatus.newO,
-              page: 1,
-              search: state.query.isEmpty ? null : state.query,
-              to: end,
-              from: start,
-            );
-            response.when(
-                success: (data) {
-                  // List<OrderData> orders = List.from(state.orders);
-                  // for (OrderData element in data?.orders ?? []) {
-                  //   if (!orders.map((item) => item.id).contains(element.id)) {
-                  //     orders.insert(0, element);
-                  //   }
-                  // }
-                  state = state.copyWith(
-                      orders: data?.orders ?? [], totalCount: orders.length);
-                  updateTotal?.call(orders.length);
-                },
-                failure: (f) {});
-          });
-        }
+        // if (isRefresh) {
+        //   _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
+        //     final response = await _ordersRepository.getOrders(
+        //       status: OrderStatus.newO,
+        //       page: 1,
+        //       search: state.query.isEmpty ? null : state.query,
+        //       to: end,
+        //       from: start,
+        //     );
+        //     response.when(
+        //         success: (data) {
+        //           // List<OrderData> orders = List.from(state.orders);
+        //           // for (OrderData element in data?.orders ?? []) {
+        //           //   if (!orders.map((item) => item.id).contains(element.id)) {
+        //           //     orders.insert(0, element);
+        //           //   }
+        //           // }
+        //           state = state.copyWith(
+        //               orders: data?.orders ?? [], totalCount: orders.length);
+        //           updateTotal?.call(orders.length);
+        //         },
+        //         failure: (f) {});
+        //   });
+        // }
       },
       failure: (failure) {
         _page--;

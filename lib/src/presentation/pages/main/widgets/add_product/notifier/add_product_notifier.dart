@@ -50,6 +50,7 @@ class AddProductNotifier extends StateNotifier<AddProductState> {
       name: product.name, // Include product name
       desc: product.desc, // Include product description
       price: product.price, // Include product price
+      type: product.type
     );
     print("The Product which I get: $newProduct");
 

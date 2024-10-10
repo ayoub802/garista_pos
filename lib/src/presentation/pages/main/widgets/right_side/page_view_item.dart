@@ -195,7 +195,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                                     ],
                                   ),
                                 ),
-                                _price(state, currency?.currency),
+                                _price(state, currency?.currency, notifier),
                               ],
                             ),
                             28.verticalSpace,
@@ -245,7 +245,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
     );
   }
 
-  Column _price(RightSideState state, String? currency) {
+  Column _price(RightSideState state, String? currency,rightSideNotifier) {
     num totalPrice = AppHelpers.calculateTotalPrice(state);
 
     String formattedPrice = NumberFormat.currency(
@@ -288,8 +288,23 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                 title: AppHelpers.getTranslation(TrKeys.order),
                 titleColor: AppColors.white,
                 onPressed: () {
-                  AppHelpers.showAlertDialog(
-                      context: context, child: OrderInformation());
+                  final List<CartProductData> allCarts = [];
+                                for (var bagProduct in state
+                                        .bags[state.selectedBagIndex]
+                                        .bagProducts ??
+                                    []) {
+                                  allCarts.addAll(bagProduct.carts ?? []);
+                                }
+                    final cartItems = allCarts.map((item) => CartItem(
+                      type: item.type, 
+                      id: item.productId, 
+                      quantity: item.quantity, 
+                      comment: '',
+                    )).toList();
+
+                   for (var cartItem in cartItems) {
+                      print('Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, total: ${totalPrice} resto_id: ${LocalStorage.getRestaurant()?.id}');
+                    }
                 },
               )
             ],

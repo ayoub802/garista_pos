@@ -15,18 +15,37 @@ import '../repository.dart';
 class OrdersRepositoryImpl extends OrdersRepository {
   @override
   Future<ApiResult<CreateOrderResponse>> createOrder(
-      OrderBodyData orderBody) async {
+     List<CartItem> cartItems, double totalCost, int extraInfo, int restoId) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final data = orderBody.toJson();
-      debugPrint('==> order create data: ${jsonEncode(data)}');
-      final response = await client.post(
-        '/api/v1/dashboard/${LocalStorage.getUser()?.id}/orders',
-        data: data,
-      );
+      final cartItemProduct = cartItems.map((item) {
+      return {
+        'type': item.type,
+        'id': item.id,
+        'quantity': item.quantity,
+        'comment': item.comment ?? null,
+        // 'toppings': item.toppings,
+        // 'ingredients': item.ingredients,
+        // 'extraVariant': item.extraVariants,
+      };
+    }).toList();
 
-      return ApiResult.success(
-        data: CreateOrderResponse.fromJson(response.data),
+    final orderBody = {
+      'total': totalCost,
+      'status': 'New',
+      'table_id': extraInfo,
+      'resto_id': restoId,
+      'cartItems': cartItemProduct,
+    };
+      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+      debugPrint('==> order create data: ${jsonEncode(cartItemProduct)} and cart Items => ${cartItemProduct}');
+      // final data = jsonEncode(orderBody);
+      // final response = await client.post(
+      //   '/api/order/',
+      //   data: data,
+      // );
+
+      return ApiResult.failure(
+       error: AppHelpers.errorHandler("test"),
       );
     } catch (e) {
       debugPrint('==> order create failure: $e');

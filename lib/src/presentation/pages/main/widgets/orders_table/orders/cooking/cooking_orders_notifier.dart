@@ -110,30 +110,30 @@ class CookingOrdersNotifier extends StateNotifier<CookingOrdersState> {
           );
           updateTotal?.call(0);
         }
-        if (isRefresh) {
+        // if (isRefresh) {
 
-          _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
-            final response = await _ordersRepository.getOrders(
-              status: OrderStatus.cooking,
-              page: 1,
-              search: state.query.isEmpty ? null : state.query,
-              to: end,
-              from: start,
-            );
-            response.when(
-                success: (data) {
-                  // List<OrderData> orders = List.from(state.orders);
-                  // for (OrderData element in data.data?.orders ?? []) {
-                  //   if (!orders.map((item) => item.id).contains(element.id)) {
-                  //     orders.insert(0, element);
-                  //   }
-                  // }
-                  state = state.copyWith(orders: data?.orders??[],totalCount:0 );
-                  updateTotal?.call(0);
-                },
-                failure: (f) {});
-          });
-        }
+        //   _refreshTime = Timer.periodic(AppConstants.refreshTime, (s) async {
+        //     final response = await _ordersRepository.getOrders(
+        //       status: OrderStatus.cooking,
+        //       page: 1,
+        //       search: state.query.isEmpty ? null : state.query,
+        //       to: end,
+        //       from: start,
+        //     );
+        //     response.when(
+        //         success: (data) {
+        //           // List<OrderData> orders = List.from(state.orders);
+        //           // for (OrderData element in data.data?.orders ?? []) {
+        //           //   if (!orders.map((item) => item.id).contains(element.id)) {
+        //           //     orders.insert(0, element);
+        //           //   }
+        //           // }
+        //           state = state.copyWith(orders: data?.orders??[],totalCount:0 );
+        //           updateTotal?.call(0);
+        //         },
+        //         failure: (f) {});
+        //   });
+        // }
       },
       failure: (failure) {
         _page--;

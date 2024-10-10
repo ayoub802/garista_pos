@@ -18,14 +18,14 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
   final UsersRepository _usersRepository;
   // final PaymentsRepository _paymentsRepository;
   // final ProductsRepository _productsRepository;
-  // final OrdersRepository _ordersRepository;
+  final OrdersRepository _ordersRepository;
   // final GalleryRepositoryFacade _galleryRepository;
   Timer? _searchUsersTimer;
 
-  RightSideNotifier(this._usersRepository
+  RightSideNotifier(this._usersRepository,
       // this._paymentsRepository,
       // this._productsRepository,
-      // this._ordersRepository,
+      this._ordersRepository,
       // this._galleryRepository
       )
       : super(const RightSideState());
@@ -546,5 +546,35 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
       },
     );
     }
+
+  // Future createOrder(BuildContext context, OrderBodyData data,
+  //       {VoidCallback? onSuccess}) async {
+  //     final connected = await AppConnectivity.connectivity();
+  //     if (connected) {
+  //       state = state.copyWith(isOrderLoading: true);
+  //       final response = await _ordersRepository.createOrder(data);
+  //       response.when(
+  //         success: (res) async {
+  //           state = state.copyWith(isOrderLoading: false);
+  //           onSuccess?.call();
+  //           removeOrderedBag(context);
+  //         },
+  //         failure: (activeFailure) {
+  //           state = state.copyWith(isOrderLoading: false);
+  //           if (mounted) {
+  //             AppHelpers.showSnackBar(
+  //               context,
+  //               AppHelpers.getTranslation(500.toString()),
+  //             );
+  //           }
+  //         },
+  //       );
+  //     } else {
+  //       if (context.mounted) {
+  //         AppHelpers.showSnackBar(
+  //             context, AppHelpers.getTranslation(TrKeys.noInternetConnection));
+  //       }
+  //     }
+  // }
 
 }

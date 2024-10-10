@@ -10,6 +10,7 @@ class ProductData {
     String? name,
     String? desc,
     String? price,
+    String? type,
     String? happyHourPrice,
     bool? isHappyHourActive,
     int? visibility,
@@ -31,6 +32,7 @@ class ProductData {
     _name = name;
     _desc = desc;
     _price = price;
+    _type = type;
     _happyHourPrice = happyHourPrice;
     _isHappyHourActive = isHappyHourActive;
     _visibility = visibility;
@@ -54,6 +56,7 @@ class ProductData {
     _name = json['name'];
     _desc = json['desc'];
     _price = json['price'];
+    _type = json['type'];
     _happyHourPrice = json['happy_hour_price'];
     _isHappyHourActive = json['is_happy_hour_active'] == 1;
     _visibility = json['visibility'];
@@ -89,6 +92,7 @@ class ProductData {
   String? _name;
   String? _desc;
   String? _price;
+  String? _type;
   String? _happyHourPrice;
   bool? _isHappyHourActive;
   int? _visibility;
@@ -110,6 +114,7 @@ class ProductData {
   String? get name => _name;
   String? get desc => _desc;
   String? get price => _price;
+  String? get type => _type;
   String? get happyHourPrice => _happyHourPrice;
   bool? get isHappyHourActive => _isHappyHourActive;
   int? get visibility => _visibility;
@@ -133,6 +138,7 @@ class ProductData {
     map['name'] = _name;
     map['desc'] = _desc;
     map['price'] = _price;
+    map['type'] = _type;
     map['happy_hour_price'] = _happyHourPrice;
     map['is_happy_hour_active'] = _isHappyHourActive;
     map['visibility'] = _visibility;
@@ -378,26 +384,36 @@ class VariantOptionData {
   VariantOptionData({
     String? name,
     String? price,
+    bool isSelected = false, // Default value to false
   }) {
     _name = name;
     _price = price;
+    _isSelected = isSelected;
   }
 
   VariantOptionData.fromJson(dynamic json) {
     _name = json['name'];
     _price = json['price'];
+    _isSelected = json['isSelected'] ?? false;
   }
 
   String? _name;
   String? _price;
+  late bool _isSelected;
 
   String? get name => _name;
   String? get price => _price;
+  bool get isSelected => _isSelected;
+
+  set isSelected(bool value) {
+    _isSelected = value;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['name'] = _name;
     map['price'] = _price;
+    map['isSelected'] = _isSelected;
     return map;
   }
 }

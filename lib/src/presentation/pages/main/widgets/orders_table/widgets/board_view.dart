@@ -65,12 +65,12 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
               listDragOnLongPress: true,
               disableScrolling: false,
               children: [
-                buildList(OrderStatus.newOrder),
+                buildList(OrderStatus.newO),
                 buildList(OrderStatus.accepted),
                 buildList(OrderStatus.cooking),
                 buildList(OrderStatus.ready),
-                buildList(OrderStatus.delivered),
-                buildList(OrderStatus.canceled),
+                buildList(OrderStatus.completed),
+                buildList(OrderStatus.rejected),
               ],
               itemDecorationWhileDragging: const BoxDecoration(
                 color: AppColors.transparent,
@@ -95,7 +95,7 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
     VoidCallback onRefresh;
 
     switch (orderStatus) {
-      case OrderStatus.newOrder:
+      case OrderStatus.newO:
         list = widget.listNew;
         header = AppHelpers.getTranslation(TrKeys.newKey);
         hasMore = ref.watch(newOrdersProvider).hasMore;
@@ -153,7 +153,7 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
               .fetchReadyOrders(isRefresh: true);
         };
         break;
-      case OrderStatus.delivered:
+      case OrderStatus.completed:
         list = widget.listDelivered;
         header = 'Completed';
         hasMore = ref.watch(deliveredOrdersProvider).hasMore;
@@ -170,7 +170,7 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
         };
 
         break;
-      case OrderStatus.canceled:
+      case OrderStatus.rejected:
         list = widget.listCanceled;
         header = "Rejected";
         hasMore = ref.watch(canceledOrdersProvider).hasMore;
@@ -232,58 +232,50 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
                 ref.watch(newOrdersProvider).orders[oldItemIndex], context);
             break;
           }
-       
-      
+
         case 2:
           {
-
-              ref.read(deliveredOrdersProvider.notifier).addList(
-                  oldListIndex == 0
-                      ? ref.watch(newOrdersProvider).orders[oldItemIndex]
-                      : oldListIndex == 1
-                          ? ref
-                              .watch(acceptedOrdersProvider)
-                              .orders[oldItemIndex]
-                          : oldListIndex == 2
-                              ? ref
-                                  .watch(cookingOrdersProvider)
-                                  .orders[oldItemIndex]
-                              : oldListIndex == 3
-                                  ? ref
-                                      .watch(readyOrdersProvider)
-                                      .orders[oldItemIndex]
-                                  : ref
-                                      .watch(onAWayOrdersProvider)
-                                      .orders[oldItemIndex],
-                  context);
+            ref.read(deliveredOrdersProvider.notifier).addList(
+                oldListIndex == 0
+                    ? ref.watch(newOrdersProvider).orders[oldItemIndex]
+                    : oldListIndex == 1
+                        ? ref.watch(acceptedOrdersProvider).orders[oldItemIndex]
+                        : oldListIndex == 2
+                            ? ref
+                                .watch(cookingOrdersProvider)
+                                .orders[oldItemIndex]
+                            : oldListIndex == 3
+                                ? ref
+                                    .watch(readyOrdersProvider)
+                                    .orders[oldItemIndex]
+                                : ref
+                                    .watch(onAWayOrdersProvider)
+                                    .orders[oldItemIndex],
+                context);
             break;
           }
 
         case 3:
           {
-
-              ref.read(canceledOrdersProvider.notifier).addList(
-                  oldListIndex == 0
-                      ? ref.watch(newOrdersProvider).orders[oldItemIndex]
-                      : oldListIndex == 1
-                          ? ref
-                              .watch(acceptedOrdersProvider)
-                              .orders[oldItemIndex]
-                          : oldListIndex == 2
-                              ? ref
-                                  .watch(cookingOrdersProvider)
-                                  .orders[oldItemIndex]
-                              : oldListIndex == 3
-                                  ? ref
-                                      .watch(readyOrdersProvider)
-                                      .orders[oldItemIndex]
-                                  : ref
-                                      .watch(deliveredOrdersProvider)
-                                      .orders[oldItemIndex],
-                  context);
+            ref.read(canceledOrdersProvider.notifier).addList(
+                oldListIndex == 0
+                    ? ref.watch(newOrdersProvider).orders[oldItemIndex]
+                    : oldListIndex == 1
+                        ? ref.watch(acceptedOrdersProvider).orders[oldItemIndex]
+                        : oldListIndex == 2
+                            ? ref
+                                .watch(cookingOrdersProvider)
+                                .orders[oldItemIndex]
+                            : oldListIndex == 3
+                                ? ref
+                                    .watch(readyOrdersProvider)
+                                    .orders[oldItemIndex]
+                                : ref
+                                    .watch(deliveredOrdersProvider)
+                                    .orders[oldItemIndex],
+                context);
             break;
           }
-        
       }
 
       switch (oldListIndex) {
@@ -297,7 +289,7 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
             ref.read(acceptedOrdersProvider.notifier).removeList(oldItemIndex);
             break;
           }
-       
+
         case 2:
           {
             ref.read(readyOrdersProvider.notifier).removeList(oldItemIndex);
@@ -305,13 +297,9 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
           }
         case 3:
           {
-
-              ref
-                  .read(deliveredOrdersProvider.notifier)
-                  .removeList(oldItemIndex);
+            ref.read(deliveredOrdersProvider.notifier).removeList(oldItemIndex);
             break;
           }
-
       }
     }
   }

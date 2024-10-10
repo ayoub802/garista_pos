@@ -1,19 +1,19 @@
 class OrderData {
   OrderData({
     required this.id,
-    required this.total,
-    required this.status,
+    this.total, // Make total nullable
+    this.status, // Make status nullable
     required this.tableId,
     required this.restoId,
     required this.createdAt,
     required this.updatedAt,
-    this.table, // Include table information
+    this.table, // Make table nullable
   });
 
   OrderData.fromJson(dynamic json)
       : id = json['id'],
-        total = json['total'],
-        status = json['status'],
+        total = json['total'], // Leave this as is for now
+        status = json['status'], // Leave this as is for now
         tableId = json['table_id'],
         restoId = json['resto_id'],
         createdAt = DateTime.parse(json['created_at']),
@@ -21,31 +21,14 @@ class OrderData {
         table = json['table'] != null ? Table.fromJson(json['table']) : null;
 
   final int id;
-  final String total;
-  final String status;
+  final String? total; // Nullable total
+  final String? status; // Nullable status
   final int tableId;
   final int restoId;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Table? table; // Nested table object
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{
-      'id': id,
-      'total': total,
-      'status': status,
-      'table_id': tableId,
-      'resto_id': restoId,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
-    if (table != null) {
-      map['table'] = table?.toJson();
-    }
-    return map;
-  }
+  final Table? table; // Nullable table
 }
-
 
 class Table {
   Table({

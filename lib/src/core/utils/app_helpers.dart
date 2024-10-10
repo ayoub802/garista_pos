@@ -346,70 +346,70 @@ class AppHelpers {
 
   static String getOrderStatusText(OrderStatus value) {
     switch (value) {
-      case OrderStatus.newOrder:
-        return "new";
+      case OrderStatus.newO:
+        return "New";
       case OrderStatus.accepted:
-        return "accepted";
+        return "Accepted";
       case OrderStatus.cooking:
         return "cooking";
       case OrderStatus.ready:
-        return "ready";
+        return "Ready";
       case OrderStatus.onAWay:
         return "on_a_way";
-      case OrderStatus.delivered:
-        return "delivered";
+      case OrderStatus.completed:
+        return "Completed";
       default:
-        return "canceled";
+        return "Rejected";
     }
   }
 
   static String getNextOrderStatus(String value) {
     switch (value) {
-      case "new":
-        return "accepted";
-      case "accepted":
+      case "New":
+        return "Accepted";
+      case "Accepted":
         return "cooking";
       case "cooking":
-        return "ready";
-      case "ready":
-        return "ended";
+        return "Ready";
+      case "Ready":
+        return "Completed";
       default:
-        return "canceled";
+        return "Rejected";
     }
   }
 
   static OrderStatus getOrderStatus(String? value, {bool? isNextStatus}) {
     if (isNextStatus ?? false) {
       switch (value) {
-        case 'new':
+        case 'New':
           return OrderStatus.accepted;
-        case 'accepted':
+        case 'Accepted':
           return OrderStatus.cooking;
         case 'cooking':
           return OrderStatus.ready;
-        case 'ready':
+        case 'Ready':
           return OrderStatus.onAWay;
         case 'on_a_way':
-          return OrderStatus.delivered;
+          return OrderStatus.completed;
         default:
-          return OrderStatus.canceled;
+          return OrderStatus.rejected;
       }
     } else {
       switch (value) {
         case 'new':
-          return OrderStatus.newOrder;
-        case 'accepted':
+          return OrderStatus.newO;
+        case 'Accepted':
           return OrderStatus.accepted;
         case 'cooking':
           return OrderStatus.cooking;
-        case 'ready':
+        case 'Ready':
           return OrderStatus.ready;
         case 'on_a_way':
           return OrderStatus.onAWay;
-        case 'delivered':
-          return OrderStatus.delivered;
+        case 'Completed':
+          return OrderStatus.completed;
         default:
-          return OrderStatus.canceled;
+          return OrderStatus.rejected;
       }
     }
   }
@@ -446,7 +446,7 @@ class AppHelpers {
       padding: EdgeInsets.symmetric(vertical: 2.r, horizontal: 10.r),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.r),
-        color: text == "new"
+        color: text == "New"
             ? AppColors.blue
             : text == "accept"
                 ? Colors.deepPurple

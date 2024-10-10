@@ -19,7 +19,7 @@ class SingleOrderResponse {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (_data != null) {
-      map['data'] = _data?.toJson();
+      map['data'] = _data;
     }
     return map;
   }
@@ -31,8 +31,7 @@ class SingleKitchenOrderResponse {
   }
 
   SingleKitchenOrderResponse.fromJson(dynamic json) {
-    _data =
-        json['data'] != null ? OrderData.fromJson(json['data']) : null;
+    _data = json['data'] != null ? OrderData.fromJson(json['data']) : null;
   }
 
   OrderData? _data;
@@ -45,7 +44,7 @@ class SingleKitchenOrderResponse {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (_data != null) {
-      map['data'] = _data?.toJson();
+      map['data'] = _data;
     }
     return map;
   }

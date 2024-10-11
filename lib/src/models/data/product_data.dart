@@ -25,6 +25,7 @@ class ProductData {
     String? image3,
     List<ToppingData>? toppings,
     List<VariantData>? extraVariants,
+    List<IngredientData>? ingredients,
     RestoData? resto,
     CategoryDataProduct? category,
   }) {
@@ -47,6 +48,7 @@ class ProductData {
     _image3 = image3;
     _toppings = toppings;
     _extraVariants = extraVariants;
+    _ingredients = ingredients;
     _resto = resto;
     _category = category;
   }
@@ -82,6 +84,12 @@ class ProductData {
         _extraVariants?.add(VariantData.fromJson(v));
       });
     }
+    if (json['ingredients'] != null) {
+      _ingredients = [];
+      json['ingredients'].forEach((v) {
+        _ingredients?.add(IngredientData.fromJson(v));
+      });
+    }
     _resto = json['resto'] != null ? RestoData.fromJson(json['resto']) : null;
     _category = json['categorie'] != null
         ? CategoryDataProduct.fromJson(json['categorie'])
@@ -107,6 +115,7 @@ class ProductData {
   String? _image3;
   List<ToppingData>? _toppings;
   List<VariantData>? _extraVariants;
+  List<IngredientData>? _ingredients;
   RestoData? _resto;
   CategoryDataProduct? _category;
 
@@ -129,8 +138,59 @@ class ProductData {
   String? get image3 => _image3;
   List<ToppingData>? get toppings => _toppings;
   List<VariantData>? get extraVariants => _extraVariants;
+  List<IngredientData>? get ingredients => _ingredients;
   RestoData? get resto => _resto;
   CategoryDataProduct? get category => _category;
+
+  ProductData copyWith({
+    int? id,
+    String? name,
+    String? desc,
+    String? price,
+    String? type,
+    String? happyHourPrice,
+    bool? isHappyHourActive,
+    int? visibility,
+    String? visibleFrom,
+    String? visibleUntil,
+    int? categoryId,
+    int? restoId,
+    String? createdAt,
+    String? updatedAt,
+    String? image1,
+    String? image2,
+    String? image3,
+    List<ToppingData>? toppings,
+    List<VariantData>? extraVariants,
+    List<IngredientData>? ingredients,
+    RestoData? resto,
+    CategoryDataProduct? category,
+  }) {
+    return ProductData(
+      id: id ?? _id,
+      name: name ?? _name,
+      desc: desc ?? _desc,
+      price: price ?? _price,
+      type: type ?? _type,
+      happyHourPrice: happyHourPrice ?? _happyHourPrice,
+      isHappyHourActive: isHappyHourActive ?? _isHappyHourActive,
+      visibility: visibility ?? _visibility,
+      visibleFrom: visibleFrom ?? _visibleFrom,
+      visibleUntil: visibleUntil ?? _visibleUntil,
+      categoryId: categoryId ?? _categoryId,
+      restoId: restoId ?? _restoId,
+      createdAt: createdAt ?? _createdAt,
+      updatedAt: updatedAt ?? _updatedAt,
+      image1: image1 ?? _image1,
+      image2: image2 ?? _image2,
+      image3: image3 ?? _image3,
+      toppings: toppings ?? _toppings,
+      extraVariants: extraVariants ?? _extraVariants,
+      ingredients: ingredients ?? _ingredients,
+      resto: resto ?? _resto,
+      category: category ?? _category,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -158,12 +218,35 @@ class ProductData {
     if (_extraVariants != null) {
       map['extravariants'] = _extraVariants?.map((v) => v.toJson()).toList();
     }
+    if (_ingredients != null) {
+      map['ingredients'] = _ingredients?.map((v) => v.toJson()).toList();
+    }
     if (_resto != null) {
       map['resto'] = _resto?.toJson();
     }
     if (_category != null) {
       map['categorie'] = _category?.toJson();
     }
+    return map;
+  }
+}
+
+class IngredientData {
+  String? name;
+  bool? active; // Make active nullable, initialize it later
+
+  IngredientData({this.name, this.active = false}); // Default active to false
+
+  IngredientData.fromJson(dynamic json) {
+    name = json['name'];
+    active =
+        json['active'] ?? false; // Safely handle null by defaulting to false
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['name'] = name;
+    map['active'] = active;
     return map;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:garista_pos/src/core/utils/local_storage.dart';
 import 'package:garista_pos/src/models/data/addons_data.dart';
+import 'package:garista_pos/src/models/data/product_data.dart';
 import 'package:garista_pos/src/presentation/components/custom_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,7 @@ class IngredientItem extends ConsumerWidget {
   final VoidCallback onTap;
   final VoidCallback add;
   final VoidCallback remove;
-  final Addons addon;
+  final IngredientData addon;
 
   const IngredientItem({
     required this.add,
@@ -25,6 +26,7 @@ class IngredientItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("The Ingrdiants => ${onTap}");
     return GestureDetector(
       onTap: () {
         onTap();
@@ -44,68 +46,17 @@ class IngredientItem extends ConsumerWidget {
                   isActive: addon.active ?? false,
                   onTap: onTap,
                 ),
-                10.horizontalSpace,
-                (addon.active ?? false)
-                    ? Row(
-                        children: [
-                          InkWell(
-                            onTap: remove,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.removeButtonColor),
-                              child: Icon(
-                                Icons.remove,
-                                color: (addon.quantity ?? 1) == 1
-                                    ? AppColors.outlineButtonBorder
-                                    : AppColors.black,
-                              ),
-                            ),
-                          ),
-                          8.horizontalSpace,
-                          Text(
-                            "${addon.quantity ?? 1}",
-                            style: GoogleFonts.inter(
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                          8.horizontalSpace,
-                          InkWell(
-                            onTap: add,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.addButtonColor),
-                              child: const Icon(
-                                Icons.add,
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
                 16.horizontalSpace,
                 Expanded(
                   child: Row(
                     children: [
                       Text(
-                        addon.product?.translation?.title ?? "",
+                        addon.name ?? "",
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: AppColors.black,
                         ),
                       ),
-                      4.horizontalSpace,
-                      Text(
-                        "+${intl.NumberFormat.currency(
-                          symbol: LocalStorage.getSelectedCurrency().type,
-                        ).format(addon.product?.stock?.totalPrice ?? 0)}",
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: AppColors.hintColor,
-                        ),
-                      )
                     ],
                   ),
                 ),

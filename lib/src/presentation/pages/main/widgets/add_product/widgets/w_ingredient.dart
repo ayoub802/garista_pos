@@ -1,6 +1,7 @@
 import 'package:garista_pos/src/core/constants/constants.dart';
 import 'package:garista_pos/src/core/utils/app_helpers.dart';
 import 'package:garista_pos/src/models/data/addons_data.dart';
+import 'package:garista_pos/src/models/data/product_data.dart';
 import 'package:garista_pos/src/presentation/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'ingredient_item.dart';
 
 class WIngredientScreen extends StatelessWidget {
-  final List<Addons> list;
+  final List<IngredientData> list;
   final ValueChanged<int> onChange;
   final ValueChanged<int> add;
   final ValueChanged<int> remove;

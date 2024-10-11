@@ -29,7 +29,8 @@ class AddProductDialog extends ConsumerStatefulWidget {
 }
 
 class _AddProductDialogState extends ConsumerState<AddProductDialog> {
-   late double totalPrice;
+  late double totalPrice;
+  int quantity = 1;
   @override
   void initState() {
     super.initState();
@@ -42,45 +43,38 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
     totalPrice = double.tryParse(widget.product?.price ?? '0.0') ?? 0.0;
   }
 
+  void updateTotalPrice() {
+    double productPrice =
+        double.tryParse(widget.product?.price ?? '0.0') ?? 0.0;
+    setState(() {
+      totalPrice = productPrice * quantity;
+    });
+  }
+
+  // Increment the quantity
+  void incrementQuantity() {
+    setState(() {
+      quantity++;
+      updateTotalPrice();
+    });
+  }
+
+  // Decrement the quantity
+  void decrementQuantity() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+        updateTotalPrice();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(addProductProvider);
     final rightSideState = ref.watch(rightSideProvider);
     final notifier = ref.read(addProductProvider.notifier);
     final rightSideNotifier = ref.read(rightSideProvider.notifier);
-    
-    // final List<Stocks> stocks = state.product?.stocks ?? <Stocks>[];
-    // if (stocks.isEmpty) {
-    // return Dialog(
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.circular(10.r),
-    //   ),
-    //   child: Container(
-    //     decoration: BoxDecoration(
-    //       borderRadius: BorderRadius.circular(10.r),
-    //       color: AppColors.white,
-    //     ),
-    //     constraints: BoxConstraints(
-    //       maxHeight: 700.r,
-    //       maxWidth: 600.r,
-    //     ),
-    //     padding: REdgeInsets.symmetric(horizontal: 40, vertical: 50),
-    //     child: Text(
-    //       '${state.product?.name}',
-    //     ),
-    //   ),
-    // );
-    // }
-    // final bool hasDiscount = (state.selectedStock?.discount != null &&
-    //     (state.selectedStock?.discount ?? 0) > 0);
-    // final String price = NumberFormat.currency(
-    //   symbol: LocalStorage.getSelectedCurrency().type,
-    // ).format(hasDiscount
-    //     ? (state.selectedStock?.totalPrice ?? 0)
-    //     : state.selectedStock?.price);
-    // final lineThroughPrice = NumberFormat.currency(
-    //   symbol: LocalStorage.getSelectedCurrency().type,
-    // ).format(state.selectedStock?.price);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.r),
@@ -115,15 +109,15 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
               ),
               6.verticalSpace,
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonImage(
                         imageUrl: widget.product?.image1,
-                        width: 250,
-                        height: 250,
+                        width: 350.w,
+                        height: 350.w,
                       ),
                       24.verticalSpace,
                     ],
@@ -144,6 +138,42 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                           ),
                         ),
                         8.verticalSpace,
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: decrementQuantity,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.removeButtonColor),
+                                child: Icon(
+                                  Icons.remove,
+                                  color: AppColors.outlineButtonBorder,
+                                ),
+                              ),
+                            ),
+                            8.horizontalSpace,
+                            Text(
+                              "${quantity}",
+                              style: GoogleFonts.inter(
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                            8.horizontalSpace,
+                            InkWell(
+                              onTap: incrementQuantity,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.addButtonColor),
+                                child: const Icon(
+                                  Icons.add,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           width:
                               MediaQuery.of(context).size.width / 1.6 - 370.w,
@@ -159,14 +189,14 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                         ),
                         8.verticalSpace,
                         widget.product?.toppings?.isNotEmpty ?? false
-                        ?
-                        SizedBox(
-                          width:
-                              MediaQuery.of(context).size.width / 1.6 - 370.w,
-                          child: Divider(
-                            color: AppColors.black.withOpacity(0.2),
-                          ),
-                        ) : SizedBox(),
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.6 -
+                                    370.w,
+                                child: Divider(
+                                  color: AppColors.black.withOpacity(0.2),
+                                ),
+                              )
+                            : SizedBox(),
                         SizedBox(
                           width:
                               MediaQuery.of(context).size.width / 1.6 - 370.w,
@@ -179,14 +209,17 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                               final ToppingData topping =
                                   widget.product!.toppings![index];
 
-                                   bool hasValidOptions = topping.options?.any((option) =>
-                                          option.name != null && option.price != null) ??
-                                      false;
+                              bool hasValidOptions = topping.options?.any(
+                                      (option) =>
+                                          option.name != null &&
+                                          option.price != null) ??
+                                  false;
 
-                                  // If no valid options are found, don't display this topping
-                                  if (!hasValidOptions) {
-                                    return SizedBox.shrink(); // Don't display this topping
-                                  }
+                              // If no valid options are found, don't display this topping
+                              if (!hasValidOptions) {
+                                return SizedBox
+                                    .shrink(); // Don't display this topping
+                              }
 
                               return Container(
                                 decoration: BoxDecoration(
@@ -200,152 +233,231 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                    Text(
-                                      topping.name ?? ' ',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.black,
-                                        letterSpacing: -0.4,
-                                      ),
-                                    ),
-                                    10.horizontalSpace,
-                                    topping.required == true
-                                    ?
-                                    Container(
-                                      padding: REdgeInsets.symmetric(horizontal: 12, vertical: 6), // Padding around the text
-                                      decoration: BoxDecoration(
-                                        color: AppColors.GaristaColorBg, // Set your desired background color here
-                                        borderRadius: BorderRadius.circular(10.r), // Add rounded corners
-                                      ),
-                                      child: Text(
-                                        topping.required == true ? 'Required' : '',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColors.white, // Text color
+                                        Text(
+                                          topping.name ?? ' ',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.black,
+                                            letterSpacing: -0.4,
+                                          ),
                                         ),
-                                      ),
-                                    ) : Container(),
+                                        10.horizontalSpace,
+                                        topping.required == true
+                                            ? Container(
+                                                padding: REdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical:
+                                                        6), // Padding around the text
+                                                decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .GaristaColorBg, // Set your desired background color here
+                                                  borderRadius:
+                                                      BorderRadius.circular(10
+                                                          .r), // Add rounded corners
+                                                ),
+                                                child: Text(
+                                                  topping.required == true
+                                                      ? 'Required'
+                                                      : '',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: AppColors
+                                                        .white, // Text color
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
                                       ],
                                     ),
                                     15.verticalSpace,
-                                 ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: topping.options?.length ?? 0,
-                                    itemBuilder: (context, optionIndex) {
-                                      final ToppingOptionData option = topping.options![optionIndex];
-                                      print("Topping Option: ${option.name}, Price: \$${option.name}, Selected: ${option.price}");
+                                    ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: topping.options?.length ?? 0,
+                                      itemBuilder: (context, optionIndex) {
+                                        final ToppingOptionData option =
+                                            topping.options![optionIndex];
+                                        print(
+                                            "Topping Option: ${option.name}, Price: \$${option.name}, Selected: ${option.price}");
 
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: 12.h), // Adjust the gap between items here
-                                        child: InkWell(
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 12
+                                                  .h), // Adjust the gap between items here
+                                          child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (topping.multipleSelection == true) {
+                                                if (topping.multipleSelection ==
+                                                    true) {
                                                   // Multiple selection allowed (toggle individual options)
-                                                  option.isSelected = !option.isSelected;
+                                                  option.isSelected =
+                                                      !option.isSelected;
                                                   if (option.isSelected) {
-                                                    totalPrice += double.tryParse(option.price ?? '0') ?? 0;
+                                                    totalPrice +=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
                                                   } else {
-                                                    totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
+                                                    totalPrice -=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
                                                   }
                                                 } else {
                                                   // Single selection: deselect if already selected, otherwise deselect others
                                                   if (option.isSelected) {
-                                                    totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
-                                                    option.isSelected = false; // Deselect the current option
+                                                    totalPrice -=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
+                                                    option.isSelected =
+                                                        false; // Deselect the current option
                                                   } else {
                                                     // Deselect all other options
-                                                    for (var opt in topping.options!) {
+                                                    for (var opt
+                                                        in topping.options!) {
                                                       if (opt.isSelected) {
-                                                        totalPrice -= double.tryParse(opt.price ?? '0') ?? 0;
+                                                        totalPrice -=
+                                                            double.tryParse(
+                                                                    opt.price ??
+                                                                        '0') ??
+                                                                0;
                                                       }
                                                       opt.isSelected = false;
                                                     }
-                                                    totalPrice += double.tryParse(option.price ?? '0') ?? 0;
-                                                    option.isSelected = true; // Select the current option
+                                                    totalPrice +=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
+                                                    option.isSelected =
+                                                        true; // Select the current option
                                                   }
                                                 }
                                               });
                                             },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  CustomCheckbox(
-                                                    isActive: option.isSelected,
-                                                   onTap: () {
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    CustomCheckbox(
+                                                      isActive:
+                                                          option.isSelected,
+                                                      onTap: () {
                                                         setState(() {
-                                                          if (topping.multipleSelection == true) {
+                                                          if (topping
+                                                                  .multipleSelection ==
+                                                              true) {
                                                             // Multiple selection allowed (toggle individual options)
-                                                            option.isSelected = !option.isSelected;
-                                                            if (option.isSelected) {
-                                                              totalPrice += double.tryParse(option.price ?? '0') ?? 0;
+                                                            option.isSelected =
+                                                                !option
+                                                                    .isSelected;
+                                                            if (option
+                                                                .isSelected) {
+                                                              totalPrice +=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
                                                             } else {
-                                                              totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
+                                                              totalPrice -=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
                                                             }
                                                           } else {
                                                             // Single selection: deselect if already selected, otherwise deselect others
-                                                            if (option.isSelected) {
-                                                              totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
-                                                              option.isSelected = false; // Deselect the current option
+                                                            if (option
+                                                                .isSelected) {
+                                                              totalPrice -=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
+                                                              option.isSelected =
+                                                                  false; // Deselect the current option
                                                             } else {
                                                               // Deselect all other options
-                                                              for (var opt in topping.options!) {
-                                                                if (opt.isSelected) {
-                                                                  totalPrice -= double.tryParse(opt.price ?? '0') ?? 0;
+                                                              for (var opt
+                                                                  in topping
+                                                                      .options!) {
+                                                                if (opt
+                                                                    .isSelected) {
+                                                                  totalPrice -=
+                                                                      double.tryParse(opt.price ??
+                                                                              '0') ??
+                                                                          0;
                                                                 }
-                                                                opt.isSelected = false;
+                                                                opt.isSelected =
+                                                                    false;
                                                               }
-                                                              totalPrice += double.tryParse(option.price ?? '0') ?? 0;
-                                                              option.isSelected = true; // Select the current option
+                                                              totalPrice +=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
+                                                              option.isSelected =
+                                                                  true; // Select the current option
                                                             }
                                                           }
                                                         });
                                                       },
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    option.name ?? '',
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 15.sp,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: AppColors.black,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  // Price display
-                                                  Text(
-                                                    '${double.tryParse(option.price ?? '0')?.toStringAsFixed(2) ?? '0.00'}',
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 16.sp,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: AppColors.black,
+                                                    SizedBox(
+                                                      width: 10,
                                                     ),
-                                                  ),
-                                                  8.horizontalSpace,
-                                                ],
-                                              ),
-                                            ],
+                                                    Text(
+                                                      option.name ?? '',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: AppColors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    // Price display
+                                                    Text(
+                                                      '${double.tryParse(option.price ?? '0')?.toStringAsFixed(2) ?? '0.00'}',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: AppColors.black,
+                                                      ),
+                                                    ),
+                                                    8.horizontalSpace,
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),                                    
-                                  8.verticalSpace,
+                                        );
+                                      },
+                                    ),
+                                    8.verticalSpace,
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width /
                                               1.6 -
@@ -360,37 +472,41 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                             },
                           ),
                         ),
-                        
                         widget.product?.extraVariants?.isNotEmpty ?? false
-                        ?
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.6 -
+                                    370.w,
+                                child: Divider(
+                                  color: AppColors.black.withOpacity(0.2),
+                                ),
+                              )
+                            : SizedBox(),
                         SizedBox(
-                          width:
-                              MediaQuery.of(context).size.width / 1.6 - 370.w,
-                          child: Divider(
-                            color: AppColors.black.withOpacity(0.2),
-                          ),
-                        ) : SizedBox(),
-                           SizedBox(
                           width:
                               MediaQuery.of(context).size.width / 1.6 - 370.w,
                           child: ListView.builder(
                             physics: const CustomBouncingScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: widget.product?.extraVariants?.length ?? 0,
+                            itemCount:
+                                widget.product?.extraVariants?.length ?? 0,
                             padding: EdgeInsets.zero,
                             itemBuilder: (context, index) {
                               final VariantData variant =
                                   widget.product!.extraVariants![index];
-                                    print("Variant Option: ${variant.name}, Price: \$${variant.required}, Selected: ${variant.multipleSelection}");
+                              print(
+                                  "Variant Option: ${variant.name}, Price: \$${variant.required}, Selected: ${variant.multipleSelection}");
 
-                                   bool hasValidOptions = variant.options?.any((option) =>
-                                          option.name != null && option.price != null) ??
-                                      false;
+                              bool hasValidOptions = variant.options?.any(
+                                      (option) =>
+                                          option.name != null &&
+                                          option.price != null) ??
+                                  false;
 
-                                  // If no valid options are found, don't display this topping
-                                  if (!hasValidOptions) {
-                                    return SizedBox.shrink(); // Don't display this topping
-                                  }
+                              // If no valid options are found, don't display this topping
+                              if (!hasValidOptions) {
+                                return SizedBox
+                                    .shrink(); // Don't display this topping
+                              }
 
                               return Container(
                                 decoration: BoxDecoration(
@@ -404,153 +520,231 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                    Text(
-                                      variant.name ?? ' ',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.black,
-                                        letterSpacing: -0.4,
-                                      ),
-                                    ),
-                                    10.horizontalSpace,
-                                    variant.required == true
-                                    ?
-                                    Container(
-                                      padding: REdgeInsets.symmetric(horizontal: 12, vertical: 6), // Padding around the text
-                                      decoration: BoxDecoration(
-                                        color: AppColors.GaristaColorBg, // Set your desired background color here
-                                        borderRadius: BorderRadius.circular(10.r), // Add rounded corners
-                                      ),
-                                      child: Text(
-                                        variant.required == true ? 'Required' : '',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColors.white, // Text color
+                                        Text(
+                                          variant.name ?? ' ',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.black,
+                                            letterSpacing: -0.4,
+                                          ),
                                         ),
-                                      ),
-                                    ) : Container(),
-                                    
-                                    ],
+                                        10.horizontalSpace,
+                                        variant.required == true
+                                            ? Container(
+                                                padding: REdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical:
+                                                        6), // Padding around the text
+                                                decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .GaristaColorBg, // Set your desired background color here
+                                                  borderRadius:
+                                                      BorderRadius.circular(10
+                                                          .r), // Add rounded corners
+                                                ),
+                                                child: Text(
+                                                  variant.required == true
+                                                      ? 'Required'
+                                                      : '',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: AppColors
+                                                        .white, // Text color
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
                                     ),
                                     15.verticalSpace,
-                                 ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: variant.options?.length ?? 0,
-                                    itemBuilder: (context, optionIndex) {
-                                      final VariantOptionData option = variant.options![optionIndex];
-                                    print("Variant Option: ${option.name}, Price: \$${option.name}, Selected: ${option.price}");
+                                    ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: variant.options?.length ?? 0,
+                                      itemBuilder: (context, optionIndex) {
+                                        final VariantOptionData option =
+                                            variant.options![optionIndex];
+                                        print(
+                                            "Variant Option: ${option.name}, Price: \$${option.name}, Selected: ${option.price}");
 
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: 12.h), // Adjust the gap between items here
-                                        child: InkWell(
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 12
+                                                  .h), // Adjust the gap between items here
+                                          child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (variant.multipleSelection == true) {
+                                                if (variant.multipleSelection ==
+                                                    true) {
                                                   // Multiple selection allowed (toggle individual options)
-                                                  option.isSelected = !option.isSelected;
+                                                  option.isSelected =
+                                                      !option.isSelected;
                                                   if (option.isSelected) {
-                                                    totalPrice += double.tryParse(option.price ?? '0') ?? 0;
+                                                    totalPrice +=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
                                                   } else {
-                                                    totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
+                                                    totalPrice -=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
                                                   }
                                                 } else {
                                                   // Single selection: deselect if already selected, otherwise deselect others
                                                   if (option.isSelected) {
-                                                    totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
-                                                    option.isSelected = false; // Deselect the current option
+                                                    totalPrice -=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
+                                                    option.isSelected =
+                                                        false; // Deselect the current option
                                                   } else {
                                                     // Deselect all other options
-                                                    for (var opt in variant.options!) {
+                                                    for (var opt
+                                                        in variant.options!) {
                                                       if (opt.isSelected) {
-                                                        totalPrice -= double.tryParse(opt.price ?? '0') ?? 0;
+                                                        totalPrice -=
+                                                            double.tryParse(
+                                                                    opt.price ??
+                                                                        '0') ??
+                                                                0;
                                                       }
                                                       opt.isSelected = false;
                                                     }
-                                                    totalPrice += double.tryParse(option.price ?? '0') ?? 0;
-                                                    option.isSelected = true; // Select the current option
+                                                    totalPrice +=
+                                                        double.tryParse(
+                                                                option.price ??
+                                                                    '0') ??
+                                                            0;
+                                                    option.isSelected =
+                                                        true; // Select the current option
                                                   }
                                                 }
                                               });
                                             },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  CustomCheckbox(
-                                                    isActive: option.isSelected,
-                                                   onTap: () {
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    CustomCheckbox(
+                                                      isActive:
+                                                          option.isSelected,
+                                                      onTap: () {
                                                         setState(() {
-                                                          if (variant.multipleSelection == true) {
+                                                          if (variant
+                                                                  .multipleSelection ==
+                                                              true) {
                                                             // Multiple selection allowed (toggle individual options)
-                                                            option.isSelected = !option.isSelected;
-                                                            if (option.isSelected) {
-                                                              totalPrice += double.tryParse(option.price ?? '0') ?? 0;
+                                                            option.isSelected =
+                                                                !option
+                                                                    .isSelected;
+                                                            if (option
+                                                                .isSelected) {
+                                                              totalPrice +=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
                                                             } else {
-                                                              totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
+                                                              totalPrice -=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
                                                             }
                                                           } else {
                                                             // Single selection: deselect if already selected, otherwise deselect others
-                                                            if (option.isSelected) {
-                                                              totalPrice -= double.tryParse(option.price ?? '0') ?? 0;
-                                                              option.isSelected = false; // Deselect the current option
+                                                            if (option
+                                                                .isSelected) {
+                                                              totalPrice -=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
+                                                              option.isSelected =
+                                                                  false; // Deselect the current option
                                                             } else {
                                                               // Deselect all other options
-                                                              for (var opt in variant.options!) {
-                                                                if (opt.isSelected) {
-                                                                  totalPrice -= double.tryParse(opt.price ?? '0') ?? 0;
+                                                              for (var opt
+                                                                  in variant
+                                                                      .options!) {
+                                                                if (opt
+                                                                    .isSelected) {
+                                                                  totalPrice -=
+                                                                      double.tryParse(opt.price ??
+                                                                              '0') ??
+                                                                          0;
                                                                 }
-                                                                opt.isSelected = false;
+                                                                opt.isSelected =
+                                                                    false;
                                                               }
-                                                              totalPrice += double.tryParse(option.price ?? '0') ?? 0;
-                                                              option.isSelected = true; // Select the current option
+                                                              totalPrice +=
+                                                                  double.tryParse(
+                                                                          option.price ??
+                                                                              '0') ??
+                                                                      0;
+                                                              option.isSelected =
+                                                                  true; // Select the current option
                                                             }
                                                           }
                                                         });
                                                       },
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    option.name ?? '',
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 15.sp,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: AppColors.black,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  // Price display
-                                                  Text(
-                                                    '${double.tryParse(option.price ?? '0')?.toStringAsFixed(2) ?? '0.00'}',
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 16.sp,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: AppColors.black,
+                                                    SizedBox(
+                                                      width: 10,
                                                     ),
-                                                  ),
-                                                  8.horizontalSpace,
-                                                ],
-                                              ),
-                                            ],
+                                                    Text(
+                                                      option.name ?? '',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: AppColors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    // Price display
+                                                    Text(
+                                                      '${double.tryParse(option.price ?? '0')?.toStringAsFixed(2) ?? '0.00'}',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: AppColors.black,
+                                                      ),
+                                                    ),
+                                                    8.horizontalSpace,
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),                                    
-                                  8.verticalSpace,
+                                        );
+                                      },
+                                    ),
+                                    8.verticalSpace,
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width /
                                               1.6 -
@@ -562,6 +756,24 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                                   ],
                                 ),
                               );
+                            },
+                          ),
+                        ),
+                        8.verticalSpace,
+                        SizedBox(
+                          width:
+                              MediaQuery.of(context).size.width / 1.6 - 370.w,
+                          child: WIngredientScreen(
+                            list: widget.product?.ingredients ?? [],
+                            onChange: (int value) {
+                              notifier.updateIngredient(context, value);
+                              print("The Ingrdiants => ${value}");
+                            },
+                            add: (int value) {
+                              // notifier.addIngredient(context, value);
+                            },
+                            remove: (int value) {
+                              // notifier.removeIngredient(context, value);
                             },
                           ),
                         ),
@@ -585,6 +797,7 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                             context,
                             rightSideState.selectedBagIndex,
                             rightSideNotifier,
+                            quantity,
                             widget.product);
                         // context.popRoute();
                       },

@@ -22,7 +22,7 @@ import '../../riverpod/provider/main_provider.dart';
 // import 'generate_check.dart';
 
 class OrderDetailPage extends ConsumerStatefulWidget {
-  final OrderDetail order;
+  final OrderData order;
 
   const OrderDetailPage({super.key, required this.order});
 
@@ -31,19 +31,19 @@ class OrderDetailPage extends ConsumerStatefulWidget {
 }
 
 class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     ref.refresh(orderDetailsProvider.notifier)
-  //       ..fetchOrderDetails(order: widget.order)
-  //       ..fetchUsers();
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.refresh(orderDetailsProvider.notifier)
+        ..fetchOrderDetails(order: widget.order)
+        ..fetchUsers();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('The order Detail => ${widget.order.id}');
+    print('The order Detail => ');
     // final state = ref.watch(orderDetailsProvider);
     num subTotal = 0;
     return SafeArea(

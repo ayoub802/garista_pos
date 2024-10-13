@@ -63,18 +63,18 @@ class OrderDetailsNotifier extends StateNotifier<OrderDetailsState> {
     );
   }
 
-  void toggleOrderDetailChecked({required int index}) {
-    List<OrderDetail>? orderDetails = state.order?.details;
-    if (orderDetails == null || orderDetails.isEmpty) {
-      return;
-    }
-    OrderDetail detail = orderDetails[index];
-    final bool isChecked = detail.isChecked ?? false;
-    detail = detail.copyWith(isChecked: !isChecked);
-    orderDetails[index] = detail;
-    final order = state.order?.copyWith(details: orderDetails);
-    state = state.copyWith(order: order);
-  }
+  // void toggleOrderDetailChecked({required int index}) {
+  //   List<OrderDetail>? orderDetails = state.order?.details;
+  //   if (orderDetails == null || orderDetails.isEmpty) {
+  //     return;
+  //   }
+  //   OrderDetail detail = orderDetails[index];
+  //   final bool isChecked = detail.isChecked ?? false;
+  //   detail = detail.copyWith(isChecked: !isChecked);
+  //   orderDetails[index] = detail;
+  //   final order = state.order?.copyWith(details: orderDetails);
+  //   state = state.copyWith(order: order);
+  // }
 
   void changeStatus(String status) {
     state = state.copyWith(status: status);

@@ -52,27 +52,27 @@ class UsersRepositoryImpl extends UsersRepository {
     }
   }
 
-  @override
-  Future<ApiResult<UsersPaginateResponse>> searchDeliveryman(
-      String? query) async {
-    final data = {
-      if (query != null) 'search': query,
-      'lang': LocalStorage.getLanguage()?.locale ?? 'en',
-    };
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/v1/dashboard/${LocalStorage.getUser()?.id}/shop/users/role/deliveryman',
-        queryParameters: data,
-      );
-      return ApiResult.success(
-        data: UsersPaginateResponse.fromJson(response.data),
-      );
-    } catch (e) {
-      debugPrint('==> search users failure: $e');
-      return ApiResult.failure(error: AppHelpers.errorHandler(e));
-    }
-  }
+  // @override
+  // Future<ApiResult<UsersPaginateResponse>> searchDeliveryman(
+  //     String? query) async {
+  //   final data = {
+  //     if (query != null) 'search': query,
+  //     'lang': LocalStorage.getLanguage()?.locale ?? 'en',
+  //   };
+  //   try {
+  //     final client = dioHttp.client(requireAuth: true);
+  //     final response = await client.get(
+  //       '/api/v1/dashboard/${LocalStorage.getUser()?.id}/shop/users/role/deliveryman',
+  //       queryParameters: data,
+  //     );
+  //     return ApiResult.success(
+  //       data: UsersPaginateResponse.fromJson(response.data),
+  //     );
+  //   } catch (e) {
+  //     debugPrint('==> search users failure: $e');
+  //     return ApiResult.failure(error: AppHelpers.errorHandler(e));
+  //   }
+  // }
 
   @override
   Future<ApiResult<SingleUserResponse>> getUserDetails(String uuid) async {
@@ -267,9 +267,9 @@ class UsersRepositoryImpl extends UsersRepository {
     final data = user?.toJson();
     debugPrint('===> update general info data ${jsonEncode(data)}');
     try {
-      final client = dioHttp.client(requireAuth: true);
+      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.put(
-        '/api/v1/dashboard/user/profile/update',
+        '/api/auth/edit/${LocalStorage.getUser()?.id}',
         data: data,
       );
       return ApiResult.success(

@@ -54,7 +54,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                              Assets.svgLogo,
+                              Assets.svgLogo1,
                               height: 40,
                               width: 40,
                             ),

@@ -1,6 +1,7 @@
 import 'address_data.dart';
 import 'user_data.dart';
 import 'currency_data.dart';
+import 'product_data.dart';
 
 import '../response/payments_response.dart';
 
@@ -89,22 +90,27 @@ class BagProductData {
     return map;
   }
 }
+
 class CartProductData {
   late int productId; // Unique identifier for the product
   late int quantity; // Quantity of this product in the cart
   String? name; // Product name
   String? desc; // Product description
-  String? price; // Product price
+  double? price; // Product price
   String? type; // Product price
-
-  CartProductData({
-    required this.productId,
-    required this.quantity,
-    this.name,
-    this.desc,
-    this.price,
-    required this.type,
-  });
+  List<ToppingData>? selectedToppings;
+  List<VariantData>? selectedVariants;
+  List<IngredientData>? selectedIngrediants;
+  CartProductData(
+      {required this.productId,
+      required this.quantity,
+      this.name,
+      this.desc,
+      this.price,
+      required this.type,
+      this.selectedToppings,
+      this.selectedVariants,
+      this.selectedIngrediants});
 
   // Implementing copyWith method
   CartProductData copyWith({
@@ -113,7 +119,10 @@ class CartProductData {
     String? name,
     String? desc,
     String? type,
-    String? price,
+    double? price,
+    List<ToppingData>? selectedToppings,
+    List<VariantData>? selectedVariants,
+    List<IngredientData>? selectedIngrediants,
   }) {
     return CartProductData(
       productId: productId ?? this.productId,
@@ -122,10 +131,34 @@ class CartProductData {
       desc: desc ?? this.desc,
       price: price ?? this.price,
       type: type ?? this.type,
+      selectedToppings: selectedToppings ?? this.selectedToppings,
+      selectedVariants: selectedVariants ?? this.selectedVariants,
+      selectedIngrediants: selectedIngrediants ?? this.selectedIngrediants,
     );
   }
 
   factory CartProductData.fromJson(Map<String, dynamic> data) {
+    List<ToppingData> toppings = [];
+    if (data['selectedToppings'] != null) {
+      toppings = (data['selectedToppings'] as List)
+          .map((topping) => ToppingData.fromJson(topping))
+          .toList();
+    }
+
+    List<VariantData> variants = [];
+    if (data['selectedVariants'] != null) {
+      variants = (data['selectedVariants'] as List)
+          .map((variant) => VariantData.fromJson(variant))
+          .toList();
+    }
+
+    List<IngredientData> ingredients = [];
+    if (data['selectedIngrediants'] != null) {
+      ingredients = (data['selectedIngrediants'] as List)
+          .map((ingredient) => IngredientData.fromJson(ingredient))
+          .toList();
+    }
+
     return CartProductData(
       productId: data['productId'],
       quantity: data['quantity'],
@@ -133,6 +166,10 @@ class CartProductData {
       desc: data['desc'],
       price: data['price'],
       type: data['type'],
+      selectedToppings: data['selectedToppings'] != null ? toppings : [],
+      selectedVariants: data['selectedVariants'] != null ? variants : [],
+      selectedIngrediants:
+          data['selectedIngrediants'] != null ? ingredients : [],
     );
   }
 
@@ -144,11 +181,33 @@ class CartProductData {
       'desc': desc,
       'price': price,
       'type': type,
+      'selectedToppings':
+          selectedToppings?.map((topping) => topping.toJson()).toList(),
+      'selectedVariants':
+          selectedVariants?.map((variant) => variant.toJson()).toList(),
+      'selectedIngrediants': selectedIngrediants
+          ?.map((ingrediant) => ingrediant.toJson())
+          .toList(),
     };
   }
 
   @override
   String toString() {
-    return 'CartProductData(productId: $productId, quantity: $quantity, name: $name, desc: $desc, price: $price, tpye: $type)';
+    // Customize toString to include selected toppings
+    String toppingsString =
+        selectedToppings != null && selectedToppings!.isNotEmpty
+            ? selectedToppings!.map((topping) => topping.toString()).join(', ')
+            : 'No toppings';
+    String variantsString = selectedVariants != null &&
+            selectedVariants!.isNotEmpty
+        ? selectedVariants!.map((variants) => variants.toString()).join(', ')
+        : 'No Variants';
+    String IngredientString =
+        selectedIngrediants != null && selectedIngrediants!.isNotEmpty
+            ? selectedIngrediants!
+                .map((ingredient) => ingredient.toString())
+                .join(', ')
+            : 'No Ingredient';
+    return 'CartProductData(productId: $productId, quantity: $quantity, name: $name, desc: $desc, price: $price, type: $type, selectedToppings: [$toppingsString], selectedVariants: [$variantsString], selectedIngrediants: [$IngredientString])';
   }
 }

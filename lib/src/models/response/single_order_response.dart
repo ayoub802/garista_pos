@@ -7,6 +7,8 @@ class SingleOrderResponse {
 
   SingleOrderResponse.fromJson(dynamic json) {
     _data = json['data'] != null ? OrderData.fromJson(json['data']) : null;
+
+     print('OrderData after parsing: $_data');
   }
 
   OrderData? _data;
@@ -19,33 +21,8 @@ class SingleOrderResponse {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (_data != null) {
-      map['data'] = _data;
+      map['data'] = _data?.toJson();
     }
-    return map;
-  }
-}
-
-class SingleKitchenOrderResponse {
-  SingleKitchenOrderResponse({OrderData? data}) {
-    _data = data;
-  }
-
-  SingleKitchenOrderResponse.fromJson(dynamic json) {
-    _data = json['data'] != null ? OrderData.fromJson(json['data']) : null;
-  }
-
-  OrderData? _data;
-
-  SingleKitchenOrderResponse copyWith({OrderData? data}) =>
-      SingleKitchenOrderResponse(data: data ?? _data);
-
-  OrderData? get data => _data;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    if (_data != null) {
-      map['data'] = _data;
-    }
-    return map;
+    return map; 
   }
 }

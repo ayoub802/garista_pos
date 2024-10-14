@@ -78,7 +78,7 @@ class CookingOrdersNotifier extends StateNotifier<CookingOrdersState> {
     }
     state = state.copyWith(isLoading: true);
     final response = await _ordersRepository.getOrders(
-      status: OrderStatus.cooking,
+      status: OrderStatus.preparing,
       page: ++_page,
       to: end,
       from: start,
@@ -99,16 +99,16 @@ class CookingOrdersNotifier extends StateNotifier<CookingOrdersState> {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         } else {
           state = state.copyWith(
             isLoading: false,
             orders: orders,
-            totalCount: 0,
+            totalCount: orders.length,
           );
-          updateTotal?.call(0);
+          updateTotal?.call(orders.length);
         }
         // if (isRefresh) {
 
@@ -149,7 +149,7 @@ class CookingOrdersNotifier extends StateNotifier<CookingOrdersState> {
     list.insert(0, orderData);
     state = state.copyWith(orders: list, totalCount: state.totalCount + 1);
     final response = await _ordersRepository.updateOrderStatus(
-      status: OrderStatus.cooking,
+      status: OrderStatus.preparing,
       orderId: orderData.id,
     );
     response.when(

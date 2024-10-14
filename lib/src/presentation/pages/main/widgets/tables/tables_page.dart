@@ -1,12 +1,9 @@
 import 'package:garista_pos/src/presentation/components/custom_scaffold.dart';
 // import 'package:garista_pos/src/presentation/pages/main/widgets/orders_table/widgets/view_mode.dart';
-import 'widgets/board_table_info.dart';
 import 'riverpod/tables_provider.dart';
 import 'widgets/custom_refresher.dart';
-import 'widgets/list_table_info.dart';
 import 'widgets/tables_board.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';

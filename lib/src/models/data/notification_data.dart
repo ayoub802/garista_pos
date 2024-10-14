@@ -2,24 +2,44 @@ import 'order_data.dart';
 
 class NotificationResponse {
   List<NotificationModel>? data;
+  int? currentPage;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
 
   NotificationResponse({
     this.data,
+    this.currentPage,
+    this.from,
+    this.lastPage,
+    this.lastPageUrl,
   });
 
   NotificationResponse copyWith({
     List<NotificationModel>? data,
+    int? currentPage,
+    int? from,
+    int? lastPage,
+    String? lastPageUrl,
   }) =>
       NotificationResponse(
         data: data ?? this.data,
+        currentPage: currentPage ?? this.currentPage,
+        from: from ?? this.from,
+        lastPage: lastPage ?? this.lastPage,
+        lastPageUrl: lastPageUrl ?? this.lastPageUrl,
       );
 
   factory NotificationResponse.fromJson(Map<String, dynamic> json) =>
       NotificationResponse(
+        currentPage: json['current_page'],
         data: json["data"] == null
             ? []
             : List<NotificationModel>.from(
                 json["data"]!.map((x) => NotificationModel.fromJson(x))),
+        from: json['from'],
+        lastPage: json['last_page'],
+        lastPageUrl: json['last_page_url'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,89 +51,79 @@ class NotificationResponse {
 
 class NotificationModel {
   int? id;
-  String? type;
   String? title;
-  String? body;
-  Data? data;
-  int? userId;
+  int? restoId;
+  String? status;
+  int? tableId;
+  int? viewed;
   DateTime? createdAt;
   DateTime? updatedAt;
   DateTime? readAt;
-  Client? client;
-  OrderData? orderData;
 
-  NotificationModel(
-      {this.id,
-      this.type,
-      this.title,
-      this.body,
-      this.data,
-      this.userId,
-      this.createdAt,
-      this.updatedAt,
-      this.readAt,
-      this.client,
-      this.orderData});
+  NotificationModel({
+    this.id,
+    this.title,
+    this.restoId,
+    this.status,
+    this.tableId,
+    this.viewed,
+    this.createdAt,
+    this.updatedAt,
+    this.readAt,
+  });
 
-  NotificationModel copyWith(
-          {int? id,
-          String? type,
-          String? title,
-          String? body,
-          Data? data,
-          int? userId,
-          DateTime? createdAt,
-          DateTime? updatedAt,
-          DateTime? readAt,
-          Client? client,
-          OrderData? orderData}) =>
+  NotificationModel copyWith({
+    int? id,
+    String? title,
+    int? restoId,
+    String? status,
+    int? tableId,
+    int? viewed,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? readAt,
+  }) =>
       NotificationModel(
-          id: id ?? this.id,
-          type: type ?? this.type,
-          title: title ?? this.title,
-          body: body ?? this.body,
-          data: data ?? this.data,
-          userId: userId ?? this.userId,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt,
-          readAt: readAt ?? this.readAt,
-          client: client ?? this.client,
-          orderData: orderData ?? this.orderData);
+        id: id ?? this.id,
+        title: title ?? this.title,
+        restoId: restoId ?? this.restoId,
+        status: status ?? this.status,
+        tableId: tableId ?? this.tableId,
+        viewed: viewed ?? this.viewed,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        readAt: readAt ?? this.readAt,
+      );
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       NotificationModel(
         id: json["id"],
-        type: json["type"],
         title: json["title"],
-        body: json["body"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
-        userId: json["user_id"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.tryParse(json["created_at"])?.toLocal(),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.tryParse(json["updated_at"])?.toLocal(),
-        readAt: json["read_at"] == null
-            ? null
-            : DateTime.tryParse(json["read_at"])?.toLocal(),
-        client: json["client"] == null ? null : Client.fromJson(json["client"]),
-        orderData:
-            json["order"] == null ? null : OrderData.fromJson(json["order"]),
+        restoId: json["resto_id"],
+        status: json["status"],
+        tableId: json["table_id"],
+        viewed: json["viewed"],
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"])?.toLocal()
+            : null,
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"])?.toLocal()
+            : null,
+        readAt: json["read_at"] != null
+            ? DateTime.tryParse(json["read_at"])?.toLocal()
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "type": type,
         "title": title,
-        "body": body,
-        "data": data?.toJson(),
-        "user_id": userId,
+        "resto_id": restoId,
+        "status": status,
+        "table_id": tableId,
+        "viewed": viewed,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "read_at": readAt?.toIso8601String(),
-        "client": client?.toJson(),
-        "order": orderData,
       };
 }
 

@@ -142,7 +142,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                     state.incomeCart?.revenueType == TrKeys.plus
                         ? Icon(
                             FlutterRemix.arrow_up_line,
-                            color: AppColors.brandColor,
+                            color: AppColors.GaristaColorBg,
                             size: 18.r,
                           )
                         : Icon(
@@ -156,7 +156,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                       style: GoogleFonts.inter(
                           fontSize: 16.sp,
                           color: state.incomeCart?.revenueType == TrKeys.plus
-                              ? AppColors.brandColor
+                              ? AppColors.GaristaColorBg
                               : AppColors.red),
                     ),
                   ],
@@ -189,7 +189,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                         Container(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.brandColor,
+                            color: AppColors.GaristaColorBg,
                           ),
                           padding: EdgeInsets.all(10.r),
                           child: const Icon(
@@ -217,7 +217,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                     state.incomeCart?.ordersType == TrKeys.plus
                         ? Icon(
                             FlutterRemix.arrow_up_line,
-                            color: AppColors.brandColor,
+                            color: AppColors.GaristaColorBg,
                             size: 18.r,
                           )
                         : Icon(
@@ -231,7 +231,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                       style: GoogleFonts.inter(
                           fontSize: 16.sp,
                           color: state.incomeCart?.ordersType == TrKeys.plus
-                              ? AppColors.brandColor
+                              ? AppColors.GaristaColorBg
                               : AppColors.red),
                     ),
                   ],
@@ -287,7 +287,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                     state.incomeCart?.averageType == TrKeys.plus
                         ? Icon(
                             FlutterRemix.arrow_up_line,
-                            color: AppColors.brandColor,
+                            color: AppColors.GaristaColorBg,
                             size: 18.r,
                           )
                         : Icon(
@@ -301,7 +301,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                       style: GoogleFonts.inter(
                           fontSize: 16.sp,
                           color: state.incomeCart?.averageType == TrKeys.plus
-                              ? AppColors.brandColor
+                              ? AppColors.GaristaColorBg
                               : AppColors.red),
                     ),
                   ],
@@ -329,11 +329,11 @@ class _InComePageState extends ConsumerState<InComePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.r),
                     color: state.selectType == e
-                        ? AppColors.brandColor
+                        ? AppColors.GaristaColorBg
                         : AppColors.white),
                 child: Text(
                   AppHelpers.getTranslation(e),
-                  style: GoogleFonts.inter(fontSize: 14.sp),
+                  style: GoogleFonts.inter(fontSize: 14.sp, color: state.selectType == e ? AppColors.white : AppColors.black),
                 ),
               ),
             ),

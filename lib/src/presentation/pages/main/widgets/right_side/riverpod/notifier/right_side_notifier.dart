@@ -22,13 +22,13 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
   // final GalleryRepositoryFacade _galleryRepository;
   Timer? _searchUsersTimer;
 
-  RightSideNotifier(this._usersRepository,
-      // this._paymentsRepository,
-      // this._productsRepository,
-      this._ordersRepository,
-      // this._galleryRepository
-      )
-      : super(const RightSideState());
+  RightSideNotifier(
+    this._usersRepository,
+    // this._paymentsRepository,
+    // this._productsRepository,
+    this._ordersRepository,
+    // this._galleryRepository
+  ) : super(const RightSideState());
   Timer? timer;
 
   Future<void> fetchBags() async {
@@ -380,7 +380,8 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
     BagData? selectedBag = bags[state.selectedBagIndex];
 
     // Ensure the selected bag is not null and has products
-    if (selectedBag?.bagProducts == null || selectedBag.bagProducts!.isEmpty) return;
+    if (selectedBag?.bagProducts == null || selectedBag.bagProducts!.isEmpty)
+      return;
 
     // Retrieve all cart items from the selected bag products
     final List<CartProductData> allCarts = [];
@@ -400,14 +401,16 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
     // Remove the product at the specified index
     CartProductData cartItem = allCarts[productIndex];
     for (var bagProduct in selectedBag.bagProducts!) {
-      int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
+      int cartIndex = bagProduct.carts
+          .indexWhere((cart) => cart.productId == cartItem.productId);
       if (cartIndex != -1) {
         // Remove the cart item from the product's carts
         List<CartProductData> updatedCarts = List.from(bagProduct.carts);
         updatedCarts.removeAt(cartIndex);
 
         // Create an updated BagProductData and replace it in the bag
-        BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
+        BagProductData updatedBagProduct =
+            bagProduct.copyWith(carts: updatedCarts);
         int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
         selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
         break; // Exit once the product is found and removed
@@ -429,63 +432,65 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
     );
   }
 
-   void decreaseProductCount({
-      required  BuildContext context,
-      required int productIndex,
-    }) {
-      List<BagData> bags = List.from(LocalStorage.getBags());
-      BagData? selectedBag = bags[state.selectedBagIndex];
-       
-      if (selectedBag?.bagProducts == null) return;
+  void decreaseProductCount({
+    required BuildContext context,
+    required int productIndex,
+  }) {
+    List<BagData> bags = List.from(LocalStorage.getBags());
+    BagData? selectedBag = bags[state.selectedBagIndex];
 
-      final List<CartProductData> allCarts = [];
-      for (var bagProduct in selectedBag!.bagProducts!) {
-        allCarts.addAll(bagProduct.carts);
-      }
+    if (selectedBag?.bagProducts == null) return;
 
-      if (productIndex >= allCarts.length) return; 
+    final List<CartProductData> allCarts = [];
+    for (var bagProduct in selectedBag!.bagProducts!) {
+      allCarts.addAll(bagProduct.carts);
+    }
 
-      CartProductData cartItem = allCarts[productIndex];
+    if (productIndex >= allCarts.length) return;
 
-      if (cartItem.quantity > 1) {
+    CartProductData cartItem = allCarts[productIndex];
 
-        CartProductData updatedCartItem = cartItem.copyWith(quantity: cartItem.quantity - 1);
-       print('The ProductIndex $productIndex and selectedBags ${updatedCartItem}');
+    if (cartItem.quantity > 1) {
+      CartProductData updatedCartItem =
+          cartItem.copyWith(quantity: cartItem.quantity - 1);
+      print(
+          'The ProductIndex $productIndex and selectedBags ${updatedCartItem}');
 
-        for (var bagProduct in selectedBag.bagProducts!) {
-          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
-          if (cartIndex != -1) {
-            List<CartProductData> updatedCarts = List.from(bagProduct.carts);
-            updatedCarts[cartIndex] = updatedCartItem;
+      for (var bagProduct in selectedBag.bagProducts!) {
+        int cartIndex = bagProduct.carts
+            .indexWhere((cart) => cart.productId == cartItem.productId);
+        if (cartIndex != -1) {
+          List<CartProductData> updatedCarts = List.from(bagProduct.carts);
+          updatedCarts[cartIndex] = updatedCartItem;
 
-            BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
-            int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
-            selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
-            break;
-          }
-        }
-
-      } 
-      else {
-        for (var bagProduct in selectedBag.bagProducts!) {
-          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
-          if (cartIndex != -1) {
-            bagProduct.carts.removeAt(cartIndex);
-            break;
-          }
+          BagProductData updatedBagProduct =
+              bagProduct.copyWith(carts: updatedCarts);
+          int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
+          selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
+          break;
         }
       }
+    } else {
+      for (var bagProduct in selectedBag.bagProducts!) {
+        int cartIndex = bagProduct.carts
+            .indexWhere((cart) => cart.productId == cartItem.productId);
+        if (cartIndex != -1) {
+          bagProduct.carts.removeAt(cartIndex);
+          break;
+        }
+      }
+    }
 
-      // Save the updated bags back to local storage
-      bags[state.selectedBagIndex] = selectedBag;
-      LocalStorage.setBags(bags);
+    // Save the updated bags back to local storage
+    bags[state.selectedBagIndex] = selectedBag;
+    LocalStorage.setBags(bags);
 
-      // Optional: You can trigger a delayed action, e.g., fetching cart data
-      // timer = Timer(
-      //   const Duration(milliseconds: 500),
-      //   () => fetchCarts(isNotLoading: true),
-      // );
-      fetchCarts(
+    // Optional: You can trigger a delayed action, e.g., fetching cart data
+    // timer = Timer(
+    //   const Duration(milliseconds: 500),
+    //   () => fetchCarts(isNotLoading: true),
+    // );
+    fetchCarts(
       checkYourNetwork: () {
         AppHelpers.showSnackBar(
           context,
@@ -493,51 +498,53 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
         );
       },
     );
+  }
+
+  void increaseProductCount({
+    required BuildContext context,
+    required int productIndex,
+  }) {
+    List<BagData> bags = List.from(LocalStorage.getBags());
+    BagData? selectedBag = bags[state.selectedBagIndex];
+
+    if (selectedBag?.bagProducts == null) return;
+
+    final List<CartProductData> allCarts = [];
+    for (var bagProduct in selectedBag!.bagProducts!) {
+      allCarts.addAll(bagProduct.carts);
     }
-   
-   void increaseProductCount({
-      required  BuildContext context,
-      required int productIndex,
-    }) {
-      List<BagData> bags = List.from(LocalStorage.getBags());
-      BagData? selectedBag = bags[state.selectedBagIndex];
-       
-      if (selectedBag?.bagProducts == null) return;
 
-      final List<CartProductData> allCarts = [];
-      for (var bagProduct in selectedBag!.bagProducts!) {
-        allCarts.addAll(bagProduct.carts);
+    if (productIndex >= allCarts.length) return;
+
+    CartProductData cartItem = allCarts[productIndex];
+
+    CartProductData updatedCartItem =
+        cartItem.copyWith(quantity: cartItem.quantity + 1);
+    for (var bagProduct in selectedBag.bagProducts!) {
+      int cartIndex = bagProduct.carts
+          .indexWhere((cart) => cart.productId == cartItem.productId);
+      if (cartIndex != -1) {
+        List<CartProductData> updatedCarts = List.from(bagProduct.carts);
+        updatedCarts[cartIndex] = updatedCartItem;
+
+        BagProductData updatedBagProduct =
+            bagProduct.copyWith(carts: updatedCarts);
+        int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
+        selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
+        break;
       }
+    }
 
-      if (productIndex >= allCarts.length) return; 
+    // Save the updated bags back to local storage
+    bags[state.selectedBagIndex] = selectedBag;
+    LocalStorage.setBags(bags);
 
-      CartProductData cartItem = allCarts[productIndex];
-
-
-        CartProductData updatedCartItem = cartItem.copyWith(quantity: cartItem.quantity + 1);
-        for (var bagProduct in selectedBag.bagProducts!) {
-          int cartIndex = bagProduct.carts.indexWhere((cart) => cart.productId == cartItem.productId);
-          if (cartIndex != -1) {
-            List<CartProductData> updatedCarts = List.from(bagProduct.carts);
-            updatedCarts[cartIndex] = updatedCartItem;
-
-            BagProductData updatedBagProduct = bagProduct.copyWith(carts: updatedCarts);
-            int bagProductIndex = selectedBag.bagProducts!.indexOf(bagProduct);
-            selectedBag.bagProducts![bagProductIndex] = updatedBagProduct;
-            break;
-          }
-        }
-
-      // Save the updated bags back to local storage
-      bags[state.selectedBagIndex] = selectedBag;
-      LocalStorage.setBags(bags);
-
-      // Optional: You can trigger a delayed action, e.g., fetching cart data
-      // timer = Timer(
-      //   const Duration(milliseconds: 500),
-      //   () => fetchCarts(isNotLoading: true),
-      // );
-      fetchCarts(
+    // Optional: You can trigger a delayed action, e.g., fetching cart data
+    // timer = Timer(
+    //   const Duration(milliseconds: 500),
+    //   () => fetchCarts(isNotLoading: true),
+    // );
+    fetchCarts(
       checkYourNetwork: () {
         AppHelpers.showSnackBar(
           context,
@@ -545,36 +552,37 @@ class RightSideNotifier extends StateNotifier<RightSideState> {
         );
       },
     );
+  }
+
+  Future createOrder(BuildContext context, List<CartItem> cartItems,
+      double totalCost, int tableId, int restoId,
+      {VoidCallback? onSuccess}) async {
+    final connected = await AppConnectivity.connectivity();
+    if (connected) {
+      state = state.copyWith(isOrderLoading: true);
+      final response = await _ordersRepository.createOrder(
+          cartItems, totalCost, tableId, restoId);
+      response.when(
+        success: (res) async {
+          state = state.copyWith(isOrderLoading: false);
+          onSuccess?.call();
+          removeOrderedBag(context);
+        },
+        failure: (activeFailure) {
+          state = state.copyWith(isOrderLoading: false);
+          if (mounted) {
+            AppHelpers.showSnackBar(
+              context,
+              AppHelpers.getTranslation(500.toString()),
+            );
+          }
+        },
+      );
+    } else {
+      if (context.mounted) {
+        AppHelpers.showSnackBar(
+            context, AppHelpers.getTranslation(TrKeys.noInternetConnection));
+      }
     }
-
-  // Future createOrder(BuildContext context, OrderBodyData data,
-  //       {VoidCallback? onSuccess}) async {
-  //     final connected = await AppConnectivity.connectivity();
-  //     if (connected) {
-  //       state = state.copyWith(isOrderLoading: true);
-  //       final response = await _ordersRepository.createOrder(data);
-  //       response.when(
-  //         success: (res) async {
-  //           state = state.copyWith(isOrderLoading: false);
-  //           onSuccess?.call();
-  //           removeOrderedBag(context);
-  //         },
-  //         failure: (activeFailure) {
-  //           state = state.copyWith(isOrderLoading: false);
-  //           if (mounted) {
-  //             AppHelpers.showSnackBar(
-  //               context,
-  //               AppHelpers.getTranslation(500.toString()),
-  //             );
-  //           }
-  //         },
-  //       );
-  //     } else {
-  //       if (context.mounted) {
-  //         AppHelpers.showSnackBar(
-  //             context, AppHelpers.getTranslation(TrKeys.noInternetConnection));
-  //       }
-  //     }
-  // }
-
+  }
 }

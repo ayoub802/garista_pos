@@ -1,29 +1,24 @@
-
 class CountNotificationModel {
-    int? notification;
-    int? transaction;
+  int? notification;
 
-    CountNotificationModel({
-        this.notification,
-        this.transaction,
-    });
+  CountNotificationModel({
+    this.notification,
+  });
 
-    CountNotificationModel copyWith({
-        int? notification,
-        int? transaction,
-    }) => 
-        CountNotificationModel(
-            notification: notification ?? this.notification,
-            transaction: transaction ?? this.transaction,
-        );
+  CountNotificationModel copyWith({
+    int? notification,
+    int? transaction,
+  }) =>
+      CountNotificationModel(
+        notification: notification ?? this.notification,
+      );
 
-    factory CountNotificationModel.fromJson(Map<String, dynamic> json) => CountNotificationModel(
-        notification: json["notification"],
-        transaction: json["transaction"],
-    );
+  factory CountNotificationModel.fromJson(Map<String, dynamic> json) =>
+      CountNotificationModel(
+        notification: json["count"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "notification": notification,
-        "transaction": transaction,
-    };
+      };
 }

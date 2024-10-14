@@ -14,42 +14,88 @@ import '../repository.dart';
 
 class OrdersRepositoryImpl extends OrdersRepository {
   @override
-  Future<ApiResult<CreateOrderResponse>> createOrder(
-     List<CartItem> cartItems, double totalCost, int extraInfo, int restoId) async {
+  Future<ApiResult<CreateOrderResponse>> createOrder(List<CartItem> cartItems,
+      double totalCost, int extraInfo, int restoId) async {
     try {
       final cartItemProduct = cartItems.map((item) {
-      return {
-        'type': item.type,
-        'id': item.id,
-        'quantity': item.quantity,
-        'comment': item.comment ?? null,
-        // 'toppings': item.toppings,
-        // 'ingredients': item.ingredients,
-        // 'extraVariant': item.extraVariants,
+        return {
+          'type': item.type,
+          'id': item.id,
+          'quantity': item.quantity,
+          'comment': item.comment ?? null,
+          'toppings': item.toppings,
+          'ingrediants': item
+              .ingredients, // You may want to adjust this field based on your use case
+          'extraVariant': item.extraVariants, // Same for this field
+        };
+      }).toList();
+
+      final orderBody = {
+        'total': totalCost,
+        'status': 'New',
+        'table_id': extraInfo,
+        'resto_id': restoId,
+        'cartItems': cartItemProduct,
       };
-    }).toList();
+      print("The Order Data => ${cartItemProduct}");
 
-    final orderBody = {
-      'total': totalCost,
-      'status': 'New',
-      'table_id': extraInfo,
-      'resto_id': restoId,
-      'cartItems': cartItemProduct,
-    };
-      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
-      debugPrint('==> order create data: ${jsonEncode(cartItemProduct)} and cart Items => ${cartItemProduct}');
-      // final data = jsonEncode(orderBody);
-      // final response = await client.post(
-      //   '/api/order/',
-      //   data: data,
-      // );
-
-      return ApiResult.failure(
-       error: AppHelpers.errorHandler("test"),
+      // Use the updated endpoint: /public/api/order/
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+      final data = jsonEncode(orderBody);
+      final response = await client.post(
+        '/api/order', // Updated endpoint
+        data: data,
       );
+      print("The Order Data => ${response.data}");
+
+      // Check response and handle success/failure
+      if (response.statusCode == 200) {
+        // Assuming that CreateOrderResponse is your model for successful response
+        await postOrderNotification(restoId, extraInfo);
+        return ApiResult.success(
+            data: CreateOrderResponse.fromJson(response.data));
+      } else {
+        // Handle error case
+        return ApiResult.failure(
+          error: AppHelpers.errorHandler("Failed to create order"),
+        );
+      }
     } catch (e) {
+      // Catch and handle exceptions
       debugPrint('==> order create failure: $e');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
+    }
+  }
+
+  Future<void> postOrderNotification(int restoId, int tableId) async {
+    try {
+      final notification = {
+        'title': 'New Order',
+        'status': 'Order',
+        'resto_id': restoId,
+        'table_id': tableId,
+      };
+
+      // Assuming you're using Dio for HTTP requests
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+
+      // Post the notification to the backend
+      final response = await client.post(
+        '/api/notifications', // Endpoint to send notification
+        data: jsonEncode(notification),
+      );
+
+      // Check if the notification request was successful
+      if (response.statusCode == 200) {
+        print('Notification successfully posted');
+      } else {
+        print('Failed to post notification: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Catch and handle any exceptions
+      print('Error posting notification: $e');
     }
   }
 
@@ -108,6 +154,9 @@ class OrdersRepositoryImpl extends OrdersRepository {
       case OrderStatus.rejected:
         statusText = 'Rejected';
         break;
+      case OrderStatus.preparing:
+        statusText = 'Preparing';
+        break;
       case OrderStatus.newO:
         statusText = 'New';
         break;
@@ -122,7 +171,7 @@ class OrdersRepositoryImpl extends OrdersRepository {
       final client =
           dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-        '/api/order_resto/${LocalStorage.getRestaurant()?.id}',
+        '/api/order_resto_hundred/${LocalStorage.getRestaurant()?.id}',
         queryParameters: data,
       );
       return ApiResult.success(
@@ -153,6 +202,9 @@ class OrdersRepositoryImpl extends OrdersRepository {
       case OrderStatus.rejected:
         statusText = 'Rejected';
         break;
+      case OrderStatus.preparing:
+        statusText = 'Preparing';
+        break;
       case OrderStatus.newO:
         statusText = 'New';
         break;
@@ -162,11 +214,8 @@ class OrdersRepositoryImpl extends OrdersRepository {
     }
     final data = {'status': statusText};
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        LocalStorage.getUser()?.id == TrKeys.waiter
-            ? '/api/v1/dashboard/waiter/order/$orderId/status/update'
-            : '/api/v1/dashboard/${LocalStorage.getUser()?.id}/order/$orderId/status',
+      final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+      await client.put('/api/order/$orderId',
         data: data,
       );
       return const ApiResult.success(
@@ -186,13 +235,8 @@ class OrdersRepositoryImpl extends OrdersRepository {
     final data = {'status': status};
     debugPrint('==> update order status data: ${jsonEncode(data)}');
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        LocalStorage.getUser()?.id == TrKeys.waiter
-            ? '/api/v1/dashboard/waiter/order/details/$orderId/status/update'
-            : LocalStorage.getUser()?.id == TrKeys.cook
-                ? '/api/v1/dashboard/cook/order-detail/$orderId/status/update'
-                : '/api/v1/dashboard/${LocalStorage.getUser()?.id}/order/details/$orderId/status',
+     final client = dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
+      await client.put('/api/order/$orderId',
         data: data,
       );
       return const ApiResult.success(
@@ -250,34 +294,11 @@ class OrdersRepositoryImpl extends OrdersRepository {
   @override
   Future<ApiResult<SingleOrderResponse>> getOrderDetails({int? orderId}) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final data = {
-        'lang': LocalStorage.getLanguage()?.locale ?? 'en',
-      };
-      final response = await client.get(
-          '/api/v1/dashboard/${LocalStorage.getUser()?.id}/orders/$orderId',
-          queryParameters: data);
+      final client = dioHttp.client(requireAuth: true,baseUrl: SecretVars.GaristabaseUrl);
+
+      final response = await client.get('/api/showOrderPOS/$orderId');
       return ApiResult.success(
         data: SingleOrderResponse.fromJson(response.data),
-      );
-    } catch (e) {
-      debugPrint('==> get order details failure: $e');
-      return ApiResult.failure(error: AppHelpers.errorHandler(e));
-    }
-  }
-
-  @override
-  Future<ApiResult<SingleKitchenOrderResponse>> getOrderDetailsKitchen(
-      {int? orderId}) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      final data = {
-        'lang': LocalStorage.getLanguage()?.locale ?? 'en',
-      };
-      final response = await client
-          .get('/api/v1/dashboard/cook/orders/$orderId', queryParameters: data);
-      return ApiResult.success(
-        data: SingleKitchenOrderResponse.fromJson(response.data),
       );
     } catch (e) {
       debugPrint('==> get order details failure: $e');

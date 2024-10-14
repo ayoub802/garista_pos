@@ -39,8 +39,14 @@ class CartOrderItem extends StatelessWidget {
     num sumPrice = 0;
     num disSumPrice = 0;
 
-    print("The Cart => ${cart?.length}");
-
+    if (cart != null) {
+      for (CartProductData product in cart!) {
+        String toppings = product.selectedToppings
+            ?.map((topping) => topping.toString())
+            .join(', ') ?? 'No toppings';
+        print("The Cart Product => ${product.name} has toppings => $toppings");
+      }
+    }
     return Slidable(
       endActionPane: ActionPane(
         extentRatio: 0.12,

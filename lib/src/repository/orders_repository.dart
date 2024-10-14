@@ -7,7 +7,8 @@ import '../core/handlers/handlers.dart';
 import '../models/models.dart';
 
 abstract class OrdersRepository {
-  Future<ApiResult<CreateOrderResponse>> createOrder(List<CartItem> cartItems, double totalCost, int extraInfo, int restoId);
+  Future<ApiResult<CreateOrderResponse>> createOrder(
+      List<CartItem> cartItems, double totalCost, int extraInfo, int restoId);
 
   Future<ApiResult<OrdersPaginateResponse>> getOrders({
     OrderStatus? status,
@@ -33,9 +34,6 @@ abstract class OrdersRepository {
   });
 
   Future<ApiResult<SingleOrderResponse>> getOrderDetails({int? orderId});
-
-  Future<ApiResult<SingleKitchenOrderResponse>> getOrderDetailsKitchen(
-      {int? orderId});
 
   Future<ApiResult<dynamic>> setDeliverMan(
       {required int orderId, required int deliverymanId});

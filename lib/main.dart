@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'src/app_widget.dart';
 import 'src/core/di/dependency_manager.dart';
@@ -12,11 +11,7 @@ import 'package:flutter_logs/flutter_logs.dart';
 void main() async {
   setUpDependencies();
   WidgetsFlutterBinding.ensureInitialized();
-  // if (Platform.isAndroid || Platform.isIOS) {
-  //   await Firebase.initializeApp();
-  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // }
-
+  await Firebase.initializeApp();
   await FlutterLogs.initLogs(
     logLevelsEnabled: [
       LogLevel.INFO,

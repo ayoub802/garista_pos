@@ -79,7 +79,9 @@ class CartItem {
   final int id;
   final int quantity;
   final String? comment;
-  // final List<String>? toppings; // Adjust based on your actual data type
+  final List<Map<String, dynamic>>? toppings;
+  final List<Map<String, dynamic>>? extraVariants;
+  final List<Map<String, dynamic>>? ingredients;
   // final List<String>? ingredients; // Adjust based on your actual data type
   // final List<String>? extraVariants; // Adjust based on your actual data type
 
@@ -88,17 +90,16 @@ class CartItem {
     required this.id,
     required this.quantity,
     this.comment,
-    // this.toppings,
-    // this.ingredients,
-    // this.extraVariants,
+    this.toppings,
+    this.extraVariants,
+    this.ingredients,
   });
 
   @override
   String toString() {
-    return "{\"type\":$type, \"quantity\":$quantity, \"comment\":$comment,}";
+    return "{\"type\":$type, \"quantity\":$quantity, \"comment\":$comment, \"the toppings\": $toppings, \"the variants\": $extraVariants, \"the ingredients\": $ingredients}";
   }
 }
-
 
 class AddressModel {
   final String? address;

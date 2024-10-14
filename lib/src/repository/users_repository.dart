@@ -14,7 +14,7 @@ abstract class UsersRepository {
     String? inviteStatus,
     int? page,
   });
-  Future<ApiResult<UsersPaginateResponse>> searchDeliveryman(String? query);
+  // Future<ApiResult<UsersPaginateResponse>> searchDeliveryman(String? query);
 
   Future<ApiResult<SingleUserResponse>> getUserDetails(String uuid);
 

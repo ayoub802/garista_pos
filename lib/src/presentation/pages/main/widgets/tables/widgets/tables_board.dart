@@ -133,19 +133,19 @@ class TablesBoard extends ConsumerWidget {
         //     ),
         //   ),
         const Spacer(),
-        ConfirmButton(
-          paddingSize: 20,
-          prefixIcon: Icon(FlutterRemix.add_fill, size: 28.r, color: Colors.white,),
-          textSize: 14,
-          title: AppHelpers.getTranslation(TrKeys.addNewTable),
-          textColor: AppColors.white,
-          onTap: () {
-            if (!state.isSectionLoading && !state.isLoading) {
-              AppHelpers.showAlertDialog(
-                  context: context, child: const AddNewTable());
-            }
-          },
-        )
+        // ConfirmButton(
+        //   paddingSize: 20,
+        //   prefixIcon: Icon(FlutterRemix.add_fill, size: 28.r, color: Colors.white,),
+        //   textSize: 14,
+        //   title: AppHelpers.getTranslation(TrKeys.addNewTable),
+        //   textColor: AppColors.white,
+        //   onTap: () {
+        //     if (!state.isSectionLoading && !state.isLoading) {
+        //       AppHelpers.showAlertDialog(
+        //           context: context, child: const AddNewTable());
+        //     }
+        //   },
+        // )
       ],
     );
   }

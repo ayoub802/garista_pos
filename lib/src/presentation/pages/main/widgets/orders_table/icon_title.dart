@@ -7,7 +7,7 @@ import '../../../../theme/app_colors.dart';
 class IconTitle extends StatelessWidget {
   final String title;
   final IconData icon;
-  final String value;
+  final String? value;
 
   const IconTitle(
       {super.key, required this.title, required this.icon, required this.value})
@@ -23,7 +23,7 @@ class IconTitle extends StatelessWidget {
           6.horizontalSpace,
           Expanded(
             child: Text(
-              "$title: $value",
+              "$title: ${value ?? '0'}",
               style: GoogleFonts.inter(
                 fontSize: 15,
                 color: AppColors.black,

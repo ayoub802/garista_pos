@@ -136,14 +136,12 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                                   symbol: currency?.currency,
                                   add: () {
                                     // Your logic to increase product count
-                                     notifier.increaseProductCount( 
-                                         context: context,
-                                        productIndex: index);
+                                    notifier.increaseProductCount(
+                                        context: context, productIndex: index);
                                   },
                                   remove: () {
-                                    notifier.decreaseProductCount( 
-                                         context: context,
-                                        productIndex: index);
+                                    notifier.decreaseProductCount(
+                                        context: context, productIndex: index);
                                   },
                                   cart: [
                                     cartItem
@@ -161,40 +159,6 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                             8.verticalSpace,
                             Column(
                               children: [
-                                Padding(
-                                  padding:
-                                      REdgeInsets.symmetric(horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      26.horizontalSpace,
-                                      // InkWell(
-                                      //   onTap: () {
-                                      //     AppHelpers.showAlertDialog(
-                                      //         context: context,
-                                      //         child: const NoteDialog());
-                                      //   },
-                                      //   child: AnimationButtonEffect(
-                                      //     child: Container(
-                                      //       padding: EdgeInsets.symmetric(
-                                      //           vertical: 10.r,
-                                      //           horizontal: 18.r),
-                                      //       decoration: BoxDecoration(
-                                      //           color: AppColors.addButtonColor,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(
-                                      //                   10.r)),
-                                      //       child: Text(
-                                      //         AppHelpers.getTranslation(
-                                      //             TrKeys.note),
-                                      //         style: GoogleFonts.inter(
-                                      //             fontSize: 14.sp),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                ),
                                 _price(state, currency?.currency, notifier),
                               ],
                             ),
@@ -245,7 +209,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
     );
   }
 
-  Column _price(RightSideState state, String? currency,rightSideNotifier) {
+  Column _price(RightSideState state, String? currency, rightSideNotifier) {
     num totalPrice = AppHelpers.calculateTotalPrice(state);
 
     String formattedPrice = NumberFormat.currency(
@@ -284,27 +248,84 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
               ),
               24.verticalSpace,
               LoginButton(
-                isLoading: state.isButtonLoading,
+                isLoading: state.isOrderLoading,
                 title: AppHelpers.getTranslation(TrKeys.order),
                 titleColor: AppColors.white,
-                onPressed: () {
+                onPressed: () async {
                   final List<CartProductData> allCarts = [];
-                                for (var bagProduct in state
-                                        .bags[state.selectedBagIndex]
-                                        .bagProducts ??
-                                    []) {
-                                  allCarts.addAll(bagProduct.carts ?? []);
-                                }
-                    final cartItems = allCarts.map((item) => CartItem(
-                      type: item.type, 
-                      id: item.productId, 
-                      quantity: item.quantity, 
-                      comment: '',
-                    )).toList();
+                  for (var bagProduct
+                      in state.bags[state.selectedBagIndex].bagProducts ?? []) {
+                    allCarts.addAll(bagProduct.carts ?? []);
+                  }
+                  final cartItems = allCarts.map((item) {
+                    // Extract and format selected toppings
+                    final List<Map<String, dynamic>> formattedToppings =
+                        item.selectedToppings?.map((topping) {
+                              return {
+                                'name': topping.name,
+                                'id': topping.id,
+                                'option': topping.options
+                                    ?.map((option) => {
+                                          'name': option.name,
+                                          'price': option.price,
+                                        })
+                                    .toList(),
+                              };
+                            }).toList() ??
+                            [];
+                    final List<Map<String, dynamic>> formattedVariants =
+                        item.selectedVariants?.map((variant) {
+                              return {
+                                'name': variant.name,
+                                'id': variant.id,
+                                'option': variant.options
+                                    ?.map((option) => {
+                                          'name': option.name,
+                                          'price': option.price,
+                                        })
+                                    .toList(),
+                              };
+                            }).toList() ??
+                            [];
+                    final List<Map<String, dynamic>> formattedIngredients =
+                        item.selectedIngrediants?.map((variant) {
+                              return {
+                                'name': variant.name,
+                              };
+                            }).toList() ??
+                            [];
 
-                   for (var cartItem in cartItems) {
-                      print('Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, total: ${totalPrice} resto_id: ${LocalStorage.getRestaurant()?.id}');
-                    }
+                    // Print out the formatted toppings
+                    print(
+                        'Toppings for product ID: ${item.productId} - $formattedVariants');
+
+                    return CartItem(
+                        type: item.type,
+                        id: item.productId,
+                        quantity: item.quantity,
+                        comment: '',
+                        toppings: formattedToppings,
+                        ingredients: formattedIngredients,
+                        extraVariants: formattedVariants);
+                  }).toList();
+                  int tableId = 2;
+                  int restoId = LocalStorage.getRestaurant()?.id ?? 0;
+                  rightSideNotifier.createOrder(
+                    context,
+                    cartItems,
+                    totalPrice,
+                    tableId,
+                    restoId,
+                    onSuccess: () {
+                      // Optional success action
+                      print("Order created successfully!");
+                    },
+                  );
+
+                  for (var cartItem in cartItems) {
+                    print(
+                        'Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, topping: ${cartItem.toppings}');
+                  }
                 },
               )
             ],

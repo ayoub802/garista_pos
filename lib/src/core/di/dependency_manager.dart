@@ -3,6 +3,8 @@ import '../../repository/repository.dart';
 import '../handlers/handlers.dart';
 import 'package:garista_pos/src/repository/table_repository.dart';
 import 'package:garista_pos/src/repository/impl/table_repository_iml.dart';
+import 'package:garista_pos/src/repository/impl/notification_repo_impl.dart';
+import 'package:garista_pos/src/repository/notification_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -18,7 +20,7 @@ void setUpDependencies() {
   getIt.registerSingleton<BrandsRepository>(BrandsRepositoryImpl());
   getIt.registerSingleton<TableRepository>(TableRepositoryIml());
   getIt.registerSingleton<OrdersRepository>(OrdersRepositoryImpl());
-
+  getIt.registerSingleton<NotificationRepository>(NotificationRepositoryImpl());
 }
 
 final dioHttp = getIt.get<HttpService>();
@@ -31,3 +33,4 @@ final categoriesRepository = getIt.get<CategoriesRepository>();
 final productsRepository = getIt.get<ProductsRepository>();
 final tableRepository = getIt.get<TableRepository>();
 final ordersRepository = getIt.get<OrdersRepository>();
+final notificationRepository = getIt.get<NotificationRepository>();

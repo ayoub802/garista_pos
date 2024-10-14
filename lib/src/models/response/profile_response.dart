@@ -1,15 +1,26 @@
 import '../data/user_data.dart';
 
 class ProfileResponse {
-  ProfileResponse({UserData? data}) {
+  
+  ProfileResponse({
+    UserData? data,
+    }) {
     _data = data;
   }
 
   ProfileResponse.fromJson(dynamic json) {
-    _data = json['data'] != null ? UserData.fromJson(json) : null;
+     if (json['data'] != null) {
+      _data = UserData.fromJson(json['data']);
+      print("Data from JSON: ${json['data']}");
+    } else if (json['user'] != null) {
+      _data = UserData.fromJson(json['user']);
+    } else {
+      print("No user or data field in JSON");
+    }
   }
 
   UserData? _data;
+
 
   ProfileResponse copyWith({UserData? data}) =>
       ProfileResponse(data: data ?? _data);

@@ -28,7 +28,7 @@ class AppHelpers {
       // Iterate over all carts within the current bag product
       for (var cart in bagProduct.carts ?? []) {
         // Sum up the price * quantity for each product
-        num productPrice = num.tryParse(cart.price ?? '0') ??
+        num productPrice = cart.price ??
             0; // Convert price to number safely
         totalPrice += productPrice * cart.quantity; // Multiply by quantity
       }

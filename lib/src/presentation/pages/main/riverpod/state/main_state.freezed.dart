@@ -40,7 +40,7 @@ mixin _$MainState {
   ShopData? get selectedShop => throw _privateConstructorUsedError;
   CategoryData? get selectedCategory => throw _privateConstructorUsedError;
   BrandData? get selectedBrand => throw _privateConstructorUsedError;
-  // OrderData? get selectedOrder => throw _privateConstructorUsedError;
+  OrderData? get selectedOrder => throw _privateConstructorUsedError;
   // PriceDate? get priceDate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -75,7 +75,7 @@ abstract class $MainStateCopyWith<$Res> {
     ShopData? selectedShop,
     CategoryData? selectedCategory,
     BrandData? selectedBrand,
-    // OrderData? selectedOrder,
+    OrderData? selectedOrder,
     // PriceDate? priceDate
   });
 }
@@ -202,10 +202,10 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
           ? _value.selectedBrand
           : selectedBrand // ignore: cast_nullable_to_non_nullable
               as BrandData?,
-      // selectedOrder: freezed == selectedOrder
-      //     ? _value.selectedOrder
-      //     : selectedOrder // ignore: cast_nullable_to_non_nullable
-      //         as OrderData?,
+      selectedOrder: freezed == selectedOrder
+          ? _value.selectedOrder
+          : selectedOrder // ignore: cast_nullable_to_non_nullable
+              as OrderData?,
       // priceDate: freezed == priceDate
       //     ? _value.priceDate
       //     : priceDate // ignore: cast_nullable_to_non_nullable
@@ -244,7 +244,7 @@ abstract class _$$MainStateImplCopyWith<$Res>
     ShopData? selectedShop,
     CategoryData? selectedCategory,
     BrandData? selectedBrand,
-    // OrderData? selectedOrder,
+    OrderData? selectedOrder,
     // PriceDate? priceDate
   });
 }
@@ -369,10 +369,10 @@ class __$$MainStateImplCopyWithImpl<$Res>
           ? _value.selectedBrand
           : selectedBrand // ignore: cast_nullable_to_non_nullable
               as BrandData?,
-      // selectedOrder: freezed == selectedOrder
-      //     ? _value.selectedOrder
-      //     : selectedOrder // ignore: cast_nullable_to_non_nullable
-      //         as OrderData?,
+      selectedOrder: freezed == selectedOrder
+          ? _value.selectedOrder
+          : selectedOrder // ignore: cast_nullable_to_non_nullable
+              as OrderData?,
       // priceDate: freezed == priceDate
       //     ? _value.priceDate
       //     : priceDate // ignore: cast_nullable_to_non_nullable
@@ -406,7 +406,7 @@ class _$MainStateImpl extends _MainState {
     this.selectedShop,
     this.selectedCategory,
     this.selectedBrand,
-    // this.selectedOrder,
+    this.selectedOrder,
     // this.priceDate
   })  : _products = products,
         _shops = shops,
@@ -521,7 +521,7 @@ class _$MainStateImpl extends _MainState {
   @override
   final BrandData? selectedBrand;
   @override
-  // final OrderData? selectedOrder;
+  final OrderData? selectedOrder;
   // @override
   // final PriceDate? priceDate;
 
@@ -571,9 +571,10 @@ class _$MainStateImpl extends _MainState {
             (identical(other.selectedCategory, selectedCategory) ||
                 other.selectedCategory == selectedCategory) &&
             (identical(other.selectedBrand, selectedBrand) ||
-                other.selectedBrand == selectedBrand)
-        //     && (identical(other.selectedOrder, selectedOrder) ||
-        //     other.selectedOrder == selectedOrder) &&
+                other.selectedBrand == selectedBrand) &&
+            (identical(other.selectedOrder, selectedOrder) ||
+                other.selectedOrder == selectedOrder)
+        // &&
         // (identical(other.priceDate, priceDate) ||
         //     other.priceDate == priceDate)
         );
@@ -603,7 +604,7 @@ class _$MainStateImpl extends _MainState {
         selectedShop,
         selectedCategory,
         selectedBrand,
-        // selectedOrder,
+        selectedOrder,
         // priceDate
       ]);
 
@@ -637,7 +638,7 @@ abstract class _MainState extends MainState {
     final ShopData? selectedShop,
     final CategoryData? selectedCategory,
     final BrandData? selectedBrand,
-    // final OrderData? selectedOrder,
+    final OrderData? selectedOrder,
     // final PriceDate? priceDate
   }) = _$MainStateImpl;
   const _MainState._() : super._();
@@ -685,8 +686,8 @@ abstract class _MainState extends MainState {
   @override
   BrandData? get selectedBrand;
   @override
-  // OrderData? get selectedOrder;
-  // @override
+  OrderData? get selectedOrder;
+  @override
   // PriceDate? get priceDate;
   // @override
   @JsonKey(ignore: true)

@@ -3,7 +3,7 @@ class TrKeys {
   static const String selectDesiredOrderHistory =
       "select_the_desired_order_history_range";
   static const String income = 'income';
-  static const String help = 'help';
+  static const String help = 'help'; 
   static const String cook = 'cook';
   static const String thisOrderCancelled = 'this.order.cancelled';
   static const String thisOrderReady = 'this.order.ready';
@@ -326,6 +326,7 @@ class TrKeys {
   static const String accepted = 'Accepted';
   static const String ready = 'Ready';
   static const String onAWay = 'on_a_way';
+  static const String preparing = 'Preparing';
   static const String delivered = 'delivery';
   static const String addComment = 'add_comment';
   static const String typeSomething = 'type_something';

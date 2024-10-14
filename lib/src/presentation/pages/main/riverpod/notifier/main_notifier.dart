@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:garista_pos/src/models/data/order_data.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/utils/utils.dart';
 import '../../../../../models/models.dart';
@@ -29,6 +30,10 @@ class MainNotifier extends StateNotifier<MainState> {
 
   changeIndex(int index) {
     state = state.copyWith(selectIndex: index);
+  }
+
+  setOrder(OrderData? order) {
+    state = state.copyWith(selectedOrder: order);
   }
 
   Future<void> fetchUserDetail(BuildContext context) async {

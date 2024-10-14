@@ -38,6 +38,7 @@ class Assets {
   static const String svgKitchen = 'assets/svg/kitchen.svg';
   static const String svgLikeSvg = 'assets/svg/likeSvg.svg';
   static const String svgLogo = 'assets/svg/logo.svg';
+  static const String svgLogo1 = 'assets/svg/garista_logo.svg';
   static const String svgMeat = 'assets/svg/meat.svg';
   static const String svgMenu = 'assets/svg/menu.svg';
   static const String svgNoHomeSvg = 'assets/svg/noHomeSvg.svg';

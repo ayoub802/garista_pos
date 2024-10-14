@@ -76,13 +76,15 @@ EditProfileNotifier(EditProfileState state) : super(state);
       //   await updateProfileImage(context, state.imagePath);
       // }
 
+      print("The User => ${user.phone}");
+
       final response = await usersRepository.editProfile(
           user: EditProfile(
-        firstname: state.firstName.isEmpty ? user.firstName : state.firstName,
-        lastname: state.lastName.isEmpty ? user.lastName : state.lastName,
-        // phone: state.phone.isEmpty ? user.phone : state.phone,
-        images: state.url.isEmpty ? user.image ?? "" : state.url,
-        gender: state.gender,
+        first_name: state.firstName.isEmpty ? user.firstName : state.firstName,
+        last_name: state.lastName.isEmpty ? user.lastName : state.lastName,
+        phone: state.phone.isEmpty ? user.phone?.toString() : state.phone,
+        // images: state.url.isEmpty ? user.image ?? "" : state.url,
+        // gender: state.gender,
       ));
       response.when(
         success: (data) {

@@ -67,7 +67,7 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
               children: [
                 buildList(OrderStatus.newO),
                 buildList(OrderStatus.accepted),
-                buildList(OrderStatus.cooking),
+                buildList(OrderStatus.preparing),
                 buildList(OrderStatus.ready),
                 buildList(OrderStatus.completed),
                 buildList(OrderStatus.rejected),
@@ -123,9 +123,9 @@ class _BoardViewState extends ConsumerState<BoardViewMode> {
               .fetchAcceptedOrders(isRefresh: true);
         };
         break;
-      case OrderStatus.cooking:
+      case OrderStatus.preparing:
         list = widget.listCooking;
-        header = "Preparing";
+        header = "Preparing"; 
         hasMore = ref.watch(cookingOrdersProvider).hasMore;
         onViewMore =
             () => ref.read(cookingOrdersProvider.notifier).fetchCookingOrders();

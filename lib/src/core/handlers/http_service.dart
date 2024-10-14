@@ -14,6 +14,7 @@ class HttpService {
             'Accept': 'application/json',
             'Content-type': 'application/json'
           },
+          
         ),
       )
         ..interceptors.add(TokenInterceptor(requireAuth: requireAuth))

@@ -67,12 +67,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     super.dispose();
   }
 
-  // String phone = (LocalStorage.getUser()?.phone as String?) ?? '';
 
   getInfo() {
     firstName.text = LocalStorage.getUser()?.firstName ?? '';
     lastName.text = LocalStorage.getUser()?.lastName ?? '';
-    // phoneNumber.text = phone ?? '';
+    phoneNumber.text = (LocalStorage.getUser()?.phone?.toString()) ?? '';
     email.text = LocalStorage.getUser()?.email ?? '';
   }
 
@@ -186,61 +185,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: REdgeInsets.only(right: 16),
-                              child: CustomColumnWidget(
-                                trName: AppHelpers.getTranslation(
-                                    TrKeys.newPassword),
-                                controller: confirmPassword,
-                                obscure: state.showOldPassword,
-                                suffixIcon: GestureDetector(
-                                  child: Icon(
-                                    state.showOldPassword
-                                        ? FlutterRemix.eye_line
-                                        : FlutterRemix.eye_close_line,
-                                    color: AppColors.black,
-                                    size: 20.r,
-                                  ),
-                                  onTap: () => notifier.setShowOldPassword(
-                                      !state.showOldPassword),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      24.r.verticalSpace,
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
                               padding: REdgeInsets.only(right: 80),
                               child: CustomColumnWidget(
                                 inputType: TextInputType.phone,
                                 controller: phoneNumber,
                                 trName: AppHelpers.getTranslation(TrKeys.phone),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: REdgeInsets.only(right: 16),
-                              child: CustomColumnWidget(
-                                trName: AppHelpers.getTranslation(
-                                    TrKeys.confirmNewPassword),
-                                controller: newPassword,
-                                obscure: state.showPassword,
-                                suffixIcon: IconButton(
-                                  splashRadius: 25.r,
-                                  icon: Icon(
-                                    state.showPassword
-                                        ? FlutterRemix.eye_line
-                                        : FlutterRemix.eye_close_line,
-                                    color: AppColors.black,
-                                    size: 20.r,
-                                  ),
-                                  onPressed: () => notifier
-                                      .setShowPassword(!state.showPassword),
-                                ),
                               ),
                             ),
                           ),
@@ -260,7 +209,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                     firstName: firstName.text,
                                     lastName: lastName.text,
                                     email: email.text,
-                                    // phone: phoneNumber.text,
+                                    phone: int.tryParse(phoneNumber.text),
                                   ));
                               if (newPassword.text.isNotEmpty &&
                                   confirmPassword.text.isNotEmpty) {

@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +25,10 @@ import 'package:garista_pos/src/presentation/pages/main/widgets/post_page.dart';
 import 'widgets/profile/edit_profile/edit_profile_page.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/tables/tables_page.dart';
 import 'widgets/orders_table/orders_table.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/notification_dialog.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/components/notification_count_container.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/riverpod/notification_provider.dart';
+import 'widgets/income/income_page.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -40,11 +43,11 @@ class _MainPageState extends ConsumerState<MainPage>
   Timer? timer;
   late List<IndexedStackChild> list = [
     IndexedStackChild(child: const PostPage(), preload: true),
-    // IndexedStackChild(child: const OrdersTablesPage()),
-    // IndexedStackChild(child: const TablesPage()),
-    // IndexedStackChild(child: const ProfilePage()),
+    IndexedStackChild(child: const OrdersTablesPage()),
+    IndexedStackChild(child: const TablesPage()),
+    IndexedStackChild(child: const InComePage()),
+    IndexedStackChild(child: const ProfilePage()),
     // IndexedStackChild(child: const CustomersPage()),
-    // IndexedStackChild(child: const SaleHistory()),
     // IndexedStackChild(child: const InComePage()),
   ];
   @override
@@ -119,6 +122,14 @@ class _MainPageState extends ConsumerState<MainPage>
       //     ..fetchUserDetail(context)
       //     ..changeIndex(0);
       // }
+      ref.read(notificationProvider.notifier).fetchCount(context);
+      // if (mounted) {
+      //   Timer.periodic(
+      //     AppConstants.refreshTime,
+      //     (s) {
+      //     },
+      //   );
+      // }
     });
   }
 
@@ -189,61 +200,7 @@ class _MainPageState extends ConsumerState<MainPage>
                     Expanded(
                       flex: 2,
                       child: TextFormField(
-                        onChanged: (value) {
-                          // if (user?.role == TrKeys.seller) {
-                          //   ref.watch(mainProvider).selectIndex == 2
-                          //       ? customerNotifier.searchUsers(
-                          //           context, value.trim())
-                          //       : notifier.setProductsQuery(
-                          //           context, value.trim());
-                          //   if (ref.watch(mainProvider).selectIndex == 1) {
-                          //     ref
-                          //         .read(newOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(acceptedOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(readyOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(onAWayOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(deliveredOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(canceledOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //   }
-                          // } else if (user?.role == TrKeys.cooker) {
-                          //   ref
-                          //       .read(kitchenProvider.notifier)
-                          //       .setOrdersQuery(context, value.trim());
-                          // } else {
-                          //   if (ref.watch(mainProvider).selectIndex == 1) {
-                          //     ref
-                          //         .read(newOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(acceptedOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(readyOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(onAWayOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(deliveredOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //     ref
-                          //         .read(canceledOrdersProvider.notifier)
-                          //         .setOrdersQuery(context, value.trim());
-                          //   }
-                          //   notifier.setProductsQuery(context, value.trim());
-                          // }
-                        },
+                        onChanged: (value) {},
                         cursorColor: AppColors.black,
                         cursorWidth: 1.r,
                         decoration: InputDecoration.collapsed(
@@ -273,22 +230,22 @@ class _MainPageState extends ConsumerState<MainPage>
                   )),
               IconButton(
                   onPressed: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (_) => const Row(
-                    //           mainAxisAlignment: MainAxisAlignment.end,
-                    //           children: [
-                    //             Dialog(child: NotificationDialog()),
-                    //           ],
-                    //         ));
+                    showDialog(
+                        context: context,
+                        builder: (_) => const Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Dialog(child: NotificationDialog()),
+                              ],
+                            ));
                   },
                   icon: const Icon(
                     FlutterRemix.notification_2_line,
                     color: AppColors.black,
                   )),
-              // NotificationCountsContainer(
-              //     count:
-              //         '${ref.watch(notificationProvider).countOfNotifications?.notification ?? 0}'),
+              NotificationCountsContainer(
+                  count:
+                      '${ref.watch(notificationProvider).countOfNotifications?.notification ?? 0}'),
               IconButton(
                 onPressed: () {
                   // ref.read(languagesProvider.notifier).getLanguages(context);
@@ -360,7 +317,6 @@ class _MainPageState extends ConsumerState<MainPage>
   }
 
   Container bottomLeftNavigationBar(MainState state) {
-
     print('The User ${LocalStorage.getUser()}');
     return Container(
       height: double.infinity,
@@ -373,7 +329,9 @@ class _MainPageState extends ConsumerState<MainPage>
           24.verticalSpace,
           Container(
             decoration: BoxDecoration(
-                color:  state.selectIndex == 0 ? AppColors.GaristaColorBg : AppColors.transparent,
+                color: state.selectIndex == 0
+                    ? AppColors.GaristaColorBg
+                    : AppColors.transparent,
                 borderRadius: BorderRadius.circular(10.r)),
             child: IconButton(
                 onPressed: () {
@@ -381,14 +339,11 @@ class _MainPageState extends ConsumerState<MainPage>
                 },
                 icon: Icon(
                   state.selectIndex == 0
-                  ?
-                  FlutterRemix.home_smile_fill
-                  :
-                  FlutterRemix.home_smile_line,
-
+                      ? FlutterRemix.home_smile_fill
+                      : FlutterRemix.home_smile_line,
                   color: state.selectIndex == 0
-                  ? AppColors.white
-                  : AppColors.iconColor,
+                      ? AppColors.white
+                      : AppColors.iconColor,
                 )),
           ),
           28.verticalSpace,
@@ -430,9 +385,10 @@ class _MainPageState extends ConsumerState<MainPage>
               ),
             ),
           ),
-                    Container(
+          28.verticalSpace,
+          Container(
             decoration: BoxDecoration(
-                color: state.selectIndex ==3
+                color: state.selectIndex == 3
                     ? AppColors.GaristaColorBg
                     : AppColors.transparent,
                 borderRadius: BorderRadius.circular(10.r)),
@@ -442,35 +398,35 @@ class _MainPageState extends ConsumerState<MainPage>
                 },
                 icon: Icon(
                   state.selectIndex == 3
-                      ? FlutterRemix.user_3_fill
-                      : FlutterRemix.user_3_line,
-                  color: state.selectIndex ==3
+                      ? FlutterRemix.pie_chart_fill
+                      : FlutterRemix.pie_chart_line,
+                  color: state.selectIndex == 3
                       ? AppColors.white
                       : AppColors.iconColor,
                 )),
           ),
           28.verticalSpace,
-          // 28.verticalSpace,
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: state.selectIndex == 4
-          //           ? AppColors.brandColor
-          //           : AppColors.transparent,
-          //       borderRadius: BorderRadius.circular(10.r)),
-          //   child: IconButton(
-          //       onPressed: () {
-          //         ref.read(mainProvider.notifier).changeIndex(4);
-          //       },
-          //       icon: Icon(
-          //         state.selectIndex == 4
-          //             ? FlutterRemix.money_dollar_circle_fill
-          //             : FlutterRemix.money_dollar_circle_line,
-          //         color: state.selectIndex == 4
-          //             ? AppColors.white
-          //             : AppColors.iconColor,
-          //       )),
-          // ),
-          // 28.verticalSpace,
+          Container(
+            decoration: BoxDecoration(
+                color: state.selectIndex == 4
+                    ? AppColors.GaristaColorBg
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(10.r)),
+            child: IconButton(
+                onPressed: () {
+                  ref.read(mainProvider.notifier).changeIndex(4);
+                },
+                icon: Icon(
+                  state.selectIndex == 4
+                      ? FlutterRemix.user_3_fill
+                      : FlutterRemix.user_3_line,
+                  color: state.selectIndex == 4
+                      ? AppColors.white
+                      : AppColors.iconColor,
+                )),
+          ),
+          28.verticalSpace,
+
           // Container(
           //   decoration: BoxDecoration(
           //       color: AppColors.brandColor,
@@ -491,12 +447,12 @@ class _MainPageState extends ConsumerState<MainPage>
           const Spacer(),
           InkWell(
             onTap: () {
-              ref.read(mainProvider.notifier).changeIndex(3);
+              ref.read(mainProvider.notifier).changeIndex(4);
             },
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                    color: state.selectIndex == 3
+                    color: state.selectIndex == 4
                         ? AppColors.GaristaColorBg
                         : AppColors.transparent,
                   ),
@@ -513,17 +469,9 @@ class _MainPageState extends ConsumerState<MainPage>
               onPressed: () {
                 // context.replaceRoute(const LoginRoute());
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginPage()),
-                  );
-                // ref.read(newOrdersProvider.notifier).stopTimer();
-                // ref.read(acceptedOrdersProvider.notifier).stopTimer();
-                // ref.read(cookingOrdersProvider.notifier).stopTimer();
-                // ref.read(readyOrdersProvider.notifier).stopTimer();
-                // ref.read(onAWayOrdersProvider.notifier).stopTimer();
-                // ref.read(deliveredOrdersProvider.notifier).stopTimer();
-                // ref.read(canceledOrdersProvider.notifier).stopTimer();
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
                 LocalStorage.clearStore();
               },
               icon: const Icon(

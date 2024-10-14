@@ -3,7 +3,7 @@ class UserData {
     int? id,
     String? firstName,
     String? lastName,
-    int? phone,
+    dynamic? phone,
     String? email,
     String? emailVerifiedAt,
     String? image,
@@ -45,7 +45,7 @@ class UserData {
   int? _id;
   String? _firstName;
   String? _lastName;
-  int? _phone;
+  dynamic? _phone;
   String? _email;
   String? _emailVerifiedAt;
   String? _image;
@@ -58,7 +58,7 @@ class UserData {
   int? get id => _id;
   String? get firstName => _firstName;
   String? get lastName => _lastName;
-  int? get phone => _phone;
+  dynamic? get phone => _phone;
   String? get email => _email;
   String? get emailVerifiedAt => _emailVerifiedAt;
   String? get image => _image;
@@ -72,7 +72,7 @@ class UserData {
     int? id,
     String? firstName,
     String? lastName,
-    int? phone,
+    dynamic? phone,
     String? email,
     String? emailVerifiedAt,
     String? image,

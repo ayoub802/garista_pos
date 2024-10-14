@@ -1,37 +1,25 @@
 class EditProfile {
-  String? firstname;
-  String? lastname;
-  String? birthday;
-  String? gender;
+  String? first_name;
+  String? last_name;
   String? phone;
-  String? secondPhone;
-  String? images;
   
 
   EditProfile(
-      {this.firstname,
-        this.lastname,
-        this.birthday,
-        this.gender,
+      {this.first_name,
+        this.last_name,
         this.phone,
-        this.secondPhone,
-        this.images
         });
 
   EditProfile.fromJson(Map<String, dynamic> json) {
-    firstname = json['firstname'];
-    lastname = json['lastname'];
-    birthday = json['birthday'];
-    gender = json['gender'];
+    first_name = json['first_name'];
+    last_name = json['last_name'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['firstname'] = firstname;
-    data['lastname'] = lastname;
-    data['birthday'] = birthday!.contains(" ") ? birthday?.substring(0,birthday?.indexOf(" ")) : birthday;
-    data['gender'] = gender;
-    if(images != null && images!.isNotEmpty) data["images"] = [images];
+    data['first_name'] = first_name;
+    data['last_name'] = last_name;
     data["phone"] = phone;
     return data;
   }

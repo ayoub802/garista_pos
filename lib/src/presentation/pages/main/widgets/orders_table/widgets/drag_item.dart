@@ -90,9 +90,9 @@ class DragItem extends ConsumerWidget {
                     .format(orderData.createdAt?.toLocal() ?? DateTime.now()),
               ),
               IconTitle(
-                title: AppHelpers.getTranslation(TrKeys.amount),
+                title: "Total",
                 icon: FlutterRemix.money_dollar_circle_line,
-                value:  LocalStorage.getBrand()?.currency as String,
+                value: orderData?.total?.toString(),
               ),
               // IconTitle(
               //   title: AppHelpers.getTranslation(TrKeys.paymentType),
@@ -100,13 +100,12 @@ class DragItem extends ConsumerWidget {
               //   value: orderData.transaction?.paymentSystem?.tag ?? "- -",
               // ),
 
-              (orderData.status?.isNotEmpty ?? false)
-                  ? IconTitle(
-                      title: AppHelpers.getTranslation(TrKeys.paymentStatus),
-                      icon: FlutterRemix.money_dollar_circle_line,
-                      value: orderData.status ?? "- -",
-                    )
-                  : const SizedBox.shrink(),
+              IconTitle(
+                title: "Table",
+                icon: FlutterRemix.money_dollar_circle_line,
+                value: orderData.table?.name ??
+                    "- -", // Safely access the table name
+              ),
               12.verticalSpace,
               Container(
                   decoration: BoxDecoration(
@@ -119,7 +118,8 @@ class DragItem extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
-                          child: Text("Deivery",
+                          child: Text(
+                            "Deivery",
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.black,
@@ -134,17 +134,10 @@ class DragItem extends ConsumerWidget {
                         decoration: BoxDecoration(
                             border: Border.all(color: AppColors.black),
                             shape: BoxShape.circle),
-                        // child: (orderData.deliveryType ?? "") == TrKeys.dine
-                        //     ? Padding(
-                        //         padding: const EdgeInsets.all(4),
-                        //         child: SvgPicture.asset(Assets.svgDine))
-                        //     : Icon(
-                        //         (orderData.deliveryType ?? "") ==
-                        //                 TrKeys.delivery
-                        //             ? FlutterRemix.e_bike_2_fill
-                        //             : FlutterRemix.walk_line,
-                        //         size: 16,
-                        //       ),
+                        child: Icon(
+                          FlutterRemix.e_bike_2_fill,
+                          size: 16,
+                        ),
                       )
                     ],
                   ))
@@ -153,7 +146,7 @@ class DragItem extends ConsumerWidget {
         ),
       ),
       onTap: () {
-        // ref.read(mainProvider.notifier).setOrder(orderData);
+        ref.read(mainProvider.notifier).setOrder(orderData);
       },
     );
   }

@@ -23,6 +23,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'order_table_riverpod/order_table_provider.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/order_detail/order_detail.dart';
 
 class OrdersTablesPage extends ConsumerStatefulWidget {
   const OrdersTablesPage({super.key});
@@ -67,7 +68,9 @@ class _OrdersTablesState extends ConsumerState<OrdersTablesPage> {
     final stateMain = ref.watch(mainProvider);
 
     return CustomScaffold(
-        body: (c) =>  SafeArea(
+        body: (c) => stateMain.selectedOrder != null
+            ? OrderDetailPage(order: stateMain.selectedOrder ?? OrderData())
+            : SafeArea(
                 child: Column(
                   children: [
                     Container(

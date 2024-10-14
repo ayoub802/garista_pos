@@ -35,6 +35,8 @@ class _ChartPageState extends State<ChartPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "The Chart Page => ${widget.price} and ${widget.times} and ${widget.chart[0].totalPrice} ${widget.chart[0].time}");
     return Container(
       width: double.infinity,
       height: 326.h,

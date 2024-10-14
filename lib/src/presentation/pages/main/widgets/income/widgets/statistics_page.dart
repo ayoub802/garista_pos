@@ -67,7 +67,7 @@ class StatisticPage extends StatelessWidget {
               ),
               6.horizontalSpace,
               Text(
-                AppHelpers.getTranslation(TrKeys.onAWay),
+                AppHelpers.getTranslation(TrKeys.preparing),
                 style: GoogleFonts.inter(fontSize: 14.sp),
               ),
               24.horizontalSpace,
@@ -81,7 +81,7 @@ class StatisticPage extends StatelessWidget {
               ),
               6.horizontalSpace,
               Text(
-                AppHelpers.getTranslation(TrKeys.delivered),
+                AppHelpers.getTranslation(TrKeys.completed),
                 style: GoogleFonts.inter(fontSize: 14.sp),
               ),
               24.horizontalSpace,
@@ -95,7 +95,7 @@ class StatisticPage extends StatelessWidget {
               ),
               6.horizontalSpace,
               Text(
-                AppHelpers.getTranslation(TrKeys.cancel),
+                AppHelpers.getTranslation(TrKeys.rejected),
                 style: GoogleFonts.inter(fontSize: 14.sp),
               ),
             ],
@@ -112,8 +112,8 @@ class StatisticPage extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 50.r,
                   lineWidth: 8.r,
-                  percent: (statistic?.accepted?.percent?.floor() ?? 0)/100,
-                  center:  Text("${statistic?.accepted?.percent?.floor()}%",
+                  percent: (statistic?.accepted?.percent?.floor() ?? 0) / 100,
+                  center: Text("${statistic?.accepted?.percent?.floor()}%",
                       style: GoogleFonts.inter(color: AppColors.black)),
                   progressColor: AppColors.blue,
                   backgroundColor: AppColors.transparent,
@@ -131,8 +131,8 @@ class StatisticPage extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 50.r,
                   lineWidth: 8.r,
-                  percent: (statistic?.ready?.percent?.floor() ?? 0)/100,
-                  center:  Text("${statistic?.ready?.percent?.floor()}%",
+                  percent: (statistic?.ready?.percent?.floor() ?? 0) / 100,
+                  center: Text("${statistic?.ready?.percent?.floor()}%",
                       style: GoogleFonts.inter(color: AppColors.black)),
                   progressColor: AppColors.revenueColor,
                   backgroundColor: AppColors.transparent,
@@ -150,8 +150,8 @@ class StatisticPage extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 50.r,
                   lineWidth: 8.r,
-                  percent: (statistic?.onAWay?.percent?.floor() ?? 0)/100,
-                  center:  Text("${statistic?.onAWay?.percent?.floor()}%",
+                  percent: (statistic?.preparing?.percent?.floor() ?? 0) / 100,
+                  center: Text("${statistic?.preparing?.percent?.floor()}%",
                       style: GoogleFonts.inter(color: AppColors.black)),
                   progressColor: AppColors.black,
                   backgroundColor: AppColors.transparent,
@@ -169,8 +169,8 @@ class StatisticPage extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 50.r,
                   lineWidth: 8.r,
-                  percent: (statistic?.delivered?.percent?.floor() ?? 0)/100,
-                  center:  Text("${statistic?.delivered?.percent?.floor()}%",
+                  percent: (statistic?.completed?.percent?.floor() ?? 0) / 100,
+                  center: Text("${statistic?.completed?.percent?.floor()}%",
                       style: GoogleFonts.inter(color: AppColors.black)),
                   progressColor: AppColors.brandColor,
                   backgroundColor: AppColors.transparent,
@@ -188,8 +188,8 @@ class StatisticPage extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 50.r,
                   lineWidth: 8.r,
-                  percent: (statistic?.canceled?.percent?.floor() ?? 0)/100,
-                  center:  Text("${statistic?.canceled?.percent?.floor()}%",
+                  percent: (statistic?.rejected?.percent?.floor() ?? 0) / 100,
+                  center: Text("${statistic?.rejected?.percent?.floor()}%",
                       style: GoogleFonts.inter(color: AppColors.black)),
                   progressColor: AppColors.red,
                   backgroundColor: AppColors.transparent,

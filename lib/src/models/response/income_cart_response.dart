@@ -1,12 +1,10 @@
-
-
 class IncomeCartResponse {
-  num? revenue;
-  num? revenuePercent;
-  num? orders;
-  num? ordersPercent;
+  dynamic? revenue;
+  dynamic? revenuePercent;
+  dynamic? orders;
+  dynamic? ordersPercent;
   num? average;
-  num? averagePercent;
+  dynamic? averagePercent;
   String? revenueType;
   String? ordersType;
   String? averageType;
@@ -24,12 +22,12 @@ class IncomeCartResponse {
   });
 
   IncomeCartResponse copyWith({
-    num? revenue,
-    num? revenuePercent,
-    num? orders,
-    num? ordersPercent,
+    dynamic? revenue,
+    dynamic? revenuePercent,
+    dynamic? orders,
+    dynamic? ordersPercent,
     num? average,
-    num? averagePercent,
+    dynamic? averagePercent,
     String? revenueType,
     String? ordersType,
     String? averageType,
@@ -46,24 +44,27 @@ class IncomeCartResponse {
         averageType: averageType ?? this.averageType,
       );
 
-  factory IncomeCartResponse.fromJson(Map<String, dynamic> json) => IncomeCartResponse(
-    revenue: json["revenue"],
-    revenuePercent: json["revenue_percent"],
-    orders: json["orders"],
-    ordersPercent: json["orders_percent"],
-    average: json["average"],
-    averagePercent: json["average_percent"],
-    revenueType: json["revenue_percent_type"],
-    ordersType: json["orders_percent_type"],
-    averageType: json["average_percent_type"],
-  );
+  factory IncomeCartResponse.fromJson(Map<String, dynamic> json) =>
+      IncomeCartResponse(
+        revenue: json["revenue"],
+        revenuePercent:
+            json["revenuePercent"], // Adjusted to match the response
+        orders: json["orders"],
+        ordersPercent: json["ordersPercent"], // Adjusted to match the response
+        average: json["average"],
+        averagePercent:
+            json["averagePercent"], // Adjusted to match the response
+        revenueType: json["revenueType"], // Adjusted to match the response
+        ordersType: json["ordersType"], // Adjusted to match the response
+        averageType: json["averageType"], // Adjusted to match the response
+      );
 
   Map<String, dynamic> toJson() => {
-    "revenue": revenue,
-    "revenue_percent": revenuePercent,
-    "orders": orders,
-    "orders_percent": ordersPercent,
-    "average": average,
-    "average_percent": averagePercent,
-  };
+        "revenue": revenue,
+        "revenuePercent": revenuePercent,
+        "orders": orders,
+        "ordersPercent": ordersPercent,
+        "average": average,
+        "averagePercent": averagePercent,
+      };
 }

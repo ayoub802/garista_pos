@@ -51,6 +51,9 @@ class _InComePageState extends ConsumerState<InComePage> {
   Widget build(BuildContext context) {
     final state = ref.watch(incomeProvider);
     final event = ref.read(incomeProvider.notifier);
+
+    // print(
+    //     "The State of INCOME ${state?.incomeCart?.average} ${state?.incomeCart?.orders} ${state?.incomeCart?.revenue} ${state?.incomeCart?.revenuePercent} ${state?.incomeCart?.revenueType} ${state?.incomeCart?.averageType}");
     return CustomScaffold(
       body: (colors) => SingleChildScrollView(
         child: Padding(
@@ -125,10 +128,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                         ),
                         24.horizontalSpace,
                         Text(
-                          NumberFormat.currency(
-                            symbol: LocalStorage.getSelectedCurrency()
-                                .type,
-                          ).format(state.incomeCart?.revenue ?? 0),
+                          "${state.incomeCart?.revenue ?? 0} ${LocalStorage.getBrand()?.currency}",
                           style: GoogleFonts.inter(
                               fontSize: 24.sp, fontWeight: FontWeight.w600),
                         ),
@@ -199,11 +199,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                         ),
                         24.horizontalSpace,
                         Text(
-                          NumberFormat.currency(
-                            symbol: LocalStorage
-                                .getSelectedCurrency()
-                                .type,
-                          ).format(state.incomeCart?.orders ?? 0),
+                          '${state.incomeCart?.orders ?? 0}',
                           style: GoogleFonts.inter(
                               fontSize: 24.sp, fontWeight: FontWeight.w600),
                         ),
@@ -271,9 +267,7 @@ class _InComePageState extends ConsumerState<InComePage> {
                         ),
                         24.horizontalSpace,
                         Text(
-                          NumberFormat.currency(
-                            symbol: LocalStorage.getSelectedCurrency().type,
-                          ).format(state.incomeCart?.average ?? 0),
+                          "${(state.incomeCart?.average ?? 0).toStringAsFixed(3)}",
                           style: GoogleFonts.inter(
                               fontSize: 24.sp, fontWeight: FontWeight.w600),
                         ),
@@ -333,7 +327,11 @@ class _InComePageState extends ConsumerState<InComePage> {
                         : AppColors.white),
                 child: Text(
                   AppHelpers.getTranslation(e),
-                  style: GoogleFonts.inter(fontSize: 14.sp, color: state.selectType == e ? AppColors.white : AppColors.black),
+                  style: GoogleFonts.inter(
+                      fontSize: 14.sp,
+                      color: state.selectType == e
+                          ? AppColors.white
+                          : AppColors.black),
                 ),
               ),
             ),

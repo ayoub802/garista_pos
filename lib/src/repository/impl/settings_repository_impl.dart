@@ -121,19 +121,20 @@ class SettingsRepositoryImpl extends SettingsRepository {
       required DateTime? to}) async {
     try {
       final data = {
-        "type": type,
-        "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
-        "date_to": to.toString().substring(0, to.toString().indexOf(" "))
+        "timeFrame": type,
+        // "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
+        // "date_to": to.toString().substring(0, to.toString().indexOf(" "))
       };
-      final client = dioHttp.client(requireAuth: true);
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-          '/api/v1/dashboard/${LocalStorage.getUser()?.id}/sales-statistic',
+          '/api/order-statistics/${LocalStorage.getRestaurant()?.id}',
           queryParameters: data);
       return ApiResult.success(
         data: IncomeStatisticResponse.fromJson(response.data),
       );
     } catch (e) {
-      debugPrint('==> get sale statistic failure: $e');
+      debugPrint('==> get sale statistic failure : $e');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
     }
   }
@@ -145,19 +146,20 @@ class SettingsRepositoryImpl extends SettingsRepository {
       required DateTime? to}) async {
     try {
       final data = {
-        "type": type,
-        "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
-        "date_to": to.toString().substring(0, to.toString().indexOf(" "))
+        "timeFrame": type,
+        // "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
+        // "date_to": to.toString().substring(0, to.toString().indexOf(" "))
       };
-      final client = dioHttp.client(requireAuth: true);
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-          '/api/v1/dashboard/${LocalStorage.getUser()?.id}/sales-main-cards',
+          '/api/order-IncomeCart/${LocalStorage.getRestaurant()?.id}',
           queryParameters: data);
       return ApiResult.success(
         data: IncomeCartResponse.fromJson(response.data),
       );
     } catch (e) {
-      debugPrint('==> get sale cart failure: $e');
+      debugPrint('==> get sale cart income failure : $e');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
     }
   }
@@ -169,19 +171,20 @@ class SettingsRepositoryImpl extends SettingsRepository {
       required DateTime? to}) async {
     try {
       final data = {
-        "type": type == TrKeys.week ? TrKeys.month : type,
-        "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
-        "date_to": to.toString().substring(0, to.toString().indexOf(" "))
+        "timeFrame": type == TrKeys.week ? TrKeys.month : type,
+        // "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
+        // "date_to": to.toString().substring(0, to.toString().indexOf(" "))
       };
-      final client = dioHttp.client(requireAuth: true);
+      final client =
+          dioHttp.client(requireAuth: true, baseUrl: SecretVars.GaristabaseUrl);
       final response = await client.get(
-          '/api/v1/dashboard/${LocalStorage.getUser()?.id}/sales-chart',
+          '/api/order-IncomeChartCart/${LocalStorage.getRestaurant()?.id}',
           queryParameters: data);
       return ApiResult.success(
         data: incomeChartResponseFromJson(jsonEncode(response.data)),
       );
     } catch (e) {
-      debugPrint('==> get sale cart failure: $e');
+      debugPrint('==> get sale cart Chart failure: $e');
       return ApiResult.failure(error: AppHelpers.errorHandler(e));
     }
   }

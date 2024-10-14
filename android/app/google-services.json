@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "867759082356",
+    "firebase_url": "https://garista-2c343-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "garista-2c343",
+    "storage_bucket": "garista-2c343.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867759082356:android:2bfd94bde0c7db91c97a21",
+        "android_client_info": {
+          "package_name": "com.example.garista_pos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPW3SNl_eNgNB82hTHNcntWYXZe4cXWMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867759082356:android:9d8ce1d82ac40a7dc97a21",
+        "android_client_info": {
+          "package_name": "com.garistawaiter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPW3SNl_eNgNB82hTHNcntWYXZe4cXWMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

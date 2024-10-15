@@ -162,51 +162,51 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                                 ],
                               ),
                             ),
-                            if (!state.isListView)
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Consumer(builder: (context, ref, child) {
-                                  return DragTarget<int>(
-                                    builder: (
-                                      BuildContext context,
-                                      List<dynamic> accepted,
-                                      List<dynamic> rejected,
-                                    ) {
-                                      return Padding(
-                                        padding: REdgeInsets.only(
-                                            top: 100,
-                                            left: 48,
-                                            right: 36,
-                                            bottom: 6),
-                                        child: Container(
-                                          height: 42.r,
-                                          padding: REdgeInsets.symmetric(
-                                              horizontal: 16),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: AppColors.shimmerBase,
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.delete,
-                                              size: 21.sp,
-                                              color: AppColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    onAcceptWithDetails: (index) {
-                                      debugPrint(index.toString());
-                                      ref
-                                          .read(tablesProvider.notifier)
-                                          .deleteTable(index: index.data);
-                                    },
-                                  );
-                                }),
-                              ),
+                            // if (!state.isListView)
+                            //   Positioned(
+                            //     bottom: 0,
+                            //     right: 0,
+                            //     child: Consumer(builder: (context, ref, child) {
+                            //       return DragTarget<int>(
+                            //         builder: (
+                            //           BuildContext context,
+                            //           List<dynamic> accepted,
+                            //           List<dynamic> rejected,
+                            //         ) {
+                            //           return Padding(
+                            //             padding: REdgeInsets.only(
+                            //                 top: 100,
+                            //                 left: 48,
+                            //                 right: 36,
+                            //                 bottom: 6),
+                            //             child: Container(
+                            //               height: 42.r,
+                            //               padding: REdgeInsets.symmetric(
+                            //                   horizontal: 16),
+                            //               decoration: BoxDecoration(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(8),
+                            //                 color: AppColors.shimmerBase,
+                            //               ),
+                            //               child: Center(
+                            //                 child: Icon(
+                            //                   Icons.delete,
+                            //                   size: 21.sp,
+                            //                   color: AppColors.black,
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           );
+                            //         },
+                            //         onAcceptWithDetails: (index) {
+                            //           debugPrint(index.toString());
+                            //           ref
+                            //               .read(tablesProvider.notifier)
+                            //               .deleteTable(index: index.data);
+                            //         },
+                            //       );
+                            //     }),
+                            //   ),
                           ],
                         )),
                       ],

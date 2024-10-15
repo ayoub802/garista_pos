@@ -6,12 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/add_product/add_product_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:garista_pos/src/presentation/pages/main/widgets/add_product/provider/add_product_provider.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../components/components.dart';
 import '../../../theme/theme.dart';
 import '../riverpod/provider/main_provider.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/right_side/riverpod/provider/right_side_provider.dart';
 
 class ProductsList extends ConsumerWidget {
   const ProductsList({super.key});
@@ -20,6 +21,11 @@ class ProductsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainProvider);
     final notifier = ref.read(mainProvider.notifier);
+    final notifierAdd = ref.read(addProductProvider.notifier);
+    final rightSideState = ref.watch(rightSideProvider);
+    final rightSideNotifier = ref.read(rightSideProvider.notifier);
+  late double totalPrice;
+
     return state.isProductsLoading
         ? const ProductGridListShimmer()
         : state.products.isNotEmpty
@@ -59,13 +65,36 @@ class ProductsList extends ConsumerWidget {
                                 child: ProductGridItem(
                                   product: product,
                                   onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AddProductDialog(
-                                            product: product);
-                                      },
-                                    );
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (context) {
+                                    //     return AddProductDialog(
+                                    //         product: product);
+                                    //   },
+                                    // );
+                                    bool hasRequiredToppings = product.toppings != null && product.toppings!.any((topping) => topping.required == true);
+                                    if (hasRequiredToppings) {
+                                      // Open the dialog if any topping has required set to true
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AddProductDialog(product: product);
+                                        },
+                                      );
+                                    } 
+                                    else{
+                                       notifierAdd.addProductToBag(
+                                          context,
+                                          rightSideState.selectedBagIndex,
+                                          rightSideNotifier,
+                                          1,
+                                          totalPrice = double.tryParse(product?.price ?? '0.0') ?? 0.0,
+                                          product,
+                                          [],
+                                          [],
+                                          [],
+                                        );
+                                    }
                                   },
                                 ),
                               ),

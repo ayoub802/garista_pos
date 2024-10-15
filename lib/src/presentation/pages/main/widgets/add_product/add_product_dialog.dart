@@ -31,10 +31,12 @@ class AddProductDialog extends ConsumerStatefulWidget {
 class _AddProductDialogState extends ConsumerState<AddProductDialog> {
   late double totalPrice;
   int quantity = 1;
-  List<Map<String, dynamic>> selectedToppings = [];
   List<Map<String, dynamic>> selectedVariants = [];
   List<Map<String, dynamic>> selectedIngredients = [];
-
+  List<Map<String, dynamic>> selectedToppings = [];
+  Map<int, bool> requiredToppingError = {}; 
+  Map<int, bool> requiredVariantError = {};
+  
   @override
   void initState() {
     super.initState();
@@ -58,7 +60,6 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
     });
   }
 
-  // Increment the quantity
   void incrementQuantity() {
     setState(() {
       quantity++;
@@ -66,7 +67,6 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
     });
   }
 
-  // Decrement the quantity
   void decrementQuantity() {
     if (quantity > 1) {
       setState(() {
@@ -76,6 +76,48 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
     }
   }
 
+  bool validateRequiredToppings() {
+    bool isValid = true;
+    requiredToppingError.clear();
+    
+    if(widget.product?.toppings != null && widget.product!.toppings!.isNotEmpty)
+    {
+      for (var topping in widget.product?.toppings ?? []) {
+        if (topping.required == true) {
+        bool hasSelectedOption = topping.options?.any((ToppingOptionData option) => option.isSelected) ?? false;
+
+          // If no option is selected, mark it as an error
+          if (!hasSelectedOption) {
+            isValid = false;
+            requiredToppingError[topping.id] = true;
+          } else {
+            requiredToppingError[topping.id] = false;
+          }
+        }
+      }
+    }
+
+    if(widget.product?.extraVariants != null && widget.product!.extraVariants!.isNotEmpty)
+    {
+      for (var variant in widget.product?.extraVariants ?? []) {
+        if (variant.required == true) {
+          bool hasSelectedOption = variant.options?.any((VariantOptionData option) => option.isSelected) ?? false;
+
+          // If no option is selected, mark it as an error
+          if (!hasSelectedOption) {
+            isValid = false;
+            requiredVariantError[variant.id] = true;
+          } else {
+            requiredVariantError[variant.id] = false;
+          }
+        }
+      }
+    }
+
+    setState(() {}); // Trigger UI update
+    return isValid;
+  }
+ 
   List<Map<String, dynamic>> getSelectedToppings() {
     List<Map<String, dynamic>> selectedToppings = [];
 
@@ -187,7 +229,7 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                     backgroundColor: AppColors.transparent,
                     iconData: FlutterRemix.close_circle_line,
                     iconColor: AppColors.black,
-                    onTap: context.popRoute,
+                    onTap:  () {Navigator.pop(context);},
                   ),
                 ],
               ),
@@ -332,28 +374,23 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                                           ),
                                         ),
                                         10.horizontalSpace,
-                                        topping.required == true
+                                      topping.required == true
                                             ? Container(
                                                 padding: REdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical:
-                                                        6), // Padding around the text
+                                                    horizontal: 12, vertical: 6),
                                                 decoration: BoxDecoration(
-                                                  color: AppColors
-                                                      .GaristaColorBg, // Set your desired background color here
+                                                  color: requiredToppingError[topping.id] == true
+                                                      ? Colors.red
+                                                      : AppColors.GaristaColorBg, // Red if error, else normal
                                                   borderRadius:
-                                                      BorderRadius.circular(10
-                                                          .r), // Add rounded corners
+                                                      BorderRadius.circular(10.r),
                                                 ),
                                                 child: Text(
-                                                  topping.required == true
-                                                      ? 'Required'
-                                                      : '',
+                                                  'Required',
                                                   style: GoogleFonts.inter(
                                                     fontSize: 14.sp,
                                                     fontWeight: FontWeight.w400,
-                                                    color: AppColors
-                                                        .white, // Text color
+                                                    color: AppColors.white,
                                                   ),
                                                 ),
                                               )
@@ -630,8 +667,9 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                                                     vertical:
                                                         6), // Padding around the text
                                                 decoration: BoxDecoration(
-                                                  color: AppColors
-                                                      .GaristaColorBg, // Set your desired background color here
+                                                  color: requiredVariantError[variant.id] == true
+                                                      ? Colors.red
+                                                      : AppColors.GaristaColorBg,
                                                   borderRadius:
                                                       BorderRadius.circular(10
                                                           .r), // Add rounded corners
@@ -891,7 +929,8 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                       isLoading: state.isLoading,
                       title: AppHelpers.getTranslation(TrKeys.add),
                       onPressed: () {
-                        notifier.addProductToBag(
+                        if (validateRequiredToppings()) {
+                          notifier.addProductToBag(
                             context,
                             rightSideState.selectedBagIndex,
                             rightSideNotifier,
@@ -900,8 +939,9 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                             widget.product,
                             selectedToppings,
                             selectedVariants,
-                            selectedIngredients);
-                        // context.popRoute();
+                            selectedIngredients,
+                          );
+                        }
                       },
                     ),
                   ),

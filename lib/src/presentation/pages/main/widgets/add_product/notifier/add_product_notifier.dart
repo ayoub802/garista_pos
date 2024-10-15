@@ -178,5 +178,6 @@ class AddProductNotifier extends StateNotifier<AddProductState> {
         );
       },
     );
+    Navigator.pop(context);
   }
 }

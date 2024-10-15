@@ -252,80 +252,81 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                 title: AppHelpers.getTranslation(TrKeys.order),
                 titleColor: AppColors.white,
                 onPressed: () async {
-                  final List<CartProductData> allCarts = [];
-                  for (var bagProduct
-                      in state.bags[state.selectedBagIndex].bagProducts ?? []) {
-                    allCarts.addAll(bagProduct.carts ?? []);
-                  }
-                  final cartItems = allCarts.map((item) {
-                    // Extract and format selected toppings
-                    final List<Map<String, dynamic>> formattedToppings =
-                        item.selectedToppings?.map((topping) {
-                              return {
-                                'name': topping.name,
-                                'id': topping.id,
-                                'option': topping.options
-                                    ?.map((option) => {
-                                          'name': option.name,
-                                          'price': option.price,
-                                        })
-                                    .toList(),
-                              };
-                            }).toList() ??
-                            [];
-                    final List<Map<String, dynamic>> formattedVariants =
-                        item.selectedVariants?.map((variant) {
-                              return {
-                                'name': variant.name,
-                                'id': variant.id,
-                                'option': variant.options
-                                    ?.map((option) => {
-                                          'name': option.name,
-                                          'price': option.price,
-                                        })
-                                    .toList(),
-                              };
-                            }).toList() ??
-                            [];
-                    final List<Map<String, dynamic>> formattedIngredients =
-                        item.selectedIngrediants?.map((variant) {
-                              return {
-                                'name': variant.name,
-                              };
-                            }).toList() ??
-                            [];
+                  // final List<CartProductData> allCarts = [];
+                  // for (var bagProduct
+                  //     in state.bags[state.selectedBagIndex].bagProducts ?? []) {
+                  //   allCarts.addAll(bagProduct.carts ?? []);
+                  // }
+                  // final cartItems = allCarts.map((item) {
+                  //   // Extract and format selected toppings
+                  //   final List<Map<String, dynamic>> formattedToppings =
+                  //       item.selectedToppings?.map((topping) {
+                  //             return {
+                  //               'name': topping.name,
+                  //               'id': topping.id,
+                  //               'option': topping.options
+                  //                   ?.map((option) => {
+                  //                         'name': option.name,
+                  //                         'price': option.price,
+                  //                       })
+                  //                   .toList(),
+                  //             };
+                  //           }).toList() ??
+                  //           [];
+                  //   final List<Map<String, dynamic>> formattedVariants =
+                  //       item.selectedVariants?.map((variant) {
+                  //             return {
+                  //               'name': variant.name,
+                  //               'id': variant.id,
+                  //               'option': variant.options
+                  //                   ?.map((option) => {
+                  //                         'name': option.name,
+                  //                         'price': option.price,
+                  //                       })
+                  //                   .toList(),
+                  //             };
+                  //           }).toList() ??
+                  //           [];
+                  //   final List<Map<String, dynamic>> formattedIngredients =
+                  //       item.selectedIngrediants?.map((variant) {
+                  //             return {
+                  //               'name': variant.name,
+                  //             };
+                  //           }).toList() ??
+                  //           [];
 
-                    // Print out the formatted toppings
-                    print(
-                        'Toppings for product ID: ${item.productId} - $formattedVariants');
+                  //   // Print out the formatted toppings
+                  //   print(
+                  //       'Toppings for product ID: ${item.productId} - $formattedVariants');
 
-                    return CartItem(
-                        type: item.type,
-                        id: item.productId,
-                        quantity: item.quantity,
-                        comment: '',
-                        toppings: formattedToppings,
-                        ingredients: formattedIngredients,
-                        extraVariants: formattedVariants);
-                  }).toList();
-                  int tableId = 2;
-                  int restoId = LocalStorage.getRestaurant()?.id ?? 0;
-                  rightSideNotifier.createOrder(
-                    context,
-                    cartItems,
-                    totalPrice,
-                    tableId,
-                    restoId,
-                    onSuccess: () {
-                      // Optional success action
-                      print("Order created successfully!");
-                    },
-                  );
-
-                  for (var cartItem in cartItems) {
-                    print(
-                        'Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, topping: ${cartItem.toppings}');
-                  }
+                  //   return CartItem(
+                  //       type: item.type,
+                  //       id: item.productId,
+                  //       quantity: item.quantity,
+                  //       comment: '',
+                  //       toppings: formattedToppings,
+                  //       ingredients: formattedIngredients,
+                  //       extraVariants: formattedVariants);
+                  // }).toList();
+                  // int tableId = 2;
+                  // int restoId = LocalStorage.getRestaurant()?.id ?? 0;
+                  // rightSideNotifier.createOrder(
+                  //   context,
+                  //   cartItems,
+                  //   totalPrice,
+                  //   tableId,
+                  //   restoId,
+                  //   onSuccess: () {
+                  //     // Optional success action
+                  //     print("Order created successfully!");
+                  //   },
+                  // );
+                  // for (var cartItem in cartItems) {
+                  //   print(
+                  //       'Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, topping: ${cartItem.toppings}');
+                  // }
+                 AppHelpers.showAlertDialog(
+                      context: context, child: OrderInformation());
                 },
               )
             ],

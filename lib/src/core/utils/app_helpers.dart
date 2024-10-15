@@ -528,29 +528,24 @@ class AppHelpers {
   }
 }
 
-extension Time on DateTime {
-  bool toEqualTime(DateTime time) {
-    if (time.year != year) {
-      return false;
-    } else if (time.month != month) {
-      return false;
-    } else if (time.day != day) {
+extension Time on DateTime? {
+  bool toEqualTime(DateTime? time) {
+    if (time == null || this == null) {
       return false;
     }
-    return true;
+    return this!.year == time.year &&
+           this!.month == time.month &&
+           this!.day == time.day;
   }
 
-  bool toEqualTimeWithHour(DateTime time) {
-    if (time.year != year) {
-      return false;
-    } else if (time.month != month) {
-      return false;
-    } else if (time.day != day) {
-      return false;
-    } else if (time.hour != hour) {
+  bool toEqualTimeWithHour(DateTime? time) {
+    if (time == null || this == null) {
       return false;
     }
-    return true;
+    return this!.year == time.year &&
+           this!.month == time.month &&
+           this!.day == time.day &&
+           this!.hour == time.hour;
   }
 }
 
@@ -558,37 +553,39 @@ extension FindPriceIndex on List<num> {
   double findPriceIndex(num price) {
     if (price != 0) {
       int startIndex = 0;
-      int endIndex = 0;
+      int endIndex = length - 1;
+
       for (int i = 0; i < length; i++) {
-        if ((this[i]) >= price.toInt()) {
+        if (this[i] >= price) {
           startIndex = i;
           break;
         }
       }
-      for (int i = 0; i < length; i++) {
-        if ((this[i]) <= price) {
+
+      for (int i = length - 1; i >= 0; i--) {
+        if (this[i] <= price) {
           endIndex = i;
+          break;
         }
       }
+
       if (startIndex == endIndex) {
-        return length.toDouble();
+        return startIndex.toDouble();
       }
 
-      num a = this[startIndex] - this[endIndex];
-      num b = price - this[endIndex];
-      num c = b / a;
-      return startIndex.toDouble() + c;
+      num range = this[startIndex] - this[endIndex];
+      num offset = price - this[endIndex];
+      return endIndex.toDouble() + (offset / range);
     } else {
-      return 0;
+      return 0.0;
     }
   }
 }
-
 extension FindPrice on List<IncomeChartResponse> {
   num findPrice(DateTime time) {
     num price = 0;
     for (int i = 0; i < length; i++) {
-      if (this[i].time!.toEqualTime(time)) {
+      if (this[i].time?.toEqualTime(time) ?? false) {
         price = this[i].totalPrice ?? 0;
       }
     }
@@ -598,7 +595,7 @@ extension FindPrice on List<IncomeChartResponse> {
   num findPriceWithHour(DateTime time) {
     num price = 0;
     for (int i = 0; i < length; i++) {
-      if (this[i].time!.toEqualTimeWithHour(time)) {
+      if (this[i].time?.toEqualTimeWithHour(time) ?? false) {
         price = this[i].totalPrice ?? 0;
       }
     }

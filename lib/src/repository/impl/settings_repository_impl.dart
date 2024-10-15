@@ -170,8 +170,10 @@ class SettingsRepositoryImpl extends SettingsRepository {
       required DateTime? from,
       required DateTime? to}) async {
     try {
+
+      print("The Type => ${type}");
       final data = {
-        "timeFrame": type == TrKeys.week ? TrKeys.month : type,
+        "timeFrame": type,
         // "date_from": from.toString().substring(0, from.toString().indexOf(" ")),
         // "date_to": to.toString().substring(0, to.toString().indexOf(" "))
       };

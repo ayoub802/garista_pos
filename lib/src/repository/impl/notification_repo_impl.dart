@@ -16,9 +16,9 @@ class NotificationRepositoryImpl extends NotificationRepository {
   }) async {
     final data = {
       if (page != null) 'page': page,
-      'column': 'created_at',
-      'sort': 'desc',
-      'perPage': 5,
+      // 'column': 'created_at',
+      // 'sort': 'desc',
+      // 'perPage': 5,
     };
     try {
       final client =
@@ -27,6 +27,8 @@ class NotificationRepositoryImpl extends NotificationRepository {
         '/api/getNotificationsPOS/${LocalStorage.getRestaurant()?.id}',
         queryParameters: data,
       );
+
+      print("The Data of the notification POS => ${response.data}");
       return ApiResult.success(
         data: NotificationResponse.fromJson(response.data),
       );

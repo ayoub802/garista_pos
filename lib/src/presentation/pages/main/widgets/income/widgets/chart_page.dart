@@ -29,7 +29,7 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage> {
   List<Color> gradientColors = [
-    AppColors.brandColor.withOpacity(0.5),
+    AppColors.GaristaColorBg.withOpacity(0.5),
     AppColors.transparent,
   ];
 
@@ -39,7 +39,7 @@ class _ChartPageState extends State<ChartPage> {
         "The Chart Page => ${widget.price} and ${widget.times} and ${widget.chart[0].totalPrice} ${widget.chart[0].time}");
     return Container(
       width: double.infinity,
-      height: 326.h,
+      height: 400.h,
       padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 30.r),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r), color: AppColors.white),
@@ -53,11 +53,13 @@ class _ChartPageState extends State<ChartPage> {
           ),
           24.verticalSpace,
           Expanded(
-            child: widget.chart.isNotEmpty
+            child: 
+            widget.chart.isNotEmpty
                 ? LineChart(
                     mainData(),
                   )
-                : Center(
+                : 
+                Center(
                     child: Text(
                       AppHelpers.getTranslation(TrKeys.needOrder),
                       style: GoogleFonts.inter(
@@ -152,7 +154,7 @@ class _ChartPageState extends State<ChartPage> {
                       : widget.chart.findPrice(widget.times[index]))),
           ],
           isCurved: true,
-          color: AppColors.brandColor,
+          color: AppColors.GaristaColorBg,
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: const FlDotData(

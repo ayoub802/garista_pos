@@ -1,6 +1,7 @@
 // import 'package:garista_pos/src/models/data/order_data.dart';
 // import 'package:garista_pos/src/models/response/product_calculate_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:garista_pos/src/models/data/notification_data.dart';
 import 'package:garista_pos/src/models/data/order_data.dart';
 
 import '../../../../../models/models.dart';
@@ -15,11 +16,14 @@ class MainState with _$MainState {
     @Default(false) bool isShopsLoading,
     @Default(false) bool isBrandsLoading,
     @Default(false) bool isCategoriesLoading,
+    @Default(false) bool isNotificationsLoading,
     @Default(true) bool hasMore,
+    @Default(true) bool isMoreNotificationLoading,
     @Default(0) int selectIndex,
     @Default([]) List<ProductData> products,
     @Default([]) List<ShopData> shops,
     @Default([]) List<CategoryData> categories,
+    @Default([]) List<NotificationModel> notifications,
     @Default([]) List<BrandData> brands,
     @Default([]) List<DropDownItemData> dropDownShops,
     @Default([]) List<DropDownItemData> dropDownCategories,

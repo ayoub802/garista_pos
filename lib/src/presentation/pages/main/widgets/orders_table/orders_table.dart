@@ -24,6 +24,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'order_table_riverpod/order_table_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/order_detail/order_detail.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
 
 class OrdersTablesPage extends ConsumerStatefulWidget {
   const OrdersTablesPage({super.key});
@@ -33,10 +35,55 @@ class OrdersTablesPage extends ConsumerStatefulWidget {
 }
 
 class _OrdersTablesState extends ConsumerState<OrdersTablesPage> {
+
+    final DatabaseReference _notificationsRef =
+      FirebaseDatabase.instance.ref("orders");
+
+   StreamSubscription<DatabaseEvent>? _firebaseSubscription;
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(newOrdersProvider.notifier).fetchNewOrders(isRefresh: true);
+       _subscribeToFirebase();
+    _initializeFirstNotification();
+    super.initState();
+  }
+
+    void _initializeFirstNotification() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(newOrdersProvider.notifier).fetchNewOrders(isRefresh: true);
+        ref
+            .read(acceptedOrdersProvider.notifier)
+            .fetchAcceptedOrders(isRefresh: true);
+        ref.read(readyOrdersProvider.notifier).fetchReadyOrders(isRefresh: true);
+        ref
+            .read(deliveredOrdersProvider.notifier)
+            .fetchDeliveredOrders(isRefresh: true);
+        ref
+            .read(canceledOrdersProvider.notifier)
+            .fetchCanceledOrders(isRefresh: true);
+        ref
+            .read(cookingOrdersProvider.notifier)
+            .fetchCookingOrders(isRefresh: true);
+      });
+    }
+
+    void _subscribeToFirebase() {
+    // Listen to Firebase Realtime Database changes
+    _firebaseSubscription =
+        _notificationsRef.onValue.listen((DatabaseEvent event) {
+      if (!mounted) return; // Make sure the widget is still active
+
+      if (event.snapshot.exists) {
+        // Safely refresh notifications only if the widget is still active
+        _refreshNotifications();
+      }
+    });
+  }
+
+
+  void _refreshNotifications() {
+    if (!mounted) return; // Avoid accessing ref after the widget is disposed
+     ref.read(newOrdersProvider.notifier).fetchNewOrders(isRefresh: true);
       ref
           .read(acceptedOrdersProvider.notifier)
           .fetchAcceptedOrders(isRefresh: true);
@@ -50,8 +97,6 @@ class _OrdersTablesState extends ConsumerState<OrdersTablesPage> {
       ref
           .read(cookingOrdersProvider.notifier)
           .fetchCookingOrders(isRefresh: true);
-    });
-    super.initState();
   }
 
   @override

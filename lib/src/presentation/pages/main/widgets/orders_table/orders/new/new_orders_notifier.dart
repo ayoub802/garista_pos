@@ -96,7 +96,8 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
         }
         state =
             state.copyWith(hasMore: newOrders.length >= (end == null ? 7 : 15));
-
+            
+            print("The Orders Length of the new => ${newOrders.length} ${orders.length}");
         if (_page == 1 && !isRefresh) {
           state = state.copyWith(
             isLoading: false,

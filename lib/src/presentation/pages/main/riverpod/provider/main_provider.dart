@@ -10,5 +10,6 @@ final mainProvider = StateNotifierProvider<MainNotifier, MainState>(
     categoriesRepository,
     brandsRepository,
     usersRepository,
+    notificationRepository
   ),
 );

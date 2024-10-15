@@ -10,10 +10,12 @@ import '../repository.dart';
 class ProductsRepositoryImpl extends ProductsRepository {
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProductsPaginate({
+    String? query,
     int? categoryId,
   }) async {
     final data = {
       if (categoryId != null) 'category': categoryId,
+      if (query != null) 'search': query,
     };
     try {
       final client =

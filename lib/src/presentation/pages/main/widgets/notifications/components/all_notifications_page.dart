@@ -20,8 +20,9 @@ class AllNotificationsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(notificationProvider);
     final notifier = ref.read(notificationProvider.notifier);
+    final stateNotification = ref.watch(mainProvider);
 
-    print("The Notitification => ${state.notifications.length}");
+   print("The Index => ${index}");
     return Column(
       children: [
         8.verticalSpace,
@@ -123,10 +124,10 @@ class AllNotificationsPage extends ConsumerWidget {
             color: AppColors.transparent,
             child: Row(
               children: [
-                if (state.notifications[index].id != null)
+                if (stateNotification.notifications[index].id != null)
                   CommonImage(
                     radius: 100,
-                    imageUrl: state.notifications[index].status,
+                    imageUrl: stateNotification.notifications[index].status,
                     height: 56,
                     width: 56,
                   ),
@@ -135,11 +136,11 @@ class AllNotificationsPage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (state.notifications[index].id != null)
+                      if (stateNotification.notifications[index].id != null)
                         Row(
                           children: [
                             Text(
-                              '${state.notifications[index].title ?? ''}.',
+                              '${stateNotification.notifications[index].title ?? ''}.',
                               style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 16.sp,
@@ -151,7 +152,7 @@ class AllNotificationsPage extends ConsumerWidget {
                               width: 8.r,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: state.notifications[index].viewed == 0
+                                  color: stateNotification.notifications[index].viewed == 0
                                       ? AppColors.GaristaColorBg
                                       : AppColors.transparent),
                             )
@@ -161,7 +162,7 @@ class AllNotificationsPage extends ConsumerWidget {
                       SizedBox(
                         width: 300,
                         child: Text(
-                          '${state.notifications[index].status}',
+                          '${stateNotification.notifications[index].status}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: GoogleFonts.inter(
@@ -172,7 +173,7 @@ class AllNotificationsPage extends ConsumerWidget {
                       ),
                       8.verticalSpace,
                       Text(
-                        '${state.notifications[index].createdAt}'
+                        '${stateNotification.notifications[index].createdAt}'
                             .substring(0, 16),
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w400,

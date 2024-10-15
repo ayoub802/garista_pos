@@ -29,20 +29,17 @@ class OrderData {
         _restoId = json['resto_id'];
         _createdAt = DateTime.parse(json['created_at']);
         _updatedAt = DateTime.parse(json['updated_at']);
-         print('Dishes field from JSON: ${json['dishes']}');
 
         _table = json['table'] != null ? Table.fromJson(json['table']) : null;
        if (json['dishes'] != null) {
         _dishes = (json['dishes'] as List)
             .map((dishJson) {
-              print('Dish JSON: $dishJson');
               return Dish.fromJson(dishJson);
             })
             .toList();
       } else {
         _dishes = [];
       }
-     print('Parsed Dishes: ${_dishes?.length}');
   }
 
   int? _id;

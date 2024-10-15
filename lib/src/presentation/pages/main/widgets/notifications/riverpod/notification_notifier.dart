@@ -151,7 +151,7 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
     final response = await _notificationRepository.getCount();
     response.when(
       success: (data) {
-        print("The Count of Notification => $data");
+        print("The Count of Notification => ${data.notification}");
         state = state.copyWith(countOfNotifications: data);
         state = state.copyWith(totalCount: (data.notification ?? 0));
 

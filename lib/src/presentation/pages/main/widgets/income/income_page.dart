@@ -21,6 +21,8 @@ import '../../../../components/custom_scaffold.dart';
 import 'widgets/chart_page.dart';
 import '../../../../components/filter_screen.dart';
 import 'widgets/pie_chart.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
 
 class InComePage extends ConsumerStatefulWidget {
   const InComePage({super.key});
@@ -32,20 +34,51 @@ class InComePage extends ConsumerStatefulWidget {
 class _InComePageState extends ConsumerState<InComePage> {
   List list = [
     TrKeys.day,
-    TrKeys.week,
+    TrKeys.week, 
     TrKeys.month,
   ];
 
+      final DatabaseReference _notificationsRef =
+      FirebaseDatabase.instance.ref("orders");
+
+   StreamSubscription<DatabaseEvent>? _firebaseSubscription;
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _subscribeToFirebase();
+    _initializeFirstNotification();
+    super.initState();
+  }
+
+    void _initializeFirstNotification() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(incomeProvider.notifier)
         ..fetchIncomeCarts()
         ..fetchIncomeCharts()
         ..fetchIncomeStatistic();
     });
-    super.initState();
+    }
+  void _subscribeToFirebase() {
+    // Listen to Firebase Realtime Database changes
+    _firebaseSubscription =
+        _notificationsRef.onValue.listen((DatabaseEvent event) {
+      if (!mounted) return; // Make sure the widget is still active
+
+      if (event.snapshot.exists) {
+        // Safely refresh notifications only if the widget is still active
+        _refreshNotifications();
+      }
+    });
   }
+
+void _refreshNotifications() {
+    if (!mounted) return; // Avoid accessing ref after the widget is disposed
+       ref.read(incomeProvider.notifier)
+        ..fetchIncomeCarts()
+        ..fetchIncomeCharts()
+        ..fetchIncomeStatistic();
+  }
+
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:garista_pos/src/models/data/notification_data.dart';
 import 'package:garista_pos/src/models/data/order_data.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/utils/utils.dart';
@@ -15,7 +16,7 @@ class MainNotifier extends StateNotifier<MainState> {
   final BrandsRepository _brandsRepository;
   final UsersRepository _usersRepository;
   final ProductsRepository _productsRepository;
-
+  final NotificationRepository _notificationRepository;
   Timer? _searchProductsTimer;
   Timer? _searchCategoriesTimer;
   Timer? _searchBrandsTimer;
@@ -26,6 +27,7 @@ class MainNotifier extends StateNotifier<MainState> {
     this._categoriesRepository,
     this._brandsRepository,
     this._usersRepository,
+    this._notificationRepository,
   ) : super(const MainState());
 
   changeIndex(int index) {
@@ -48,6 +50,46 @@ class MainNotifier extends StateNotifier<MainState> {
     // );
   }
 
+   Future<void> fetchNotifications({
+    VoidCallback? checkYourNetwork,
+    bool? isRefresh,
+  }) async {
+    if (isRefresh ?? false) {
+      _page = 0;
+    } else if (!state.hasMore) {
+      return;
+    }
+    final connected = await AppConnectivity.connectivity();
+    if (connected) {
+      state = state.copyWith(isNotificationsLoading: true, notifications: []);
+      final response = await _notificationRepository.getNotifications(
+       page: 1,
+      );
+      response.when(
+        success: (data) {
+
+          print("The Date of the notifications ${data.data?[0].title}");
+          state = state.copyWith(
+            notifications: data.data ?? [],
+            isNotificationsLoading: false,
+          );
+          if ((data.data?.length ?? 0) < 5) {
+            state = state.copyWith(isMoreNotificationLoading: false);
+          }
+        },
+        failure: (failure) {
+          state = state.copyWith(isNotificationsLoading: false);
+          debugPrint('==> get products failure: $failure');
+        },
+      );
+
+      // state = state.copyWith(isMoreProductsLoading: true);
+    
+    } else {
+      checkYourNetwork?.call();
+    }
+  }
+
   Future<void> fetchProducts({
     VoidCallback? checkYourNetwork,
     bool? isRefresh,
@@ -64,6 +106,7 @@ class MainNotifier extends StateNotifier<MainState> {
       final response = await _productsRepository.getProductsPaginate(
         categoryId:
             state.selectedCategory == null ? null : state.selectedCategory!.id,
+        query: state.query.isEmpty ? null : state.query,
       );
       response.when(
         success: (data) {
@@ -86,6 +129,7 @@ class MainNotifier extends StateNotifier<MainState> {
           categoryId: state.selectedCategory == null
               ? null
               : state.selectedCategory!.id,
+          query: state.query.isEmpty ? null : state.query,
         );
         response.when(
           success: (data) async {

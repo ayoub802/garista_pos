@@ -1,4 +1,5 @@
 import 'package:garista_pos/src/presentation/components/shimmers/lines_shimmer.dart';
+import 'package:garista_pos/src/presentation/pages/main/riverpod/provider/main_provider.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/components/all_notifications_page.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/components/notification_count_container.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/components/view_more_button.dart';
@@ -13,6 +14,7 @@ import '../../../../../core/utils/app_helpers.dart';
 import '../../../../theme/app_colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
+import 'package:garista_pos/src/presentation/pages/main/riverpod/state/main_state.dart';
 
 class NotificationDialog extends ConsumerStatefulWidget {
   const NotificationDialog({super.key});
@@ -25,73 +27,25 @@ class NotificationDialog extends ConsumerStatefulWidget {
 class _NotificationDialogState extends ConsumerState<NotificationDialog>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
-  final DatabaseReference _notificationsRef =
-      FirebaseDatabase.instance.ref("notifications");
-
-  StreamSubscription<DatabaseEvent>? _firebaseSubscription;
 
   @override
   void initState() {
-    // _subscribeToFirebase();
-    // _initializeFirstNotification();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!ref.read(notificationProvider).isFirstTimeNotification) {
-        ref.read(notificationProvider.notifier)
-          ..fetchNotificationsPaginate()
-          ..changeFirst();
-      }
-    });
     _controller = TabController(length: 3, vsync: this);
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _firebaseSubscription?.cancel();
     _controller.dispose();
-
     super.dispose();
   }
 
-  void _initializeFirstNotification() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!ref.read(notificationProvider).isFirstTimeNotification) {
-        ref.read(notificationProvider.notifier)
-          ..fetchNotificationsPaginate()
-          ..changeFirst();
-      }
-    });
-  }
-
-  void _subscribeToFirebase() {
-    // Listen to Firebase Realtime Database changes
-    _firebaseSubscription =
-        _notificationsRef.onValue.listen((DatabaseEvent event) {
-      if (!mounted) return; // Make sure the widget is still active
-
-      if (event.snapshot.exists) {
-        final firebaseData = event.snapshot.value as Map<dynamic, dynamic>;
-        print("Data from Firebase: $firebaseData");
-
-        // Safely refresh notifications only if the widget is still active
-        _refreshNotifications();
-      }
-    });
-  }
-
-  void _refreshNotifications() {
-    if (!mounted) return; // Avoid accessing ref after the widget is disposed
-    ref.read(notificationProvider.notifier).fetchNotificationsPaginate();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(notificationProvider);
     final notifier = ref.read(notificationProvider.notifier);
-
-    print(
-        'The Notification Count => ${state.countOfNotifications?.notification}');
+    final stateNotification = ref.watch(mainProvider);
 
     return Container(
       width: 446.w,
@@ -104,8 +58,14 @@ class _NotificationDialogState extends ConsumerState<NotificationDialog>
             30.verticalSpace,
             Row(
               children: [
-                Text(
-                  AppHelpers.getTranslation(TrKeys.notifications),
+                // Text(
+                //   AppHelpers.getTranslation(TrKeys.notifications),
+                //   style: GoogleFonts.inter(
+                //       fontWeight: FontWeight.w600,
+                //       fontSize: 22.sp,
+                //       color: AppColors.black),
+                // ),
+                Text("${stateNotification.notifications[0].title}",
                   style: GoogleFonts.inter(
                       fontWeight: FontWeight.w600,
                       fontSize: 22.sp,
@@ -150,29 +110,18 @@ class _NotificationDialogState extends ConsumerState<NotificationDialog>
                       )
                     ],
                   ),
-                  // Row(
-                  //   mainAxisSize: MainAxisSize.min,
-                  //   children: [
-                  //     Text(
-                  //       AppHelpers.getTranslation(TrKeys.transactions),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Text(
-                  //   AppHelpers.getTranslation(TrKeys.messages),
-                  // )
                 ]),
             Expanded(
               child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _controller,
                   children: [
-                    state.isNotificationLoading
+                    stateNotification.isNotificationsLoading
                         ? const Center(
                             child: CircularProgressIndicator(
                             color: AppColors.black,
                           ))
-                        : state.notifications.isNotEmpty
+                        : stateNotification.notifications.isNotEmpty
                             ? ListView(
                                 children: [
                                   26.verticalSpace,
@@ -180,27 +129,27 @@ class _NotificationDialogState extends ConsumerState<NotificationDialog>
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount: state.notifications.length,
+                                    itemCount: stateNotification.notifications.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return AllNotificationsPage(index);
                                     },
                                   ),
-                                  4.verticalSpace,
-                                  state.isMoreNotificationLoading
-                                      ? const LineShimmer(
-                                          isActiveLine: true,
-                                        )
-                                      : state.hasMoreNotification
-                                          ? ViewMoreButton(
-                                              onTap: () {
-                                                return notifier
-                                                    .fetchNotificationsPaginate();
-                                              },
-                                            )
-                                          : const SizedBox(),
+                                  // 4.verticalSpace,
+                                  // stateNotification.isMoreNotificationLoading
+                                  //     ? const LineShimmer(
+                                  //         isActiveLine: true,
+                                  //       )
+                                  //     : state.hasMoreNotification
+                                  //         ? ViewMoreButton(
+                                  //             onTap: () {
+                                  //               return notifier
+                                  //                   .fetchNotificationsPaginate();
+                                  //             },
+                                  //           )
+                                  //         : const SizedBox(),
                                   25.verticalSpace,
-                                  if (state.notifications.isNotEmpty)
+                                  if (stateNotification.notifications.isNotEmpty)
                                     Row(
                                       children: [
                                         const Icon(

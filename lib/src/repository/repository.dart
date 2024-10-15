@@ -16,4 +16,6 @@ export 'payments_repository.dart';
 export 'impl/payments_repository_impl.dart';
 export 'orders_repository.dart';
 export 'impl/orders_repository_impl.dart';
+export 'notification_repository.dart';
+export 'impl/notification_repo_impl.dart';
 export 'gallery.dart';

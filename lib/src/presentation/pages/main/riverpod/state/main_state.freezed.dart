@@ -21,11 +21,14 @@ mixin _$MainState {
   bool get isShopsLoading => throw _privateConstructorUsedError;
   bool get isBrandsLoading => throw _privateConstructorUsedError;
   bool get isCategoriesLoading => throw _privateConstructorUsedError;
+  bool get isNotificationsLoading => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
+  bool get isMoreNotificationLoading => throw _privateConstructorUsedError;
   int get selectIndex => throw _privateConstructorUsedError;
   List<ProductData> get products => throw _privateConstructorUsedError;
   List<ShopData> get shops => throw _privateConstructorUsedError;
   List<CategoryData> get categories => throw _privateConstructorUsedError;
+  List<NotificationModel> get notifications => throw _privateConstructorUsedError;
   List<BrandData> get brands => throw _privateConstructorUsedError;
   List<DropDownItemData> get dropDownShops =>
       throw _privateConstructorUsedError;
@@ -59,11 +62,14 @@ abstract class $MainStateCopyWith<$Res> {
     bool isShopsLoading,
     bool isBrandsLoading,
     bool isCategoriesLoading,
+    bool isNotificationsLoading,
     bool hasMore,
+    bool isMoreNotificationLoading,
     int selectIndex,
     List<ProductData> products,
     List<ShopData> shops,
     List<CategoryData> categories,
+    List<NotificationModel> notifications,
     List<BrandData> brands,
     List<DropDownItemData> dropDownShops,
     List<DropDownItemData> dropDownCategories,
@@ -98,11 +104,14 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
     Object? isShopsLoading = null,
     Object? isBrandsLoading = null,
     Object? isCategoriesLoading = null,
+    Object? isNotificationsLoading = null,
     Object? hasMore = null,
+    Object? isMoreNotificationLoading = null,
     Object? selectIndex = null,
     Object? products = null,
     Object? shops = null,
     Object? categories = null,
+    Object? notifications = null,
     Object? brands = null,
     Object? dropDownShops = null,
     Object? dropDownCategories = null,
@@ -138,9 +147,17 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
           ? _value.isCategoriesLoading
           : isCategoriesLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isNotificationsLoading: null == isNotificationsLoading
+          ? _value.isNotificationsLoading
+          : isNotificationsLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       hasMore: null == hasMore
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMoreNotificationLoading: null == isMoreNotificationLoading
+          ? _value.isMoreNotificationLoading
+          : isMoreNotificationLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       selectIndex: null == selectIndex
           ? _value.selectIndex
@@ -158,6 +175,10 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<CategoryData>,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as List<NotificationModel>,
       brands: null == brands
           ? _value.brands
           : brands // ignore: cast_nullable_to_non_nullable
@@ -228,11 +249,14 @@ abstract class _$$MainStateImplCopyWith<$Res>
     bool isShopsLoading,
     bool isBrandsLoading,
     bool isCategoriesLoading,
+    bool isNotificationsLoading,
     bool hasMore,
+    bool isMoreNotificationLoading,
     int selectIndex,
     List<ProductData> products,
     List<ShopData> shops,
     List<CategoryData> categories,
+    List<NotificationModel> notifications,
     List<BrandData> brands,
     List<DropDownItemData> dropDownShops,
     List<DropDownItemData> dropDownCategories,
@@ -265,11 +289,14 @@ class __$$MainStateImplCopyWithImpl<$Res>
     Object? isShopsLoading = null,
     Object? isBrandsLoading = null,
     Object? isCategoriesLoading = null,
+    Object? isNotificationsLoading = null,
     Object? hasMore = null,
+    Object? isMoreNotificationLoading = null,
     Object? selectIndex = null,
     Object? products = null,
     Object? shops = null,
     Object? categories = null,
+    Object? notifications = null,
     Object? brands = null,
     Object? dropDownShops = null,
     Object? dropDownCategories = null,
@@ -305,9 +332,17 @@ class __$$MainStateImplCopyWithImpl<$Res>
           ? _value.isCategoriesLoading
           : isCategoriesLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isNotificationsLoading: null == isNotificationsLoading
+          ? _value.isNotificationsLoading
+          : isNotificationsLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       hasMore: null == hasMore
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMoreNotificationLoading: null == isMoreNotificationLoading
+          ? _value.isMoreNotificationLoading
+          : isMoreNotificationLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       selectIndex: null == selectIndex
           ? _value.selectIndex
@@ -325,6 +360,10 @@ class __$$MainStateImplCopyWithImpl<$Res>
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<CategoryData>,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as List<NotificationModel>,
       brands: null == brands
           ? _value._brands
           : brands // ignore: cast_nullable_to_non_nullable
@@ -390,11 +429,14 @@ class _$MainStateImpl extends _MainState {
     this.isShopsLoading = false,
     this.isBrandsLoading = false,
     this.isCategoriesLoading = false,
+    this.isNotificationsLoading = false,
     this.hasMore = true,
+    this.isMoreNotificationLoading = true,
     this.selectIndex = 0,
     final List<ProductData> products = const [],
     final List<ShopData> shops = const [],
     final List<CategoryData> categories = const [],
+    final List<NotificationModel> notifications = const [],
     final List<BrandData> brands = const [],
     final List<DropDownItemData> dropDownShops = const [],
     final List<DropDownItemData> dropDownCategories = const [],
@@ -411,6 +453,7 @@ class _$MainStateImpl extends _MainState {
   })  : _products = products,
         _shops = shops,
         _categories = categories,
+        _notifications = notifications,
         _brands = brands,
         _dropDownShops = dropDownShops,
         _dropDownCategories = dropDownCategories,
@@ -434,7 +477,13 @@ class _$MainStateImpl extends _MainState {
   final bool isCategoriesLoading;
   @override
   @JsonKey()
+  final bool isNotificationsLoading;
+  @override
+  @JsonKey()
   final bool hasMore;
+  @override
+  @JsonKey()
+  final bool isMoreNotificationLoading;
   @override
   @JsonKey()
   final int selectIndex;
@@ -463,6 +512,15 @@ class _$MainStateImpl extends _MainState {
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_categories);
+  }
+  
+  final List<NotificationModel> _notifications;
+  @override
+  @JsonKey()
+  List<NotificationModel> get notifications {
+    if (_notifications is EqualUnmodifiableListView) return _notifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_notifications);
   }
 
   final List<BrandData> _brands;
@@ -545,13 +603,18 @@ class _$MainStateImpl extends _MainState {
                 other.isBrandsLoading == isBrandsLoading) &&
             (identical(other.isCategoriesLoading, isCategoriesLoading) ||
                 other.isCategoriesLoading == isCategoriesLoading) &&
+            (identical(other.isNotificationsLoading, isNotificationsLoading) ||
+                other.isNotificationsLoading == isNotificationsLoading) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
+            (identical(other.isMoreNotificationLoading, isMoreNotificationLoading) || other.isMoreNotificationLoading == isMoreNotificationLoading) &&
             (identical(other.selectIndex, selectIndex) ||
                 other.selectIndex == selectIndex) &&
             const DeepCollectionEquality().equals(other._products, _products) &&
             const DeepCollectionEquality().equals(other._shops, _shops) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
+            const DeepCollectionEquality()
+                .equals(other._notifications, _notifications) &&
             const DeepCollectionEquality().equals(other._brands, _brands) &&
             const DeepCollectionEquality()
                 .equals(other._dropDownShops, _dropDownShops) &&
@@ -588,11 +651,14 @@ class _$MainStateImpl extends _MainState {
         isShopsLoading,
         isBrandsLoading,
         isCategoriesLoading,
+        isNotificationsLoading,
         hasMore,
+        isMoreNotificationLoading,
         selectIndex,
         const DeepCollectionEquality().hash(_products),
         const DeepCollectionEquality().hash(_shops),
         const DeepCollectionEquality().hash(_categories),
+        const DeepCollectionEquality().hash(_notifications),
         const DeepCollectionEquality().hash(_brands),
         const DeepCollectionEquality().hash(_dropDownShops),
         const DeepCollectionEquality().hash(_dropDownCategories),
@@ -622,11 +688,14 @@ abstract class _MainState extends MainState {
     final bool isShopsLoading,
     final bool isBrandsLoading,
     final bool isCategoriesLoading,
+    final bool isNotificationsLoading,
     final bool hasMore,
+    final bool isMoreNotificationLoading,
     final int selectIndex,
     final List<ProductData> products,
     final List<ShopData> shops,
     final List<CategoryData> categories,
+    final List<NotificationModel> notifications,
     final List<BrandData> brands,
     final List<DropDownItemData> dropDownShops,
     final List<DropDownItemData> dropDownCategories,
@@ -654,7 +723,11 @@ abstract class _MainState extends MainState {
   @override
   bool get isCategoriesLoading;
   @override
+  bool get isNotificationsLoading;
+  @override
   bool get hasMore;
+  @override
+  bool get isMoreNotificationLoading;
   @override
   int get selectIndex;
   @override
@@ -663,6 +736,8 @@ abstract class _MainState extends MainState {
   List<ShopData> get shops;
   @override
   List<CategoryData> get categories;
+  @override
+  List<NotificationModel> get notifications;
   @override
   List<BrandData> get brands;
   @override

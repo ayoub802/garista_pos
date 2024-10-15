@@ -29,6 +29,7 @@ import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/no
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/components/notification_count_container.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/riverpod/notification_provider.dart';
 import 'widgets/income/income_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -56,12 +57,24 @@ class _MainPageState extends ConsumerState<MainPage>
     super.dispose();
   }
 
+  final DatabaseReference _notificationsRef =
+      FirebaseDatabase.instance.ref("notifications");
+
+  StreamSubscription<DatabaseEvent>? _firebaseSubscription;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(mainProvider.notifier)
         ..fetchProducts(
+          checkYourNetwork: () {
+            AppHelpers.showSnackBar(
+              context,
+              AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+            );
+          },
+        )
+        ..fetchNotifications(
           checkYourNetwork: () {
             AppHelpers.showSnackBar(
               context,
@@ -131,6 +144,26 @@ class _MainPageState extends ConsumerState<MainPage>
       //   );
       // }
     });
+    _subscribeToFirebase();
+  }
+
+  void _subscribeToFirebase() {
+    // Listen to Firebase Realtime Database changes
+    _firebaseSubscription =
+        _notificationsRef.onValue.listen((DatabaseEvent event) {
+      if (!mounted) return; // Make sure the widget is still active
+
+      if (event.snapshot.exists) {
+        // Safely refresh notifications only if the widget is still active
+        _refreshNotifications();
+      }
+    });
+  }
+
+  void _refreshNotifications() {
+    if (!mounted) return; // Avoid accessing ref after the widget is disposed
+    ref.read(mainProvider.notifier)
+          ..fetchNotifications();
   }
 
   @override
@@ -141,7 +174,7 @@ class _MainPageState extends ConsumerState<MainPage>
     return SafeArea(
       child: CustomScaffold(
         extendBody: true,
-        appBar: (colors) => customAppBar(),
+        appBar: (colors) => customAppBar(notifier),
         backgroundColor: AppColors.mainBack,
         body: (c) => Directionality(
           textDirection: TextDirection.ltr,
@@ -162,7 +195,7 @@ class _MainPageState extends ConsumerState<MainPage>
     );
   }
 
-  AppBar customAppBar() {
+  AppBar customAppBar(MainNotifier notifier) {
     // print("The Info Brand => ${ref.watch(mainProvider).brands[0].description}");
     final state = ref.watch(mainProvider);
     final brand = LocalStorage.getBrand();
@@ -200,7 +233,9 @@ class _MainPageState extends ConsumerState<MainPage>
                     Expanded(
                       flex: 2,
                       child: TextFormField(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          notifier.setProductsQuery(context, value.trim());
+                        },
                         cursorColor: AppColors.black,
                         cursorWidth: 1.r,
                         decoration: InputDecoration.collapsed(
@@ -243,9 +278,9 @@ class _MainPageState extends ConsumerState<MainPage>
                     FlutterRemix.notification_2_line,
                     color: AppColors.black,
                   )),
-              NotificationCountsContainer(
-                  count:
-                      '${ref.watch(notificationProvider).countOfNotifications?.notification ?? 0}'),
+              // NotificationCountsContainer(
+              //     count:
+              //         '${ref.watch(notificationProvider).countOfNotifications?.notification ?? 0}'),
               IconButton(
                 onPressed: () {
                   // ref.read(languagesProvider.notifier).getLanguages(context);

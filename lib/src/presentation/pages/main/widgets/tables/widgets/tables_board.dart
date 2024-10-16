@@ -46,9 +46,6 @@ class TablesBoard extends ConsumerWidget {
                               tableModel: TableModel(
                                 name: tableListData[i]?.name ?? "",
                                 chairCount: 4 ?? 0,
-                                // tax: tableListData[i]?.tax ?? 0,
-                                // shopSectionId:
-                                //     tableListData[i]?.shopSectionId ?? 0,
                               ),
                               type: (state.tableStatistic?.occupiedIds
                                           .contains(tableListData[i]?.id ?? 0) ??
@@ -72,9 +69,6 @@ class TablesBoard extends ConsumerWidget {
                                 tableModel: TableModel(
                                   name: tableListData[i]?.name ?? "",
                                   chairCount: 4 ?? 0,
-                                  // tax: tableListData[i]?.tax ?? 0,
-                                  // shopSectionId:
-                                  //     tableListData[i]?.shopSectionId ?? 0,
                                 ),
                                 type: (state.tableStatistic?.occupiedIds.contains(
                                             tableListData[i]?.id ?? 0) ??
@@ -92,7 +86,7 @@ class TablesBoard extends ConsumerWidget {
                 ),
                 if (state.isLoading)
                   const Center(
-                    child: CircularProgressIndicator(color: AppColors.brandColor),
+                    child: CircularProgressIndicator(color: AppColors.GaristaColorBg),
                   ),
               ],
             ),
@@ -100,7 +94,7 @@ class TablesBoard extends ConsumerWidget {
         if (tableListData.isEmpty && state.isLoading)
           const Expanded(
             child: Center(
-              child: CircularProgressIndicator(color: AppColors.brandColor),
+              child: CircularProgressIndicator(color: AppColors.GaristaColorBg),
             ),
           ),
 

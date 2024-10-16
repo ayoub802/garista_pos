@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
+import 'package:garista_pos/src/presentation/pages/main/widgets/tables/riverpod/tables_provider.dart';
 import 'package:garista_pos/generated/assets.dart';
 import 'package:garista_pos/src/core/constants/constants.dart';
 import 'package:garista_pos/src/core/utils/utils.dart';
@@ -30,11 +30,15 @@ class PageViewItem extends ConsumerStatefulWidget {
 
 class _PageViewItemState extends ConsumerState<PageViewItem> {
   late TextEditingController coupon;
+  String? selectedTable;
 
   @override
   void initState() {
     super.initState();
     coupon = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(tablesProvider.notifier).initial();
+    });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref
           .read(rightSideProvider.notifier)
@@ -159,7 +163,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
                             8.verticalSpace,
                             Column(
                               children: [
-                                _price(state, currency?.currency, notifier),
+                                _price(state, currency?.currency, notifier, selectedTable),
                               ],
                             ),
                             28.verticalSpace,
@@ -209,7 +213,7 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
     );
   }
 
-  Column _price(RightSideState state, String? currency, rightSideNotifier) {
+  Column _price(RightSideState state, String? currency, rightSideNotifier, String? selectedTable) {
     num totalPrice = AppHelpers.calculateTotalPrice(state);
 
     String formattedPrice = NumberFormat.currency(
@@ -248,86 +252,94 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
               ),
               24.verticalSpace,
               LoginButton(
-                isLoading: state.isOrderLoading,
                 title: AppHelpers.getTranslation(TrKeys.order),
                 titleColor: AppColors.white,
                 onPressed: () async {
-                  // final List<CartProductData> allCarts = [];
-                  // for (var bagProduct
-                  //     in state.bags[state.selectedBagIndex].bagProducts ?? []) {
-                  //   allCarts.addAll(bagProduct.carts ?? []);
-                  // }
-                  // final cartItems = allCarts.map((item) {
-                  //   // Extract and format selected toppings
-                  //   final List<Map<String, dynamic>> formattedToppings =
-                  //       item.selectedToppings?.map((topping) {
-                  //             return {
-                  //               'name': topping.name,
-                  //               'id': topping.id,
-                  //               'option': topping.options
-                  //                   ?.map((option) => {
-                  //                         'name': option.name,
-                  //                         'price': option.price,
-                  //                       })
-                  //                   .toList(),
-                  //             };
-                  //           }).toList() ??
-                  //           [];
-                  //   final List<Map<String, dynamic>> formattedVariants =
-                  //       item.selectedVariants?.map((variant) {
-                  //             return {
-                  //               'name': variant.name,
-                  //               'id': variant.id,
-                  //               'option': variant.options
-                  //                   ?.map((option) => {
-                  //                         'name': option.name,
-                  //                         'price': option.price,
-                  //                       })
-                  //                   .toList(),
-                  //             };
-                  //           }).toList() ??
-                  //           [];
-                  //   final List<Map<String, dynamic>> formattedIngredients =
-                  //       item.selectedIngrediants?.map((variant) {
-                  //             return {
-                  //               'name': variant.name,
-                  //             };
-                  //           }).toList() ??
-                  //           [];
+                  final List<CartProductData> allCarts = [];
+                  for (var bagProduct
+                      in state.bags[state.selectedBagIndex].bagProducts ?? []) {
+                    allCarts.addAll(bagProduct.carts ?? []);
+                  }
+                  final cartItems = allCarts.map((item) {
+                    // Extract and format selected toppings
+                    final List<Map<String, dynamic>> formattedToppings =
+                        item.selectedToppings?.map((topping) {
+                              return {
+                                'name': topping.name,
+                                'id': topping.id,
+                                'option': topping.options
+                                    ?.map((option) => {
+                                          'name': option.name,
+                                          'price': option.price,
+                                        })
+                                    .toList(),
+                              };
+                            }).toList() ??
+                            [];
+                    final List<Map<String, dynamic>> formattedVariants =
+                        item.selectedVariants?.map((variant) {
+                              return {
+                                'name': variant.name,
+                                'id': variant.id,
+                                'option': variant.options
+                                    ?.map((option) => {
+                                          'name': option.name,
+                                          'price': option.price,
+                                        })
+                                    .toList(),
+                              };
+                            }).toList() ??
+                            [];
+                    final List<Map<String, dynamic>> formattedIngredients =
+                        item.selectedIngrediants?.map((variant) {
+                              return {
+                                'name': variant.name,
+                              };
+                            }).toList() ??
+                            [];
 
-                  //   // Print out the formatted toppings
-                  //   print(
-                  //       'Toppings for product ID: ${item.productId} - $formattedVariants');
+                    // Print out the formatted toppings
+                    print(
+                        'Toppings for product ID: ${item.productId} - $formattedVariants');
 
-                  //   return CartItem(
-                  //       type: item.type,
-                  //       id: item.productId,
-                  //       quantity: item.quantity,
-                  //       comment: '',
-                  //       toppings: formattedToppings,
-                  //       ingredients: formattedIngredients,
-                  //       extraVariants: formattedVariants);
-                  // }).toList();
-                  // int tableId = 2;
-                  // int restoId = LocalStorage.getRestaurant()?.id ?? 0;
-                  // rightSideNotifier.createOrder(
-                  //   context,
-                  //   cartItems,
-                  //   totalPrice,
-                  //   tableId,
-                  //   restoId,
-                  //   onSuccess: () {
-                  //     // Optional success action
-                  //     print("Order created successfully!");
-                  //   },
-                  // );
-                  // for (var cartItem in cartItems) {
-                  //   print(
-                  //       'Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, topping: ${cartItem.toppings}');
-                  // }
+                    return CartItem(
+                        type: item.type,
+                        id: item.productId,
+                        quantity: item.quantity,
+                        comment: '',
+                        toppings: formattedToppings,
+                        ingredients: formattedIngredients,
+                        extraVariants: formattedVariants);
+                  }).toList();
+                  int restoId = LocalStorage.getRestaurant()?.id ?? 0;
+                 
+                  for (var cartItem in cartItems) {
+                    print(
+                        'Type: ${cartItem.type}, ID: ${cartItem.id}, Quantity: ${cartItem.quantity}, Comment: ${cartItem.comment}, topping: ${cartItem.toppings}');
+                  }
+                  
+ 
                  AppHelpers.showAlertDialog(
-                      context: context, child: OrderInformation());
-                },
+                      context: context, 
+                      child: OrderInformation(
+                        selectedTable: selectedTable,
+                        orderfunction: () async {
+                          //   rightSideNotifier.createOrder(
+                          //   context,
+                          //   cartItems,
+                          //   totalPrice,
+                          //   int.tryParse(selectedTable.toString()) ?? 0, // Convert selectedTable to an int
+                          //   restoId,
+                          //   onSuccess: () {
+                          //     // Optional success action
+                          //     print("Order created successfully!");
+                          //   },
+                          // );
+                          print("The Selected Tbales $selectedTable");
+                        },
+                      )
+                 );
+                }
               )
             ],
           ),
@@ -335,4 +347,119 @@ class _PageViewItemState extends ConsumerState<PageViewItem> {
       ],
     );
   }
+
+  // @override
+  // Widget OrderModal(BuildContext context, Function()? orderfunction, RightSideState state, String? selectedTable, ValueChanged<String?> onTableSelected,) {
+  //  final stateTable = ref.watch(tablesProvider);
+
+  //  List<DropdownMenuItem<String>> dropdownItems = stateTable.tableListData
+  //       .map((table) {
+  //     return DropdownMenuItem<String>(
+  //       value: table?.id.toString(), // Assuming each table has an 'id'
+  //       child: Text(table?.name ?? 'Unknown Table'), // Handle potential null 'name'
+  //     );
+  //   }).toList();
+
+  //   print("The Selected Tables => $selectedTable");
+
+
+  //   return KeyboardDismisser(
+  //     child: Container(
+  //       width: 350.w,
+  //       padding: REdgeInsets.symmetric(horizontal: 24.r),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(10.r),
+  //         color: AppColors.white,
+  //       ),
+  //       child: SingleChildScrollView(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Row(
+  //               children: [
+  //                 Text(
+  //                   AppHelpers.getTranslation(TrKeys.order),
+  //                   style: GoogleFonts.inter(
+  //                       fontSize: 22.r, fontWeight: FontWeight.w600),
+  //                 ),
+  //                 const Spacer(),
+  //                 IconButton(
+  //                   onPressed: () {
+  //                     // context.popRoute();
+  //                   },
+  //                   icon: const Icon(FlutterRemix.close_line),
+  //                 ),
+  //               ],
+  //             ),
+  //             16.verticalSpace,
+  //              Padding(
+  //                 padding: REdgeInsets.all(16),
+  //                 child: Row(
+  //                   children: [
+  //                     Expanded(
+  //                         flex: !stateTable.isListView ? 15 : 15,
+  //                         child: Padding(
+  //                             padding: REdgeInsets.only(left: 16, right: 17),
+  //                             child: Column(
+  //                               mainAxisSize: MainAxisSize.max,
+  //                               crossAxisAlignment: CrossAxisAlignment.start,
+  //                               mainAxisAlignment: MainAxisAlignment.start,
+  //                               children: [
+  //                                 Row(
+  //                                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                                   mainAxisAlignment: MainAxisAlignment.center,
+  //                                   children: [
+  //                                     Text(
+  //                                       "Select The Table :",
+  //                                       style: GoogleFonts.inter(
+  //                                         fontSize: 22.sp,
+  //                                         fontWeight: FontWeight.w600,
+  //                                       ),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                                 24.verticalSpace,
+  //                             Stack(
+  //                                   children: [
+  //                                     SizedBox(
+  //                                     height: 250.h,
+  //                                     width: 350.w,
+  //                                       child: Column(
+  //                                     children: [
+  //                                        DropdownButton<String>(
+  //                                         isExpanded: true,
+  //                                         value: selectedTable, // Current selected table
+  //                                         hint: Text("Selecte a Table"),
+  //                                         items: dropdownItems, // The dropdown menu items
+  //                                         onChanged: (String? newValue) {
+  //                                           setState(() {
+  //                                             onTableSelected(newValue); // Update selected table
+  //                                           });
+  //                                           // Additional logic to handle table selection can be added here
+  //                                         },
+  //                                       ),
+  //                                     ]
+  //                                       )
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ],
+  //                             ))),
+  //                   ],
+  //                 ),
+  //               ),
+  //             LoginButton(
+  //               isLoading: state.isOrderLoading,
+  //               title: AppHelpers.getTranslation(TrKeys.order),
+  //               titleColor: AppColors.white,
+  //               onPressed: orderfunction
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
 }

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/constants/constants.dart';
 import '../../../../../../core/utils/utils.dart';
-import '../../../../../../models/models.dart';
+import '../../../../../../models/models.dart'; 
 import '../../../../../components/components.dart';
 import '../../../../../theme/theme.dart';
 import '../riverpod/tables_notifier.dart';

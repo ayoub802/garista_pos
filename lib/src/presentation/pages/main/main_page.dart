@@ -30,6 +30,9 @@ import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/co
 import 'package:garista_pos/src/presentation/pages/main/widgets/notifications/riverpod/notification_provider.dart';
 import 'widgets/income/income_page.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:delightful_toast/toast/components/toast_card.dart';
+import 'package:delightful_toast/delight_toast.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -41,6 +44,8 @@ class MainPage extends ConsumerStatefulWidget {
 class _MainPageState extends ConsumerState<MainPage>
     with SingleTickerProviderStateMixin {
   // final user = LocalStorage.getUser();
+
+  
   Timer? timer;
   late List<IndexedStackChild> list = [
     IndexedStackChild(child: const PostPage(), preload: true),
@@ -54,6 +59,7 @@ class _MainPageState extends ConsumerState<MainPage>
   @override
   void dispose() {
     timer?.cancel();
+     _firebaseSubscription?.cancel();
     super.dispose();
   }
 
@@ -153,9 +159,28 @@ class _MainPageState extends ConsumerState<MainPage>
         _notificationsRef.onValue.listen((DatabaseEvent event) {
       if (!mounted) return; // Make sure the widget is still active
 
+
       if (event.snapshot.exists) {
         // Safely refresh notifications only if the widget is still active
         _refreshNotifications();
+
+      //    DelightToastBar(
+      //   autoDismiss: true, // Automatically dismiss after a few seconds
+      //   builder: (context) => const ToastCard(
+      //     leading: Icon(
+      //       Icons.notifications_active,
+      //       size: 28,
+      //       color: Colors.blue,
+      //     ),
+      //     title: Text(
+      //       "New notification received!",
+      //       style: TextStyle(
+      //         fontWeight: FontWeight.w700,
+      //         fontSize: 14,
+      //       ),
+      //     ),
+      //   ),
+      // ).show(context);
       }
     });
   }

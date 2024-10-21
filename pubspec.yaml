@@ -58,6 +58,8 @@ dependencies:
   flutter_logs: ^2.2.1
   firebase_core: ^3.6.0
   firebase_database: ^11.1.4
+  delightful_toast: ^1.1.0
+  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:

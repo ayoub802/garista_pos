@@ -5,6 +5,7 @@ import 'package:garista_pos/src/core/utils/app_helpers.dart';
 import 'package:garista_pos/src/core/utils/app_validators.dart';
 import 'package:garista_pos/src/core/utils/local_storage.dart';
 import 'package:garista_pos/src/models/data/bag_data.dart';
+import 'package:garista_pos/src/models/data/position_model.dart';
 import 'package:garista_pos/src/models/data/table_model.dart';
 import 'package:garista_pos/src/presentation/components/buttons/animation_button_effect.dart';
 import 'package:garista_pos/src/presentation/components/components.dart';
@@ -29,7 +30,7 @@ import 'riverpod/state/right_side_state.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/tables/widgets/tables_list.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/tables/widgets/tables_board.dart';
 import 'package:garista_pos/src/presentation/pages/main/widgets/tables/widgets/custom_refresher.dart';
-import 'package:garista_pos/src/presentation/pages/main/widgets/tables/widgets/custom_table.dart';
+import 'package:garista_pos/src/presentation/pages/main/widgets/tables/widgets/custom_chair.dart';
 
 class OrderInformation extends ConsumerStatefulWidget {
   final String? selectedTable; 
@@ -143,18 +144,9 @@ class _OrderInformationState extends ConsumerState<OrderInformation> {
                                       width: 350.w,
                                         child: Column(
                                       children: [
-                                         DropdownButton<String>(
-                                          isExpanded: true,
-                                          value: _currentSelectedTable , // Current selected table
-                                          hint: Text("Selecte a Table"),
-                                          items: dropdownItems, // The dropdown menu items
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              _currentSelectedTable = newValue; // Update selected table
-                                            });
-                                            // Additional logic to handle table selection can be added here
-                                          },
-                                        ),
+                                         Expanded(
+                                          child: TableWidget(context),
+                                         ),
                                       ]
                                         )
                                       ),
@@ -178,4 +170,213 @@ class _OrderInformationState extends ConsumerState<OrderInformation> {
     );
   }
 
+ Widget TableWidget(BuildContext context) {
+  // Ensure the final variables are assigned
+
+  PositionModel positionModel = AppHelpers.fixedTable(4);
+
+  final int top = positionModel.top; 
+  final int bottom = positionModel.left;
+  final int left =  positionModel.right;
+  final int right =  positionModel.bottom;
+
+  final double chairHeight = 54; // Example values, modify accordingly
+  final double chairWidth = 140;
+  final double chairSpace = 10;
+  final double chairWithTableSpace = 6;
+  final String title = "Table";
+  final double? tableHeight;
+  final double? tableWidth;
+  final String type = "occupied"; // Example, replace accordingly
+
+  // Compute withCount and heightCount
+  int withCount = top > bottom ? top : bottom;
+  int heightCount = left > right ? left : right;
+
+  double width = withCount != 0 && withCount != 1
+      ? (chairWidth * withCount) + ((withCount - 1) * chairSpace)
+      : chairWidth * 1.6;
+  double height = heightCount != 0 && heightCount != 1
+      ? (chairWidth * heightCount) + ((heightCount - 1) * chairSpace)
+      : chairWidth * 1.4;
+
+  // Adjust width and height based on chair positions
+  if (left != 0) {
+    width += chairHeight + chairWithTableSpace;
+  }
+  if (right != 0) {
+    width += chairHeight + chairWithTableSpace;
+  }
+  if (top != 0) {
+    height += chairHeight;
+  }
+  if (bottom != 0) {
+    height += chairHeight + chairWithTableSpace;
+  }
+
+
+  print("The Count => ${width} $height $chairHeight $chairSpace $chairWithTableSpace $withCount $heightCount ");
+  return SizedBox(
+    width:  width,
+    height:  height,
+    child: Column(
+      children: [
+        // Top chairs
+        SizedBox(
+            height: 24,
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: left != 0
+                    ? chairHeight + chairSpace * 2.5
+                    : top == 1
+                        ? chairSpace * 2.5
+                        : 0,
+                right: right != 0
+                    ? chairHeight + chairSpace * 2.5
+                    : top == 1
+                        ? chairSpace * 2.5
+                        : 0,
+              ),
+              child: Row(
+                children: List.generate(
+                  top,
+                  (index) => Expanded(
+                    child: VerticalChair(
+                      chairPosition: ChairPosition.top,
+                      color: AppColors.GaristaColorBg,
+                      chairSpace: index == 0 ? 0 : chairSpace,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+                // Table content
+        Expanded(
+          child: Row(
+            children: [
+               SizedBox(
+                height: left != 0
+                      ? 100
+                      : 0,
+                width: left != 0 ? chairHeight : 0,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: left,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return CustomChair(
+                      chairWidth: 80,
+                      chairPosition: ChairPosition.left,
+                      color: AppColors.GaristaColorBg,
+                      chairSpace: index == 0 ? 0 : chairSpace,
+                    );
+                  },
+                ),
+                           // Table
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(chairWithTableSpace),
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 
+                         withCount == 1 ? 2 : 0, vertical: heightCount == 1 ? 2 : 0,),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: type == TrKeys.occupied
+                              ? Colors.red
+                              : type == TrKeys.booked
+                                  ? Colors.yellow
+                                  : Colors.green,
+                        ),
+                        child: Text(
+                          title,
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                            color: type == TrKeys.occupied ||
+                                    type == TrKeys.booked
+                                ? Colors.white
+                                : Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: withCount == 1 ? 14 : 15,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+             
+              SizedBox(
+                height: right != 0
+                    ? 72
+                    : 0,
+                width: right != 0 ? chairHeight : 0,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: right,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return CustomChair(
+                      chairWidth: 80,
+                      chairPosition: ChairPosition.right,
+                      color: AppColors.GaristaColorBg,
+                      chairSpace: index == 0 ? 0 : chairSpace,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        SizedBox(
+          height: 25,
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: left != 0
+                  ? chairHeight + chairSpace * 2.5
+                  : bottom == 1
+                      ? chairSpace * 2.5
+                      : 0,
+              right: right != 0
+                  ? chairHeight + chairSpace * 2.5
+                  : bottom == 1
+                      ? chairSpace * 2.5
+                      : 0,
+            ),
+            child: Row(
+              children: List.generate(
+                bottom,
+                (index) => Expanded(
+                  child: VerticalChair(
+                    chairPosition: ChairPosition.bottom,
+                                        color: AppColors.GaristaColorBg,
+                    chairSpace: index == 0 ? 0 : chairSpace,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }

@@ -940,6 +940,7 @@ class _AddProductDialogState extends ConsumerState<AddProductDialog> {
                             selectedToppings,
                             selectedVariants,
                             selectedIngredients,
+                            true
                           );
                         }
                       },

@@ -32,6 +32,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     final notifier = ref.read(loginProvider.notifier);
     final state = ref.watch(loginProvider);
+
     return KeyboardDismisser(
         child: AbsorbPointer(
       absorbing: state.isLoading,

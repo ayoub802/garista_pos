@@ -27,8 +27,6 @@ class NotificationRepositoryImpl extends NotificationRepository {
         '/api/getNotificationsPOS/${LocalStorage.getRestaurant()?.id}',
         queryParameters: data,
       );
-
-      print("The Data of the notification POS => ${response.data}");
       return ApiResult.success(
         data: NotificationResponse.fromJson(response.data),
       );

@@ -67,6 +67,7 @@ class AddProductNotifier extends StateNotifier<AddProductState> {
     List<Map<String, dynamic>> selectedToppings,
     List<Map<String, dynamic>> selectedVariants,
     List<Map<String, dynamic>> selectedIngredients,
+    bool isDialog,
   ) {
     // LocalStorage.clearBags();
     if (product == null) {
@@ -178,6 +179,10 @@ class AddProductNotifier extends StateNotifier<AddProductState> {
         );
       },
     );
-    Navigator.pop(context);
+
+    if(isDialog == true)
+    {
+      Navigator.pop(context);
+    }
   }
 }

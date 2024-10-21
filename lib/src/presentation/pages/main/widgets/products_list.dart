@@ -72,7 +72,9 @@ class ProductsList extends ConsumerWidget {
                                     //         product: product);
                                     //   },
                                     // );
-                                    bool hasRequiredToppings = product.toppings != null && product.toppings!.any((topping) => topping.required == true);
+                                    final productPrice = double.tryParse(product?.price ?? '0.0');
+                                    totalPrice = productPrice ?? 0.0;
+                                    bool hasRequiredToppings = product.toppings?.any((topping) => topping.required == true) ?? false;
                                     if (hasRequiredToppings) {
                                       // Open the dialog if any topping has required set to true
                                       showDialog(
@@ -83,17 +85,23 @@ class ProductsList extends ConsumerWidget {
                                       );
                                     } 
                                     else{
-                                       notifierAdd.addProductToBag(
-                                          context,
-                                          rightSideState.selectedBagIndex,
-                                          rightSideNotifier,
-                                          1,
-                                          totalPrice = double.tryParse(product?.price ?? '0.0') ?? 0.0,
-                                          product,
-                                          [],
-                                          [],
-                                          [],
-                                        );
+                                        try {
+                                          notifierAdd.addProductToBag(
+                                            context,
+                                            rightSideState.selectedBagIndex,
+                                            rightSideNotifier,
+                                            1,
+                                            totalPrice,
+                                            product,
+                                            [], // Pass appropriate toppings, modifiers, or options
+                                            [],
+                                            [],
+                                            false
+                                          );
+                                        } catch (e) {
+                                          print("Error adding product to the bag: $e");
+                                          // You can show a snackbar or alert here to notify the user
+                                        }
                                     }
                                   },
                                 ),

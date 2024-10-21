@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:garista_pos/src/core/utils/app_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -97,7 +95,11 @@ class ResponsiveTable extends StatelessWidget {
     if (bottom != 0) {
       height += chairHeight + chairWithTableSpace;
     }
-    return SizedBox(
+
+      print("The Count => ${width} $height $chairHeight $chairSpace $chairWithTableSpace $withCount $heightCount $tableHeight $tableHeight");
+
+    return 
+    SizedBox(
       width: tableWidth ?? width,
       height: tableHeight ?? height,
       child: Column(
